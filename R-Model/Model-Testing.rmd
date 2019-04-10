@@ -1,0 +1,145 @@
+---
+title: "MSiA 423 Testing"
+author: "Alex Burzinski"
+date: "April 10, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Import Data
+```{r}
+batting <- read.csv('../batterScrapeData.csv', header = TRUE, stringsAsFactors = FALSE)
+pitching <- read.csv('../pitcherScrapeData.csv', header = TRUE, stringsAsFactors = FALSE)
+
+pitching$player <- gsub("\u00A0", " ", pitching$player, fixed =TRUE)
+pitching$player <- gsub('*', '', pitching$player, fixed = TRUE)
+
+cy <- read.csv('../cyYoungWinners.csv', header = TRUE, stringsAsFactors = FALSE)
+```
+
+
+### Join Data
+```{r}
+pitching <- merge(x = pitching, y = cy, by.x = c('year', 'player'), by.y = c('Year', 'Winner'), all.x = TRUE)
+
+pitching$cy_young <- ifelse(is.na(pitching$League), 0, 1)
+```
+
+### Create model
+```{r}
+all_samples <- which(pitching$cy_young == 1)
+
+for (year in unique(pitching$year)) {
+  num_winner <- nrow(pitching[pitching$year == year & pitching$cy_young == 1,])
+  sample_size <- num_winner * 10 - num_winner
+  all_samples <- c(all_samples, sample(x = which(pitching$year == year & pitching$cy_young == 0), size = sample_size, replace = FALSE))
+}
+
+train <- pitching[all_samples,]
+
+model <- glm(cy_young ~ lg_ID + W + L + earned_run_avg + G + GS + CG + SHO + SV + IP + H + R + ER + HR + BB + IBB + SO + HBP + BK + WP + batters_faced +
+             earned_run_avg_plus + fip + whip + hits_per_nine + home_runs_per_nine + bases_on_balls_per_nine + strikeouts_per_base_on_balls,
+             data = train, family = 'binomial')
+
+cum_model <- glm(cy_young ~ lg_ID + W + L + G + GS + CG + SHO + SV + IP + H + R + ER + HR + BB + IBB + SO + HBP + BK + WP + batters_faced,
+             data = train, family = 'binomial')
+
+avg_model <- glm(cy_young ~ lg_ID + earned_run_avg + earned_run_avg_plus + fip + whip + hits_per_nine + home_runs_per_nine +
+             bases_on_balls_per_nine + strikeouts_per_base_on_balls,
+             data = train, family = 'binomial')
+
+train$response <- predict(cum_model, newdata = train, type = 'response')
+train$y_hat <- ifelse(train$response >= .5, 1, 0)
+
+train[train$cy_young == 0 & train&y_hat == 1,]
+train[train$cy_young == 1 & train&y_hat == 0,]
+
+table(train$cy_young, train$y_hat)
+
+pitching$response <- predict(cum_model, newdata = pitching, type = 'response')
+pitching$y_hat <- ifelse(pitching$response >= .5, 1, 0)
+
+table(pitching$cy_young, pitching$y_hat)
+```
+
+### Predict Current Year
+```{r}
+pred <- data.frame(year = 2019,
+                   player = 'Jacob deGrom',
+                   ranker = 1,
+                   age = 29,
+                   team_ID = 'NYM',
+                   lg_ID = 'NL',
+                   W = 2,
+                   L = 1,
+                   win_loss_pct = .667,
+                   earned_run_avg = 3.18,
+                   G = 3,
+                   GS = 3,
+                   GF = 0,
+                   CG = 0,
+                   SHO = 0,
+                   SV = 0,
+                   IP = 17.0,
+                   H = 16,
+                   R = 6,
+                   ER = 6,
+                   HR = 3,
+                   BB = 3,
+                   IBB = 0,
+                   SO = 27,
+                   HBP = 0,
+                   BK = 0,
+                   WP = 1,
+                   batters_faced = 68,
+                   earned_run_avg_plus = 150,
+                   fip = 2.72,
+                   whip = 1.118,
+                   hits_per_nine = 8.5,
+                   home_runs_per_nine = 1.6,
+                   bases_on_balls_per_nine = 1.6,
+                   strikeouts_per_nine = 14.3,
+                   strikeouts_per_base_on_balls = 9.00,
+                   League = NA,
+                   cy_young = 0,
+                   response = 0,
+                   y_hat = 0)
+
+
+extend <- function(val, games_played, total_games) {
+  return(val * total_games / games_played)
+}
+
+games_played <- 40
+total_games <- 162
+
+pred$W <- extend(pred$W, games_played, total_games)
+pred$L <- extend(pred$L, games_played, total_games)
+pred$G <- extend(pred$G, games_played, total_games)
+pred$GS <- extend(pred$GS, games_played, total_games)
+pred$GF <- extend(pred$GF, games_played, total_games)
+pred$CG <- extend(pred$CG, games_played, total_games)
+pred$SHO <- extend(pred$SHO, games_played, total_games)
+pred$SV <- extend(pred$SV, games_played, total_games)
+pred$IP <- extend(pred$IP, games_played, total_games)
+pred$H <- extend(pred$H, games_played, total_games)
+pred$R <- extend(pred$R, games_played, total_games)
+pred$ER <- extend(pred$ER, games_played, total_games)
+pred$HR <- extend(pred$HR, games_played, total_games)
+pred$BB <- extend(pred$BB, games_played, total_games)
+pred$IBB <- extend(pred$IBB, games_played, total_games)
+pred$SO <- extend(pred$SO, games_played, total_games)
+pred$HBP <- extend(pred$HBP, games_played, total_games)
+pred$BK <- extend(pred$BK, games_played, total_games)
+pred$WP <- extend(pred$WP, games_played, total_games)
+
+
+predict(cum_model, newdata = pred, type = 'response')
+```
+
+
+
