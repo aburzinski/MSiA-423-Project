@@ -36,7 +36,7 @@ for year in years:
             runOnce = False
         if result['class'][0] != 'thead' and result['class'][0] != 'league_average_table':
             # print(result['class'])
-            data = [tag.text for tag in result]
+            data = [tag.text.replace("\u00A0"," ") for tag in result]
             data.append(str(year))
             f.write(','.join(data) + '\n')
 
