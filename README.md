@@ -35,7 +35,7 @@ This project will use 50 years of historical MLB to predict success among player
 - Epic 5: Create Team Performance Based Model
 
 ### Backlog
-1. Epic1 - Collect and Clean Data: 4 Points - PLANNED
+1. Epic1 - Collect and Clean Data: 2 Points - PLANNED
 2. Epic1 - Engineer and Transform Features: 1 Point - PLANNED
 3. Epic1 - Create Models with Python: 1 Point - PLANNED
 4. Epic1 - Assess Model Performance: 1 Point - PLANNED
