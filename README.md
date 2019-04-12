@@ -1,11 +1,11 @@
 ## Project Charter
 ### Vision
-This project will provide MLB with the opportunity to improve fan experience by generating and sustaining fan interest in both MLB teams and MLB players.
+Provide Major League Baseball MLB with an application that improves fan experience by engaging and sustaining fan interest in MLB teams and players.
 ### Mission
-Build an application with an easy to use interface and accurate logistic regression models that predict MLB season outcomes with up to date data, providing MLB fans an enjoyable and rewarding experience. 
+Build an application incorporating an intuitive user interface, data updated daily, and accurate logistic regression models that predict MLB team and player season outcomes and awards.  This application will assist MLB in driving and sustaining season-long fan engagement. 
 ### Success Criteria
 - The success of the logistic regression models used will be based on achieving an AUC measure and F-score of above .9.
-- The success of the application with respect to the business outcome will be fan engagement.  A successful application will drive users to attend more MLB games and purchase more MLB memorabilia.  This will be assessed by analyzing fan user behavior before and after using the application.
+- The success of the application with respect to the business outcome will be improved fan engagement.  A successful application will drive users to attend a higher number of MLB games and purchase a larger amount MLB merchandise and memorabilia.  This will be assessed by analyzing fan user behavior before and after using the application.
 
 ## Planning
 ### MLB Award Prediction App
