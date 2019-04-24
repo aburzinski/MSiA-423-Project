@@ -1,6 +1,8 @@
 import logging
 import requests
 import json
+import os
+import helpers.helpers as h
  
 logging.basicConfig(level=logging.DEBUG,
     format='%(name)s - %(levelname)s - %(asctime)s - %(message)s'
@@ -13,15 +15,9 @@ baseURL = 'http://lookup-service-prod.mlb.com'
 startYear = 2017
 endYear = 2018
 
-# Move funtion to util/helper
-import os, errno 
-def silentRemove(fileName):
-    try:
-        os.remove(fileName)
-    except OSError as e:
-        if e.errno != errno.ENOENT:  # File not found error
-            raise
-
+currentDir = os.path.dirname(__file__)
+parentDir = os.path.split(currentDir)[0]
+writeToDir = os.path.join(parentDir, 'data', 'historical')
 
 def parseYearString(yearString):
     yearList = set()
@@ -45,9 +41,9 @@ def writeIterLine(iter, f):
 
 def pullStatsHistory(histType, playerYears):
     writeHeaders = True
-    silentRemove('../data/historical/' + histType + 'Historical.csv')
+    h.silentRemove(os.path.join(writeToDir, histType + 'Historical.csv'))
 
-    with open('../data/historical/' + histType + 'Historical.csv', 'a') as f:
+    with open(os.path.join(writeToDir, histType + 'Historical.csv'), 'a') as f:
         for player in playerYears.keys():
             for year in playerYears[player]:
                 endpoint = 'sport_' + histType + '_tm'
