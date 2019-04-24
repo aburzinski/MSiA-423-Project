@@ -11,9 +11,10 @@ logger = logging.getLogger(__name__)
 def silentRemove(fileName):
     try:
         os.remove(fileName)
-	logger.debug('Removed file ' + filename)
+        logger.debug('Removed file ' + filename)
     except OSError as e:
         if e.errno != errno.ENOENT:  # File not found error
             raise
-	else:
-	    logger.debug('File not deleted since it doesn't exist')
+        else:
+            logger.debug('File not deleted since it doesn\'t exist')
+
