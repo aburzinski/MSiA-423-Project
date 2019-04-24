@@ -45,9 +45,9 @@ def writeIterLine(iter, f):
 
 def pullStatsHistory(histType, playerYears):
     writeHeaders = True
-    silentRemove(histType + 'Historical.csv')
+    silentRemove('../data/historical/' + histType + 'Historical.csv')
 
-    with open(histType + 'Historical.csv', 'a') as f:
+    with open('../data/historical/' + histType + 'Historical.csv', 'a') as f:
         for player in playerYears.keys():
             for year in playerYears[player]:
                 endpoint = 'sport_' + histType + '_tm'
