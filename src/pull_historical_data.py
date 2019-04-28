@@ -114,6 +114,35 @@ def pullTeams(startYear = 2019, endYear = 2020):
                 writeHeaders = False
             for row in json.loads(r.text)[endpoint]['queryResults']['row']:
                 writeIterLine(row.values(), f)
+    
+    f.close()
+
+def pullPlayers(playerYears):
+    """ Pull data about each player
+
+        Use the playerYears dictionary to ensure that each player that
+        has stats will also have related data
+    """
+    writeHeaders = True
+    h.silentRemove(os.path.join(writeToDir, 'players.csv'))
+
+    with open(os.path.join(writeToDir, 'players.csv'), 'a') as f:
+        for player in playerYears.keys():
+            endpoint = 'player_info'
+            column1 = 'player_id'
+            playerURL = '/json/named.' + endpoint + '.bam'
+            options = '?sport_code=%27mlb%27'
+            options += '&player_id=' + player
+            fullURL = baseURL + playerURL + options
+            r = requests.get(fullURL)
+
+            if writeHeaders:
+                writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].keys(), f)
+                writeHeaders = False
+            writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].values(), f)
+
+    f.close()
+
 
 # Get Team Ids
 teamIds = set()
@@ -136,7 +165,6 @@ for year in range(startYear, endYear):
 playerYears = {}
 
 for teamId in teamIds:
-    # if teamId == str(146):
     endpoint = 'roster_team_alltime'
     column1 = 'player_id'
     column2 = 'stat_years'
@@ -156,7 +184,10 @@ for teamId in teamIds:
         playerYears[record[column1]] = playerYears[record[column1]].union(parseYearString(record[column2]))
 
 # Get Team Data
-pullTeams(startYear, endYear)
+# pullTeams(startYear, endYear)
+
+# Get Player Data
+pullPlayers(playerYears)
 
 # Get historical hitting stats
 # pullStatsHistory('hitting', playerYears, startYear, endYear)
