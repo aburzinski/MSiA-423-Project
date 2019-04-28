@@ -43,7 +43,7 @@ def writeIterLine(iter, f):
     elems = []
     for elem in iter:
         elems.append(elem)
-    f.write(','.join(elems) + '\n')
+    f.write('"' + '","'.join(elems) + '"\n')
 
 
 def pullStatsHistory(histType, playerYears, startYear, endYear):
@@ -159,7 +159,7 @@ for year in range(startYear, endYear):
     for record in json.loads(r.text)[endpoint]['queryResults']['row']:
         teamIds.add(record[column])
 
-logger.debug('Got data on ' + len(teamIds) + ' teams')
+logger.debug('Got data on ' + str(len(teamIds)) + ' teams')
 
 # Get players by year
 
@@ -184,7 +184,7 @@ for teamId in teamIds:
 
         playerYears[record[column1]] = playerYears[record[column1]].union(parseYearString(record[column2]))
 
-logger.debug('Got data on ' + len(playerYears) + ' players')
+logger.debug('Got data on ' + str(len(playerYears)) + ' players')
 
 # Get Team Data
 logger.info('Creating teams.csv file')
@@ -196,8 +196,8 @@ pullPlayers(playerYears)
 
 # Get historical hitting stats
 logger.info('Creating hittingHistorical.csv file')
-pullStatsHistory('hitting', playerYears, startYear, endYear)
+# pullStatsHistory('hitting', playerYears, startYear, endYear)
 
 # Get historical pitching stats
 logger.info('Creating pitchingHistorical.csv file')
-pullStatsHistory('pitching', playerYears, startYear, endYear)
+# pullStatsHistory('pitching', playerYears, startYear, endYear)
