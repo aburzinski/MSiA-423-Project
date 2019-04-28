@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 baseURL = 'http://lookup-service-prod.mlb.com'
 
-startYear = 2017
+startYear = 1960
 endYear = 2018
 
 currentDir = os.path.dirname(__file__)
@@ -196,8 +196,8 @@ pullPlayers(playerYears)
 
 # Get historical hitting stats
 logger.info('Creating hittingHistorical.csv file')
-# pullStatsHistory('hitting', playerYears, startYear, endYear)
+pullStatsHistory('hitting', playerYears, startYear, endYear)
 
 # Get historical pitching stats
 logger.info('Creating pitchingHistorical.csv file')
-# pullStatsHistory('pitching', playerYears, startYear, endYear)
+pullStatsHistory('pitching', playerYears, startYear, endYear)
