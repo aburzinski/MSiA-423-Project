@@ -159,6 +159,7 @@ for year in range(startYear, endYear):
     for record in json.loads(r.text)[endpoint]['queryResults']['row']:
         teamIds.add(record[column])
 
+logger.debug('Got data on ' + len(teamIds) + ' teams')
 
 # Get players by year
 
@@ -183,14 +184,20 @@ for teamId in teamIds:
 
         playerYears[record[column1]] = playerYears[record[column1]].union(parseYearString(record[column2]))
 
+logger.debug('Got data on ' + len(playerYears) + ' players')
+
 # Get Team Data
-# pullTeams(startYear, endYear)
+logger.info('Creating teams.csv file')
+pullTeams(startYear, endYear)
 
 # Get Player Data
+logger.info('Creating players.csv file')
 pullPlayers(playerYears)
 
 # Get historical hitting stats
-# pullStatsHistory('hitting', playerYears, startYear, endYear)
+logger.info('Creating hittingHistorical.csv file')
+pullStatsHistory('hitting', playerYears, startYear, endYear)
 
 # Get historical pitching stats
-# pullStatsHistory('pitching', playerYears, startYear, endYear)
+logger.info('Creating pitchingHistorical.csv file')
+pullStatsHistory('pitching', playerYears, startYear, endYear)
