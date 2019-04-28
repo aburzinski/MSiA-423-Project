@@ -19,9 +19,13 @@ currentDir = os.path.dirname(__file__)
 parentDir = os.path.split(currentDir)[0]
 writeToDir = os.path.join(parentDir, 'data', 'historical')
 
+h.silentCreateDir(writeToDir)
 logger.debug('Writing data to path ' + writeToDir)
 
 def parseYearString(yearString):
+    """ Parse the API returned string of years to a list of ints.
+    Ex. Converts '2015-2017, 2019' to a list of [2015, 2016, 2017, 2019]
+    """
     yearList = set()
     splitString = yearString.split(', ')
     for string in splitString:
@@ -35,51 +39,81 @@ def parseYearString(yearString):
 
 
 def writeIterLine(iter, f):
+    """ Take an iterator of items and create one line of a csv from them """
     elems = []
     for elem in iter:
         elems.append(elem)
     f.write(','.join(elems) + '\n')
 
 
-def pullStatsHistory(histType, playerYears):
+def pullStatsHistory(histType, playerYears, startYear, endYear):
+    """ Receive statistical data from API calls based on a playerid and seasonid.
+
+        Arguments:
+            histType (str): Specifies the type of data to collect.
+                Either 'hitting' or 'pitching'
+            playerYear (dict): A dictionary with keys of a unique player id
+                and values of a set of years that player was active
+    """
     writeHeaders = True
     h.silentRemove(os.path.join(writeToDir, histType + 'Historical.csv'))
 
     with open(os.path.join(writeToDir, histType + 'Historical.csv'), 'a') as f:
         for player in playerYears.keys():
             for year in playerYears[player]:
-                endpoint = 'sport_' + histType + '_tm'
-                hittingURL = '/json/named.' + endpoint + '.bam'
-                options = '?sport_code=%27mlb%27&game_type=%27R%27'
-                options += '&season=' + str(year)
-                options += '&player_id=' + player
+                if year >= startYear and year <= endYear:
+                    endpoint = 'sport_' + histType + '_tm'
+                    hittingURL = '/json/named.' + endpoint + '.bam'
+                    options = '?sport_code=%27mlb%27&game_type=%27R%27'
+                    options += '&season=' + str(year)
+                    options += '&player_id=' + player
 
-                columns = '&' +endpoint + '.col_ex=sport_code'
-                columns += '&' +endpoint + '.col_ex=team_full'
-                columns += '&' +endpoint + '.col_ex=league_full'
-                columns += '&' +endpoint + '.col_ex=team_abbrev'
-                columns += '&' +endpoint + '.col_ex=end_date'
-                columns += '&' +endpoint + '.col_ex=league_short'
-                columns += '&' +endpoint + '.col_ex=sport'
-                columns += '&' +endpoint + '.col_ex=team_short'
+                    columns = '&' +endpoint + '.col_ex=sport_code'
+                    columns += '&' +endpoint + '.col_ex=team_full'
+                    columns += '&' +endpoint + '.col_ex=league_full'
+                    columns += '&' +endpoint + '.col_ex=team_abbrev'
+                    columns += '&' +endpoint + '.col_ex=end_date'
+                    columns += '&' +endpoint + '.col_ex=league_short'
+                    columns += '&' +endpoint + '.col_ex=sport'
+                    columns += '&' +endpoint + '.col_ex=team_short'
 
-                fullURL = baseURL + hittingURL + options + columns
-                r = requests.get(fullURL)
-                
-                if int(json.loads(r.text)[endpoint]['queryResults']['totalSize']) > 1:
-                    if writeHeaders:
-                        writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'][0].keys(), f)
-                        writeHeaders = False
-                    for row in json.loads(r.text)[endpoint]['queryResults']['row']:
-                        writeIterLine(row.values(), f)
-                
-                if int(json.loads(r.text)[endpoint]['queryResults']['totalSize']) == 1:
-                    if writeHeaders:
-                        writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].keys(), f)
-                        writeHeaders = False
-                    writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].values(), f)
+                    fullURL = baseURL + hittingURL + options + columns
+                    r = requests.get(fullURL)
+                    
+                    if int(json.loads(r.text)[endpoint]['queryResults']['totalSize']) > 1:
+                        if writeHeaders:
+                            writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'][0].keys(), f)
+                            writeHeaders = False
+                        for row in json.loads(r.text)[endpoint]['queryResults']['row']:
+                            writeIterLine(row.values(), f)
+                    
+                    if int(json.loads(r.text)[endpoint]['queryResults']['totalSize']) == 1:
+                        if writeHeaders:
+                            writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].keys(), f)
+                            writeHeaders = False
+                        writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].values(), f)
     
     f.close()
+
+def pullTeams(startYear = 2019, endYear = 2020):
+    """ Pull MLB team data for each season between startYear and endYear """
+    writeHeaders = True
+    h.silentRemove(os.path.join(writeToDir, 'teams.csv'))
+
+    with open(os.path.join(writeToDir, 'teams.csv'), 'a') as f:
+        for year in range(startYear, endYear):
+            endpoint = 'team_all_season'
+            teamURL = '/json/named.' + endpoint + '.bam'
+            options = '?sport_code=%27mlb%27&all_star_sw=%27N%27'
+            options += '&season=' + str(year)
+            fullURL = baseURL + teamURL + options
+            r = requests.get(fullURL)
+
+            if writeHeaders:
+                writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'][0].keys(), f)
+                writeHeaders = False
+            for row in json.loads(r.text)[endpoint]['queryResults']['row']:
+                writeIterLine(row.values(), f)
 
 # Get Team Ids
 teamIds = set()
@@ -121,9 +155,11 @@ for teamId in teamIds:
 
         playerYears[record[column1]] = playerYears[record[column1]].union(parseYearString(record[column2]))
 
+# Get Team Data
+pullTeams(startYear, endYear)
 
 # Get historical hitting stats
-pullStatsHistory('hitting', playerYears)
+# pullStatsHistory('hitting', playerYears, startYear, endYear)
 
 # Get historical pitching stats
-pullStatsHistory('pitching', playerYears)
+# pullStatsHistory('pitching', playerYears, startYear, endYear)
