@@ -145,9 +145,9 @@ def pullPlayers(playerYears):
 
 
 # Get Team Ids
-teamIds = set()
+teamIds = {}
 
-for year in range(startYear, endYear):
+for year in range(startYear, endYear + 1):
     endpoint = 'team_all_season'
     column = 'team_id'
     teamURL = '/json/named.' + endpoint + '.bam'
@@ -157,7 +157,10 @@ for year in range(startYear, endYear):
     fullURL = baseURL + teamURL + options + columns
     r = requests.get(fullURL)
     for record in json.loads(r.text)[endpoint]['queryResults']['row']:
-        teamIds.add(record[column])
+        if record[column] not in teamIds.keys():
+            teamIds[record[column]] = [year, year]
+        else:
+            teamIds[record[column]][1] = year
 
 logger.debug('Got data on ' + str(len(teamIds)) + ' teams')
 
@@ -165,12 +168,12 @@ logger.debug('Got data on ' + str(len(teamIds)) + ' teams')
 
 playerYears = {}
 
-for teamId in teamIds:
+for teamId in teamIds.keys():
     endpoint = 'roster_team_alltime'
     column1 = 'player_id'
     column2 = 'stat_years'
     playerURL = '/json/named.' + endpoint + '.bam'
-    options = '?start_season=' + str(startYear) + '&end_season=' + str(endYear)
+    options = '?start_season=' + str(teamIds[teamId][0]) + '&end_season=' + str(teamIds[teamId][1])
     options += '&team_id=' + teamId
     columns = '&' +endpoint + '.col_in=' + column1
     columns += '&' +endpoint + '.col_in=' + column2
@@ -196,8 +199,8 @@ pullPlayers(playerYears)
 
 # Get historical hitting stats
 logger.info('Creating hittingHistorical.csv file')
-pullStatsHistory('hitting', playerYears, startYear, endYear)
+# pullStatsHistory('hitting', playerYears, startYear, endYear)
 
 # Get historical pitching stats
 logger.info('Creating pitchingHistorical.csv file')
-pullStatsHistory('pitching', playerYears, startYear, endYear)
+# pullStatsHistory('pitching', playerYears, startYear, endYear)
