@@ -1,23 +1,20 @@
-import logging
+import logging.config
 import requests
 import json
 import os
 import helpers.helpers as h
- 
-logging.basicConfig(level=logging.DEBUG,
-    format='%(name)s - %(levelname)s - %(asctime)s - %(message)s'
-)
 
+currentDir = os.path.dirname(__file__)
+parentDir = os.path.split(currentDir)[0]
+writeToDir = os.path.join(parentDir, 'data', 'historical')
+
+logging.config.fileConfig(os.path.join(parentDir, 'config', 'logging', 'local.conf'))
 logger = logging.getLogger(__name__)
 
 baseURL = 'http://lookup-service-prod.mlb.com'
 
 startYear = 1960
 endYear = 2018
-
-currentDir = os.path.dirname(__file__)
-parentDir = os.path.split(currentDir)[0]
-writeToDir = os.path.join(parentDir, 'data', 'historical')
 
 h.silentCreateDir(writeToDir)
 logger.debug('Writing data to path ' + writeToDir)
@@ -199,8 +196,8 @@ pullPlayers(playerYears)
 
 # Get historical hitting stats
 logger.info('Creating hittingHistorical.csv file')
-# pullStatsHistory('hitting', playerYears, startYear, endYear)
+pullStatsHistory('hitting', playerYears, startYear, endYear)
 
 # Get historical pitching stats
 logger.info('Creating pitchingHistorical.csv file')
-# pullStatsHistory('pitching', playerYears, startYear, endYear)
+pullStatsHistory('pitching', playerYears, startYear, endYear)
