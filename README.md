@@ -53,3 +53,7 @@ Build an application incorporating an intuitive user interface, data updated dai
 - Epic3
 - Epic4
 - Epic5
+
+
+## Technical TODOs
+- Make sure to add project root to system path
