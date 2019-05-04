@@ -11,14 +11,6 @@ writeToDir = os.path.join(parentDir, 'data', 'historical')
 logging.config.fileConfig(os.path.join(parentDir, 'config', 'logging', 'local.conf'))
 logger = logging.getLogger(__name__)
 
-baseURL = 'http://lookup-service-prod.mlb.com'
-
-startYear = 1960
-endYear = 2018
-
-h.silentCreateDir(writeToDir)
-logger.debug('Writing data to path ' + writeToDir)
-
 def parseYearString(yearString):
     """ Parse the API returned string of years to a list of ints.
     Ex. Converts '2015-2017, 2019' to a list of [2015, 2016, 2017, 2019]
@@ -43,7 +35,7 @@ def writeIterLine(iter, f):
     f.write('"' + '","'.join(elems) + '"\n')
 
 
-def pullStatsHistory(histType, playerYears, startYear, endYear):
+def pullStatsHistory(baseURL, histType, playerYears, startYear, endYear):
     """ Receive statistical data from API calls based on a playerid and seasonid.
 
         Arguments:
@@ -92,7 +84,7 @@ def pullStatsHistory(histType, playerYears, startYear, endYear):
     
     f.close()
 
-def pullTeams(startYear = 2019, endYear = 2020):
+def pullTeams(baseURL, startYear = 2019, endYear = 2020):
     """ Pull MLB team data for each season between startYear and endYear """
     writeHeaders = True
     h.silentRemove(os.path.join(writeToDir, 'teams.csv'))
@@ -114,7 +106,7 @@ def pullTeams(startYear = 2019, endYear = 2020):
     
     f.close()
 
-def pullPlayers(playerYears):
+def pullPlayers(baseURL, playerYears):
     """ Pull data about each player
 
         Use the playerYears dictionary to ensure that each player that
@@ -141,63 +133,72 @@ def pullPlayers(playerYears):
     f.close()
 
 
-# Get Team Ids
-teamIds = {}
+if __name__ == '__main__':
+    baseURL = 'http://lookup-service-prod.mlb.com'
 
-for year in range(startYear, endYear + 1):
-    endpoint = 'team_all_season'
-    column = 'team_id'
-    teamURL = '/json/named.' + endpoint + '.bam'
-    options = '?sport_code=%27mlb%27&all_star_sw=%27N%27'
-    options += '&season=' + str(year)
-    columns = '&' +endpoint + '.col_in=' + column
-    fullURL = baseURL + teamURL + options + columns
-    r = requests.get(fullURL)
-    for record in json.loads(r.text)[endpoint]['queryResults']['row']:
-        if record[column] not in teamIds.keys():
-            teamIds[record[column]] = [year, year]
-        else:
-            teamIds[record[column]][1] = year
+    startYear = 1960
+    endYear = 2018
 
-logger.debug('Got data on ' + str(len(teamIds)) + ' teams')
+    h.silentCreateDir(writeToDir)
+    logger.debug('Writing data to path ' + writeToDir)
 
-# Get players by year
+    # Get Team Ids
+    teamIds = {}
 
-playerYears = {}
+    for year in range(startYear, endYear + 1):
+        endpoint = 'team_all_season'
+        column = 'team_id'
+        teamURL = '/json/named.' + endpoint + '.bam'
+        options = '?sport_code=%27mlb%27&all_star_sw=%27N%27'
+        options += '&season=' + str(year)
+        columns = '&' +endpoint + '.col_in=' + column
+        fullURL = baseURL + teamURL + options + columns
+        r = requests.get(fullURL)
+        for record in json.loads(r.text)[endpoint]['queryResults']['row']:
+            if record[column] not in teamIds.keys():
+                teamIds[record[column]] = [year, year]
+            else:
+                teamIds[record[column]][1] = year
 
-for teamId in teamIds.keys():
-    endpoint = 'roster_team_alltime'
-    column1 = 'player_id'
-    column2 = 'stat_years'
-    playerURL = '/json/named.' + endpoint + '.bam'
-    options = '?start_season=' + str(teamIds[teamId][0]) + '&end_season=' + str(teamIds[teamId][1])
-    options += '&team_id=' + teamId
-    columns = '&' +endpoint + '.col_in=' + column1
-    columns += '&' +endpoint + '.col_in=' + column2
+    logger.debug('Got data on ' + str(len(teamIds)) + ' teams')
 
-    fullURL = baseURL + playerURL + options + columns
-    r = requests.get(fullURL)
+    # Get players by year
 
-    for record in json.loads(r.text)[endpoint]['queryResults']['row']:
-        if record[column1] not in playerYears.keys():
-            playerYears[record[column1]] = set()
+    playerYears = {}
 
-        playerYears[record[column1]] = playerYears[record[column1]].union(parseYearString(record[column2]))
+    for teamId in teamIds.keys():
+        endpoint = 'roster_team_alltime'
+        column1 = 'player_id'
+        column2 = 'stat_years'
+        playerURL = '/json/named.' + endpoint + '.bam'
+        options = '?start_season=' + str(teamIds[teamId][0]) + '&end_season=' + str(teamIds[teamId][1])
+        options += '&team_id=' + teamId
+        columns = '&' +endpoint + '.col_in=' + column1
+        columns += '&' +endpoint + '.col_in=' + column2
 
-logger.debug('Got data on ' + str(len(playerYears)) + ' players')
+        fullURL = baseURL + playerURL + options + columns
+        r = requests.get(fullURL)
 
-# Get Team Data
-logger.info('Creating teams.csv file')
-pullTeams(startYear, endYear)
+        for record in json.loads(r.text)[endpoint]['queryResults']['row']:
+            if record[column1] not in playerYears.keys():
+                playerYears[record[column1]] = set()
 
-# Get Player Data
-logger.info('Creating players.csv file')
-pullPlayers(playerYears)
+            playerYears[record[column1]] = playerYears[record[column1]].union(parseYearString(record[column2]))
 
-# Get historical hitting stats
-logger.info('Creating hittingHistorical.csv file')
-pullStatsHistory('hitting', playerYears, startYear, endYear)
+    logger.debug('Got data on ' + str(len(playerYears)) + ' players')
 
-# Get historical pitching stats
-logger.info('Creating pitchingHistorical.csv file')
-pullStatsHistory('pitching', playerYears, startYear, endYear)
+    # Get Team Data
+    logger.info('Creating teams.csv file')
+    pullTeams(baseURL, startYear, endYear)
+
+    # Get Player Data
+    logger.info('Creating players.csv file')
+    pullPlayers(baseURL, playerYears)
+
+    # Get historical hitting stats
+    logger.info('Creating hittingHistorical.csv file')
+    pullStatsHistory(baseURL, 'hitting', playerYears, startYear, endYear)
+
+    # Get historical pitching stats
+    logger.info('Creating pitchingHistorical.csv file')
+    pullStatsHistory(baseURL, 'pitching', playerYears, startYear, endYear)
