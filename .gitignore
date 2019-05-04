@@ -12,6 +12,7 @@ data/*
 !data/sample/
 !data/auxiliary
 models/*
+!models/mlb_database
 test/model/test/*
 !.gitkeep
 .idea
