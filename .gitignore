@@ -15,3 +15,6 @@ models/*
 test/model/test/*
 !.gitkeep
 .idea
+
+# Unwanted config files
+azureConfig.ini
