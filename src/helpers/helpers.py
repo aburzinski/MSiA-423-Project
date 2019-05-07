@@ -1,12 +1,9 @@
 import logging.config
 import os
 import errno
+from config import config
 
-currentDir = os.path.dirname(__file__)
-parentDir = os.path.split(currentDir)[0]
-parentDir = os.path.split(parentDir)[0]
-
-logging.config.fileConfig(os.path.join(parentDir, 'config', 'logging', 'local.conf'))
+logging.config.fileConfig(config.LOGGING_CONFIG_FILE)
 logger = logging.getLogger(__name__)
 
 def silentRemove(fileName):
