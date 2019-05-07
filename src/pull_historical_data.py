@@ -6,7 +6,7 @@ from config import config
 import requests
 import json
 import os
-import helpers.helpers as h
+import src.helpers.helpers as h
 
 parentDir = config.PROJECT_ROOT_DIR
 writeToDir = os.path.join(parentDir, 'data', 'historical')
