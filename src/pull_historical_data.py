@@ -1,14 +1,17 @@
+import sys
+sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 423\Project\MSiA-423-Project')
+
 import logging.config
+from config import config
 import requests
 import json
 import os
 import helpers.helpers as h
 
-currentDir = os.path.dirname(__file__)
-parentDir = os.path.split(currentDir)[0]
+parentDir = config.PROJECT_ROOT_DIR
 writeToDir = os.path.join(parentDir, 'data', 'historical')
 
-logging.config.fileConfig(os.path.join(parentDir, 'config', 'logging', 'local.conf'))
+logging.config.fileConfig(os.path.join(config.PROJECT_ROOT_DIR, config.LOGGING_CONFIG_FILE))
 logger = logging.getLogger(__name__)
 
 def parseYearString(yearString):

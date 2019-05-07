@@ -18,4 +18,4 @@ test/model/test/*
 .idea
 
 # Unwanted config files
-azureConfig.ini
+config/config.py
