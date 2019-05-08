@@ -23,3 +23,16 @@ def silentCreateDir(dirName):
     if not os.path.exists(dirName):
         os.makedirs(dirName)
         logger.debug('Created directory ' + dirName)
+
+
+def writeIterLine(iter, f):
+    """Take an iterator of strings and create one line of a csv from them
+    Args:
+        iter (An iterator of `str` objects): An iterator of string objects
+            Created wither from dict keys or dict values
+        f (file object): The file to write to
+    """
+    elems = []
+    for elem in iter:
+        elems.append(elem)
+    f.write('"' + '","'.join(elems) + '"\n')

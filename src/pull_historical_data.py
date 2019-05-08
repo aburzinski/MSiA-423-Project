@@ -23,27 +23,14 @@ def parseYearString(yearString):
         return yearSet
 
     splitString = yearString.split(', ')
-    for string in splitString:
-        if string.find('-') == -1:
-            yearSet.add(int(string))
+    for stringPart in splitString:
+        if stringPart.find('-') == -1:
+            yearSet.add(int(stringPart))
         else:
-            for year in range(int(string[0:4]), int(string[5:]) + 1):
+            for year in range(int(stringPart[0:4]), int(stringPart[5:]) + 1):
                 yearSet.add(year)
 
     return yearSet
-
-
-def writeIterLine(iter, f):
-    """Take an iterator of strings and create one line of a csv from them
-    Args:
-        iter (An iterator of `str` objects): An iterator of string objects
-            Created wither from dict keys or dict values
-        f (file object): The file to write to
-    """
-    elems = []
-    for elem in iter:
-        elems.append(elem)
-    f.write('"' + '","'.join(elems) + '"\n')
 
 
 def pullStatsHistory(baseURL, histType, playerYears, startYear, endYear):
@@ -82,16 +69,16 @@ def pullStatsHistory(baseURL, histType, playerYears, startYear, endYear):
                     
                     if int(json.loads(r.text)[endpoint]['queryResults']['totalSize']) > 1:
                         if writeHeaders:
-                            writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'][0].keys(), f)
+                            h.writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'][0].keys(), f)
                             writeHeaders = False
                         for row in json.loads(r.text)[endpoint]['queryResults']['row']:
-                            writeIterLine(row.values(), f)
+                            h.writeIterLine(row.values(), f)
                     
                     if int(json.loads(r.text)[endpoint]['queryResults']['totalSize']) == 1:
                         if writeHeaders:
-                            writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].keys(), f)
+                            h.writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].keys(), f)
                             writeHeaders = False
-                        writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].values(), f)
+                        h.writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].values(), f)
     
     f.close()
 
@@ -110,10 +97,10 @@ def pullTeams(baseURL, startYear = 2019, endYear = 2020):
             r = requests.get(fullURL)
 
             if writeHeaders:
-                writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'][0].keys(), f)
+                h.writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'][0].keys(), f)
                 writeHeaders = False
             for row in json.loads(r.text)[endpoint]['queryResults']['row']:
-                writeIterLine(row.values(), f)
+                h.writeIterLine(row.values(), f)
     
     f.close()
 
@@ -137,9 +124,9 @@ def pullPlayers(baseURL, playerYears):
             r = requests.get(fullURL)
 
             if writeHeaders:
-                writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].keys(), f)
+                h.writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].keys(), f)
                 writeHeaders = False
-            writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].values(), f)
+            h.writeIterLine(json.loads(r.text)[endpoint]['queryResults']['row'].values(), f)
 
     f.close()
 
