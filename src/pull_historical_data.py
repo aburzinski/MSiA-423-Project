@@ -34,7 +34,12 @@ def parseYearString(yearString):
 
 
 def writeIterLine(iter, f):
-    """ Take an iterator of items and create one line of a csv from them """
+    """Take an iterator of strings and create one line of a csv from them
+    Args:
+        iter (An iterator of `str` objects): An iterator of string objects
+            Created wither from dict keys or dict values
+        f (file object): The file to write to
+    """
     elems = []
     for elem in iter:
         elems.append(elem)
