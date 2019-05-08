@@ -11,7 +11,7 @@ import src.helpers.helpers as h
 parentDir = config.PROJECT_ROOT_DIR
 writeToDir = os.path.join(parentDir, 'data', 'historical')
 
-logging.config.fileConfig(config.LOGGING_CONFIG_FILE)
+logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 def parseYearString(yearString):

@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 import src.helpers.helpers as h
 
 parentDir = config.PROJECT_ROOT_DIR
-logging.config.fileConfig(config.LOGGING_CONFIG_FILE)
+logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 from models.mlb_database.create_database import Base, Player, Team

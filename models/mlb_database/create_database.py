@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 import sqlalchemy as sql
 import src.helpers.helpers as h
 
-logging.config.fileConfig(config.LOGGING_CONFIG_FILE)
+logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 Base = declarative_base()
