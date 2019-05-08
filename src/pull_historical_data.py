@@ -18,16 +18,19 @@ def parseYearString(yearString):
     """ Parse the API returned string of years to a list of ints.
     Ex. Converts '2015-2017, 2019' to a list of [2015, 2016, 2017, 2019]
     """
-    yearList = set()
+    yearSet = set()
+    if len(yearString) < 1:
+        return yearSet
+
     splitString = yearString.split(', ')
     for string in splitString:
         if string.find('-') == -1:
-            yearList.add(int(string))
+            yearSet.add(int(string))
         else:
             for year in range(int(string[0:4]), int(string[5:]) + 1):
-                yearList.add(year)
+                yearSet.add(year)
 
-    return yearList
+    return yearSet
 
 
 def writeIterLine(iter, f):
