@@ -4,13 +4,13 @@ sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 42
 import logging.config
 import os
 from config import config
+import src.helpers.azure as ah
 import boto3
 
-currentDir = os.path.dirname(__file__)
 parentDir = config.PROJECT_ROOT_DIR
 readFromDir = os.path.join(parentDir, 'data', 'historical')
 
-logging.config.fileConfig(config.LOGGING_CONFIG_FILE)
+logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
@@ -23,16 +23,9 @@ if __name__ == '__main__':
     bucketPath = 'data/historical/'
 
     s3 = session.resource('s3')
+    logger.debug('Connected to s3 successfully')
+
     bucket = s3.Bucket(bucketName)
     logger.info('Writing to the s3 bucket ' + bucketName)
 
-    files = [f for f in os.listdir(readFromDir)
-        if os.path.isfile(os.path.join(readFromDir, f))]
-
-    logger.info('Writing the following files to s3: ' + str(files))
-
-    for f in files:
-        with open(os.path.join(readFromDir, f), 'rb') as data:
-            bucket.put_object(Key=bucketPath + f, Body=data)
-        data.close()
-        logger.debug('Wrote {} to s3 successfully'.format(f))
+    ah.writeDirToS3(readFromDir, bucket, bucketPath)
