@@ -43,7 +43,7 @@ class Team(Base):
     state = Column(String(100), unique=False, nullable=True)
     league = Column(String(10), unique=False, nullable=True)
     division = Column(String(10), unique=False, nullable=True)
-    yearFounded = Column(String(10), unique=False, nullable=True)
+    yearFounded = Column(Integer, unique=False, nullable=True)
 
     def __repr__(self):
         return '<Team %r>' % self.teamName
