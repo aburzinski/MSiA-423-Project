@@ -8,14 +8,14 @@ from config import config
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-def writeFileToS3(fileName, filePath, bucket, bucketPath):
+def writeFileToS3(fileName, filePath, client, bucketName, bucketPath):
 
     fullPath = os.path.join(fileName, filePath)
 
     logger.info('Writing the following files to s3: ' + str(fullPath))
 
     with open(fullPath, 'rb') as data:
-        bucket.put_object(Key=bucketPath + fileName, Body=data)
+        client.put_object(Bucket=bucketName, Key=bucketPath + fileName, Body=data)
     data.close()
     logger.debug('Wrote {} to s3 successfully'.format(fullPath))
 
