@@ -31,10 +31,8 @@ if __name__ == '__main__':
     bucketName = config.AWS_S3_BUCKET_NAME
     bucketPath = 'data/{}/'.format(args.directory)
 
-    s3 = session.resource('s3')
+    s3 = session.client('s3')
     logger.debug('Connected to s3 successfully')
-
-    bucket = s3.Bucket(bucketName)
+    
     logger.info('Writing to the s3 bucket ' + bucketName)
-
-    ah.writeDirToS3(readFromDir, bucket, bucketPath)
+    ah.writeDirToS3(readFromDir, s3, bucketName, bucketPath)

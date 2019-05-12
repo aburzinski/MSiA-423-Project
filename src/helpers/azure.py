@@ -20,7 +20,7 @@ def writeFileToS3(fileName, filePath, bucket, bucketPath):
     logger.debug('Wrote {} to s3 successfully'.format(fullPath))
 
 
-def writeDirToS3(dirPath, bucket, bucketPath):
+def writeDirToS3(dirPath, client, bucketName, bucketPath):
     files = [f for f in os.listdir(dirPath)
         if os.path.isfile(os.path.join(dirPath, f))]
 
@@ -28,6 +28,6 @@ def writeDirToS3(dirPath, bucket, bucketPath):
 
     for f in files:
         with open(os.path.join(dirPath, f), 'rb') as data:
-            bucket.put_object(Key=bucketPath + f, Body=data)
+            client.put_object(Bucket=bucketName, Key=bucketPath + f, Body=data)
         data.close()
         logger.debug('Wrote {} to s3 successfully'.format(f))
