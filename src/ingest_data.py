@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 from models.mlb_database.create_database import Base
 import src.ingestion_scripts.Player as player
+import src.ingestion_scripts.Team as team
 
 if __name__ == '__main__':
     engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
@@ -39,3 +40,10 @@ if __name__ == '__main__':
     playerFile = ah.readFileFromS3('players.csv', s3, bucketName, bucketPath)
 
     player.ingestPlayers(playerFile, dbsession, truncate=True)
+    
+    logger.info('Reading from the s3 bucket ' + bucketName)
+    teamFile = ah.readFileFromS3('teams.csv', s3, bucketName, bucketPath)
+
+    team.ingestTeams(teamFile, dbsession, truncate=True)
+
+    logger.info('Data ingestion conpleted')
