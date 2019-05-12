@@ -36,3 +36,23 @@ def writeIterLine(iter, f):
     for elem in iter:
         elems.append(elem)
     f.write('"' + '","'.join(elems) + '"\n')
+
+def textParseDate(origDate):
+    """Take a date of the format YYYY-MM-DDTHH:MM:SS and parse
+        it to YYYY/MM/DD
+    """
+    if len(origDate) == 0:
+        return ''
+    else:
+        year = origDate[0:4]
+        month = origDate[5:7]
+        day = origDate[8:10]
+
+        try:
+            yearInt = int(year)
+            monthInt = int(month)
+            dayInt = int(day)
+        except ValueError:
+            raise ValueError('Input date not in the correct formate')
+        
+        return year + '/' + month + '/' + day

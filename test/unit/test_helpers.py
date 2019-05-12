@@ -103,3 +103,23 @@ def test_writeIterLine():
 
     # Clean up test file
     os.remove(filename)
+
+
+def test_textParseDate():
+    """Test the textParseDate method"""
+    # Test for empty string
+    testValue = ''
+    expectedValue = ''
+    assert(base.textParseDate(testValue) == expectedValue)
+
+    # Test correct format
+    testValue = '1999-01-03T00:00:00'
+    expectedValue = '1999/01/03'
+    assert(base.textParseDate(testValue) == expectedValue)
+
+    # Test incorrect format
+    testValue = '01-03-1999'
+    try:
+        base.textParseDate(testValue)
+    except ValueError:
+        assert(True)
