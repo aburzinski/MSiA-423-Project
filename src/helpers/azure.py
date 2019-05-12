@@ -31,3 +31,8 @@ def writeDirToS3(dirPath, client, bucketName, bucketPath):
             client.put_object(Bucket=bucketName, Key=bucketPath + f, Body=data)
         data.close()
         logger.debug('Wrote {} to s3 successfully'.format(f))
+
+
+def readFileFromS3(fileName, client, bucketName, bucketPath):
+    response = client.get_object(Bucket=bucketName, Key=bucketPath + fileName)
+    return response['Body'].read().decode('utf-8')
