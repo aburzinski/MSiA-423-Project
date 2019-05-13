@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import boto3
 import src.helpers.helpers as h
-import src.helpers.azure as ah
+import src.helpers.azureHelpers as ah
 
 parentDir = config.PROJECT_ROOT_DIR
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)

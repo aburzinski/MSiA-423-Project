@@ -5,7 +5,7 @@ import argparse
 import logging.config
 import os
 from config import config
-import src.helpers.azure as ah
+import src.helpers.azureHelpers as ah
 import boto3
 
 parser = argparse.ArgumentParser(description='Write files to AWS s3.')
