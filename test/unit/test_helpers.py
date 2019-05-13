@@ -97,6 +97,7 @@ def test_writeIterLine():
     with open(filename, 'w') as f:
         try:
             base.writeIterLine({'testKey': 123}.values(), f)
+            assert False
         except TypeError:
             assert(True)
     f.close()
@@ -121,5 +122,6 @@ def test_textParseDate():
     testValue = '01-03-1999'
     try:
         base.textParseDate(testValue)
+        assert False
     except ValueError:
         assert(True)
