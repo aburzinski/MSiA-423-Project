@@ -34,11 +34,11 @@ def test_createDatabaseURI():
     dbtype = 'mysql'
     dbname = 'test'
     host = '127.0.0.1'
-    port = '5432'
+    port = '3306'
     username = 'user'
     password = 'pw'
 
-    expectedOutput = 'mysql+pymysql://user:pw@host:port/dbname'
-    assert(base.createDatabaseURI(dbtype, host, dbname,
-        port=port, username=username, password=password))
+    expectedOutput = 'mysql+pymysql://user:pw@127.0.0.1:3306/test'
+    assert(base.createDatabaseURI(dbtype, host, dbname, port=port,
+        username=username, password=password) == expectedOutput)
     
