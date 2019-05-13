@@ -1,8 +1,3 @@
-import logging.config
-from config import config
-
-logging.config.fileConfig(config.LOGGING_CONFIG_FILE)
-logger = logging.getLogger(__name__)
 
 def createDatabaseURI(dbtype, host, dbname, dialect='pymysql',
     port='', username='', password=''):
