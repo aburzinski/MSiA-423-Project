@@ -8,6 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, MetaData
 from sqlalchemy.orm import sessionmaker
 import sqlalchemy as sql
+from sqlalchemy_utils import create_database, database_exists
 import src.helpers.helpers as h
 
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
@@ -72,14 +73,20 @@ if __name__ == '__main__':
 
     if config.SQLALCHEMY_TYPE == 'sqlite':
         h.silentCreateDir(config.SQLALCHEMY_SQLITE_DIR)
-    
-    logger.debug('Creating database at {}'.format(config.SQLALCHEMY_SQLITE_DIR))
 
     engine_string = config.SQLALCHEMY_DATABASE_URI
     engine = sql.create_engine(engine_string)
 
+    # Create database only if it doesn't already exist
+    if not database_exists(engine.url):
+        logger.debug('Creating database at {}'.format(config.SQLALCHEMY_DATABASE_URI))
+        create_database(engine.url)
+        logger.info('MLB database created successfully')
+    else:
+        logger.info('Database already exists')
+
     # Drop all tables if they already exist
     Base.metadata.drop_all(bind=engine)
-
     Base.metadata.create_all(bind=engine)
-    logger.info('MLB database created successfully')
+
+    logger.info('Tables dropped and recreated successfully')
