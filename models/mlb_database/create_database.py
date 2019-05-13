@@ -72,7 +72,7 @@ class CurrentStats(Base):
 if __name__ == '__main__':
 
     if config.SQLALCHEMY_TYPE == 'sqlite':
-        h.silentCreateDir(config.SQLALCHEMY_SQLITE_DIR)
+        h.silentCreateDir(config.SQLALCHEMY_SQLITE_HOST)
 
     engine_string = config.SQLALCHEMY_DATABASE_URI
     engine = sql.create_engine(engine_string)
