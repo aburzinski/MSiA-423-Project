@@ -1,4 +1,6 @@
-import os.path as path
+import sys
+import os
+sys.path.append(os.environ['PYTHONPATH'])
 
 # DEBUG = True
 # LOGGING_CONFIG = "logging/local.conf"
@@ -9,7 +11,7 @@ import os.path as path
 # MAX_ROWS_SHOW = 100
 
 # Project
-PROJECT_ROOT_DIR = path.join('Example', 'Project', 'Root')
+PROJECT_ROOT_DIR = os.path.join('Example', 'Project', 'Root')
 CURRENT_SEASON = 2019
 
 # S3
@@ -18,10 +20,10 @@ AWS_ACCESS_KEY_ID = 'id'
 AWS_SECRET_ACCESS_KEY = 'secret-key'
 
 # Logging
-LOGGING_CONFIG_FILE = path.join(PROJECT_ROOT_DIR, 'config', 'logging', 'local.conf')
+LOGGING_CONFIG_FILE = os.path.join(PROJECT_ROOT_DIR, 'config', 'logging', 'local.conf')
 
 # SQL Alchemy
-SQLALCHEMY_SQLITE_HOST = path.join(PROJECT_ROOT_DIR, 'data', 'database')
+SQLALCHEMY_SQLITE_HOST = os.path.join(PROJECT_ROOT_DIR, 'data', 'database')
 
 SQLALCHEMY_MYSQL_HOST = 'host'
 SQLALCHEMY_MYSQL_PORT = 'port'
