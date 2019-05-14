@@ -1,9 +1,9 @@
 import sys
-sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 423\Project\MSiA-423-Project')
+import os
+sys.path.append(os.environ.get('PYTHONPATH'))
 
 import argparse
 import logging.config
-import os
 from config import config
 import src.helpers.azureHelpers as ah
 import boto3
