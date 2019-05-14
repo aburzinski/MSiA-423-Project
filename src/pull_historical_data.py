@@ -1,11 +1,11 @@
+import os
 import sys
-sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 423\Project\MSiA-423-Project')
+sys.path.append(os.environ.get('PYTHONPATH'))
 
 import logging.config
 from config import config
 import requests
 import json
-import os
 import src.helpers.helpers as h
 
 parentDir = config.PROJECT_ROOT_DIR

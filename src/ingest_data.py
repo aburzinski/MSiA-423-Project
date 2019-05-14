@@ -1,7 +1,7 @@
-import sys
-sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 423\Project\MSiA-423-Project')
-
 import os
+import sys
+sys.path.append(os.environ.get('PYTHONPATH'))
+
 import logging.config
 from config import config
 from sqlalchemy import create_engine
