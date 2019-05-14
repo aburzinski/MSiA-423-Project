@@ -15,6 +15,3 @@ data/*
 test/model/test/*
 !.gitkeep
 .idea
-
-# Unwanted config files
-config/config.py
