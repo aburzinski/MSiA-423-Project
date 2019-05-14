@@ -6,7 +6,7 @@ $path = "/nfs/home/user/project"
 export PYTHONPATH = $path
 
 # Add S3 bucket and keys
-$aws_bucket_name
+$aws_bucket_name = ""
 $aws_access_key_id = ""
 $aws_secret_access_key = ""
 

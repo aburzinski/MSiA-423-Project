@@ -11,7 +11,7 @@ sys.path.append(os.environ.get('PYTHONPATH'))
 # MAX_ROWS_SHOW = 100
 
 # Project
-PROJECT_ROOT_DIR = r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 423\Project\MSiA-423-Project'
+PROJECT_ROOT_DIR = os.environ.get('PYTHONPATH')
 CURRENT_SEASON = 2019
 
 # S3
