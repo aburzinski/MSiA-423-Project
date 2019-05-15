@@ -19,6 +19,10 @@ AWS_S3_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
+# S3 Historical Data Download
+# Note: This should never be changed
+HISTORICAL_S3_BUCKET_NAME = '423-mlb-historical'
+
 # Logging
 LOGGING_CONFIG_FILE = os.path.join(PROJECT_ROOT_DIR, 'config', 'logging', 'local.conf')
 
