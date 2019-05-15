@@ -34,8 +34,13 @@ SQLALCHEMY_MYSQL_PORT = '3306'
 SQLALCHEMY_MYSQL_USERNAME = os.environ.get('MYSQL_USER')
 SQLALCHEMY_MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD')
 
-SQLALCHEMY_HOST = SQLALCHEMY_SQLITE_HOST
 SQLALCHEMY_TYPE = 'sqlite'  # Should be either 'sqlite' or 'mysql'
+if SQLALCHEMY_TYPE == 'sqlite':
+    SQLALCHEMY_HOST = SQLALCHEMY_SQLITE_HOST
+elif SQLALCHEMY_TYPE == 'mysql':
+    SQLALCHEMY_HOST = SQLALCHEMY_MYSQL_HOST
+else:
+    raise ValueError('SQLALCHEMY_TYPE not set ccorrectly in config/config.py')
 SQLALCHEMY_DATABASE_NAME = 'mlb'
 
 import src.helpers.configHelpers as ch
