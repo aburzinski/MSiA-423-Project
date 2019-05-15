@@ -82,6 +82,7 @@ This can be done by running the following script (based on the AWS environment v
 Make sure to change the `SQLALCHEMY_TYPE` variable in the `config/config.py` file to either _sqlite_ or _mysql_.  This determines which type of database will be created.
   - If using sqlite, change the `SQLALCHEMY_SQLITE_HOST` variable in the `config/config.py` file to the desired location for the sqlite database.
   - If using MySQL in RDS, no addition changes are necessary
+
 After updating the configuration file, create the database by running:
 
 `python models/mlb_database/create_database.py`
@@ -90,6 +91,12 @@ After updating the configuration file, create the database by running:
 To add data to the database, run the following python script:
 
 `python src/ingest_data.py`
+
+
+## Testing
+To test many of the functions in this project, run `pytest` from the command line.
+
+The code for the test cases exists in the `test/unit` folder.
 
 
 ## Planning
