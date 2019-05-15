@@ -42,6 +42,14 @@ First, create the `PYTHONPATH` variable.  This should be the top level project d
 export PYTHONPATH='/nfs/home/user/my_project_root'
 ```
 
+__Note:__ When setting PYTHONPATH, do not use a `~`.  I.e., use 
+
+`export PYTHONPATH='/nfs/home/user/projects/my_project_root'`
+
+rather than 
+
+`export PYTHONPATH='~/projects/my_project_root'`
+
 Next, create the credentials for the AWS S3 bucket that this project will use:
 
 ```
