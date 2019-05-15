@@ -27,6 +27,7 @@ if __name__ == '__main__':
         response = requests.get(bucketURL)
 
         fileName = os.path.join(parentDir, 'data', 'historical', file)
+        h.silentCreateDir(os.path.join(parentDir, 'data', 'historical'))
         h.silentRemove(fileName)
         with open(fileName, 'wb') as f:
             f.write(response.content)
