@@ -3,6 +3,7 @@ sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 42
 
 import os
 import src.helpers.helpers as base
+import pytest
 
 def test_silentRemove():
     """Test the silentRemove function"""
