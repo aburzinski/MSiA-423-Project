@@ -60,12 +60,12 @@ Build an application incorporating an intuitive user interface, data updated dai
 3. Epic1 - Assess Model Performance: 1 Point - PLANNED
 4. Epic1 - Tune Models: 4 Points - PLANNED
 5. Epic1 - Create Documentation for Models: 2 Points - PLANNED
-6. Epic2 - Create Web App Using Flask and HTML: Create Landing Page - 2 Points
-7. Epic2 - Create Web App Using Flask and HTML: Create Player Page - 2 Points
-8. Epic2 - Create Web App Using Flask and HTML: Create Team Page - 2 Points
-9. Epic2 - Create Web App Using Flask and HTML: Create Comparison Page - 2 Points
-10. Epic2 - Improve UX with CSS and Javascript: 8 Points
-11. Epic3 - Automate Training of model: - 2 Points
+6. Epic2 - Create Web App Using Flask and HTML: Create Landing Page - 2 Points - PLANNED
+7. Epic2 - Create Web App Using Flask and HTML: Create Player Page - 2 Points - PLANNED
+8. Epic2 - Create Web App Using Flask and HTML: Create Team Page - 2 Points - PLANNED
+9. Epic2 - Create Web App Using Flask and HTML: Create Comparison Page - 2 Points - PLANNED
+10. Epic2 - Improve UX with CSS and Javascript: 8 Points - PLANNED
+11. Epic3 - Automate Training of model: - 2 Points - PLANNED
 
 ### Completed
 1. Epic1 - Collect Historical Data
