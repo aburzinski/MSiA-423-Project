@@ -8,6 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, MetaData
 from sqlalchemy.orm import sessionmaker
 import sqlalchemy as sql
+import pymysql
 from sqlalchemy_utils import create_database, database_exists
 import src.helpers.helpers as h
 
