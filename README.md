@@ -7,6 +7,13 @@ Build an application incorporating an intuitive user interface, data updated dai
 - The success of the logistic regression models used will be based on achieving an AUC measure and F-score of above .9.
 - The success of the application with respect to the business outcome will be improved fan engagement.  A successful application will drive users to attend a higher number of MLB games and purchase a larger amount MLB merchandise and memorabilia.  This will be assessed by analyzing fan user behavior before and after using the application.
 
+
+## Data Sources
+The statisical Major League Baseball data comes from the following API:
+`https://appac.github.io/mlb-data-api-docs/`
+
+There is no singup process required to use the API.  However, statistical data can only be pulled for one player and one season at a time.  Because of this, downloading the historical dataset can take quite a while.  A workaround is discussed below.
+
 ## Project Initialization
 ### To initialize this project in a new environemnt, follow these steps
 
@@ -19,25 +26,67 @@ Create the environemnt from the `requirements.txt` file
 
 ```
 pip install virtual env
+
 virtualenv env_name
+
 source env_name/bin/activate
+
 pip install -r requirements.txt
 ```
 
-1. Create environment variables in new enviroment
+3. Create Environment Variables in New Enviroment
+First, create the `PYTHONPATH` variable.  This should be the top level project directory (i.e. `MSiA-423-Project`):
 
-- Add project to PYTHONPATH env variable
-- Add S3 bucket credentials
-- Add RDS endpoint and credentials
-- Update config file
-- Download historical data
-- Download daily data
-- Upload to S3
-- Create database
-- Upload data to database
+```
+export PYTHONPATH='/nfs/home/user/my_project_root'
+```
+
+Next, create the credentials for the AWS S3 bucket that this project will use:
+
+```
+export AWS_BUCKET_NAME='my_bucket'
+
+export AWS_ACCESS_KEY_ID='my_access_key'
+
+export AWS_SECRET_ACCESS_KEY='my_access_secret'
+```
+
+Finally, create the credentials that will be used for an RDS instance.  This step only needs to be completed if using an RDS database (versus writing to sqlite locally):
+
+```
+export MYSQL_HOST='my_db_url'
+
+export MYSQL_USER='my_db_username'
+
+export MYSQL_PASSWORD='my_db_password'
+```
+
+4. Download the historical data required for the app to the local machine
+This data will be created in the `data/historical` directory
+
+This can be done running the following script:
+`python src/pull_historical_data.py`
+This script pulls the data from an API, and can take over an hour to run.  To pull the same historical data from a public AWS S3 bucket, run:
+`python src/read_historical_files.py`
+
+5. Move the historical data from the local machine to an AWS S3 bucket
+This can be done by running the following script (based on the AWS environment variables created above):
+`python src/write_to_cloud.py historical`
+
+6. Create SQL Database
+Make sure to change the `SQLALCHEMY_TYPE` variable in the `config/config.py` file to either _sqlite_ or _mysql_.  This determines which type of database will be created.
+  - If using sqlite, change the `SQLALCHEMY_SQLITE_HOST` variable in the `config/config.py` file to the desired location for the sqlite database.
+  - If using MySQL in RDS, no addition changes are necessary
+After updating the configuration file, create the database by running:
+`python models/mlb_database/create_database.py`
+
+7. Add data to the database
+To add data to the database, run the following python script:
+`python src/ingest_data.py`
+
 
 ## Planning
-### MLB Award Prediction App
+### Theme 1: MLB Award Prediction App
 - Epic 1: Create and Test Models
   - Collect Historial Data
   - Clean Historical Data
