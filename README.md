@@ -7,6 +7,35 @@ Build an application incorporating an intuitive user interface, data updated dai
 - The success of the logistic regression models used will be based on achieving an AUC measure and F-score of above .9.
 - The success of the application with respect to the business outcome will be improved fan engagement.  A successful application will drive users to attend a higher number of MLB games and purchase a larger amount MLB merchandise and memorabilia.  This will be assessed by analyzing fan user behavior before and after using the application.
 
+## Project Initialization
+### To initialize this project in a new environemnt, follow these steps
+
+1. Clone Project from Github
+Run the following from the command line:
+`git clone https://github.com/aburzinski/MSiA-423-Project.git`
+
+2. Create Python Environment
+Create the environemnt from the `requirements.txt` file
+
+```
+pip install virtual env
+virtualenv env_name
+source env_name/bin/activate
+pip install -r requirements.txt
+```
+
+1. Create environment variables in new enviroment
+
+- Add project to PYTHONPATH env variable
+- Add S3 bucket credentials
+- Add RDS endpoint and credentials
+- Update config file
+- Download historical data
+- Download daily data
+- Upload to S3
+- Create database
+- Upload data to database
+
 ## Planning
 ### MLB Award Prediction App
 - Epic 1: Create and Test Models
@@ -53,7 +82,3 @@ Build an application incorporating an intuitive user interface, data updated dai
 - Epic3
 - Epic4
 - Epic5
-
-
-## Technical TODOs
-- Make sure to add project root to system path
