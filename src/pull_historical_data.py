@@ -42,6 +42,8 @@ def pullStatsHistory(baseURL, histType, playerYears, startYear, endYear):
             playerYear (dict): A dictionary with keys of a unique player id
                 and values of a set of years that player was active
     """
+    logger.info('Creating {}Historical.csv file'.format(histType))
+
     writeHeaders = True
     h.silentRemove(os.path.join(writeToDir, histType + 'Historical.csv'))
 
@@ -84,11 +86,13 @@ def pullStatsHistory(baseURL, histType, playerYears, startYear, endYear):
 
 def pullTeams(baseURL, startYear = 2019, endYear = 2020):
     """ Pull MLB team data for each season between startYear and endYear """
+    logger.info('Creating teams.csv file')
+
     writeHeaders = True
     h.silentRemove(os.path.join(writeToDir, 'teams.csv'))
 
     with open(os.path.join(writeToDir, 'teams.csv'), 'a') as f:
-        for year in range(startYear, endYear):
+        for year in range(startYear, endYear + 1):
             endpoint = 'team_all_season'
             teamURL = '/json/named.' + endpoint + '.bam'
             options = '?sport_code=%27mlb%27&all_star_sw=%27N%27'
@@ -110,6 +114,8 @@ def pullPlayers(baseURL, playerYears):
         Use the playerYears dictionary to ensure that each player that
         has stats will also have related data
     """
+    logger.info('Creating players.csv file')
+
     writeHeaders = True
     h.silentRemove(os.path.join(writeToDir, 'players.csv'))
 
@@ -135,7 +141,7 @@ if __name__ == '__main__':
     baseURL = 'http://lookup-service-prod.mlb.com'
 
     startYear = 1960
-    endYear = 2018
+    endYear = 2019
 
     h.silentCreateDir(writeToDir)
     logger.debug('Writing data to path ' + writeToDir)
@@ -186,17 +192,13 @@ if __name__ == '__main__':
     logger.debug('Got data on ' + str(len(playerYears)) + ' players')
 
     # Get Team Data
-    logger.info('Creating teams.csv file')
     pullTeams(baseURL, startYear, endYear)
 
     # Get Player Data
-    logger.info('Creating players.csv file')
     pullPlayers(baseURL, playerYears)
 
     # Get historical hitting stats
-    logger.info('Creating hittingHistorical.csv file')
     pullStatsHistory(baseURL, 'hitting', playerYears, startYear, endYear)
 
     # Get historical pitching stats
-    logger.info('Creating pitchingHistorical.csv file')
     pullStatsHistory(baseURL, 'pitching', playerYears, startYear, endYear)
