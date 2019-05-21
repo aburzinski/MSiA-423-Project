@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import logging.config
 from config import config
+import src.helpers.helpers as h
 import src.helpers.modelHelpers as mh
 
 parentDir = config.PROJECT_ROOT_DIR
@@ -56,6 +57,8 @@ modelData.loc[modelData['obp_y'] == '.---', 'obp_y'] = 0.0
 
 modelData = modelData.replace([np.inf, -np.inf], np.nan).fillna(0)
 
-modelData.to_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features', 'mvpFeatures.csv'), index=False)
+writeToDir = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features')
+h.silentCreateDir(writeToDir)
+modelData.to_csv(os.path.join(writeToDir, 'mvpFeatures.csv'), index=False)
 
 logger.info('A file with {} rows and {} columns was created'.format(modelData.shape[0], modelData.shape[1]))
