@@ -70,6 +70,9 @@ class CurrentStats(Base):
     cyYoungLikelihood = Column(Float, unique=False, nullable=True)
     cyYoungRank = Column(Integer, unique=False, nullable=True)
 
+    def __repr__(self):
+        return '<Player Stats %r>' % self.playerId
+
 if __name__ == '__main__':
 
     if config.SQLALCHEMY_TYPE == 'sqlite':
