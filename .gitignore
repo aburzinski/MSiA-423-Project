@@ -16,3 +16,4 @@ test/model/test/*
 !.gitkeep
 .idea
 *.model
+settings.json
