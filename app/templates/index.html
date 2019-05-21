@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Index.html</title>
+        <link href="static/team_colors.css" rel="stylesheet">
+    </head>
+    <body>
+        <h2>Header</h2>
+        <p>Some example text</p>
+        {% if True %}
+            <p class="blue">If test</p>
+        {% else %}
+            <p class="red">If test</p>
+        {% endif %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Player Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players if player.playerName > 'T' %}
+                    <tr>
+                        <td class="red">{{ player.playerName }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="blue">{{ player.playerName }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

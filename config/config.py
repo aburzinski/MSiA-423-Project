@@ -8,7 +8,6 @@ sys.path.append(os.environ.get('PYTHONPATH'))
 # APP_NAME = "penny-lane"
 # HOST = "127.0.0.1"
 # SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
-# MAX_ROWS_SHOW = 100
 
 # Project
 PROJECT_ROOT_DIR = os.environ.get('PYTHONPATH')
@@ -48,3 +47,8 @@ SQLALCHEMY_DATABASE_URI = ch.createDatabaseURI(dbtype=SQLALCHEMY_TYPE,
     host=SQLALCHEMY_HOST, dbname=SQLALCHEMY_DATABASE_NAME,
     port=SQLALCHEMY_MYSQL_PORT, username=SQLALCHEMY_MYSQL_USERNAME,
     password=SQLALCHEMY_MYSQL_PASSWORD)
+
+# Flask App
+DEBUG = True
+MAX_ROWS_SHOW = 100
+SQLALCHEMY_TRACK_MODIFICATIONS = False
