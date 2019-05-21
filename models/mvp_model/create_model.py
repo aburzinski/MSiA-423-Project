@@ -14,7 +14,7 @@ import imblearn.over_sampling as SMOTE
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-modelData = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features', 'mvpFeatures.csv'))
+modelData = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features', 'mvpFeaturesHistorical.csv'))
 
 X = modelData.loc[:, modelData.columns != 'is_winner']
 y = modelData.loc[:, modelData.columns == 'is_winner']
