@@ -6,8 +6,8 @@ __pycache__/
 .log
 .png
 .idea
-*.ipynb
 .ipynb_checkpoints/
+*.model
 .pytest_cache
 data/*
 !data/sample/
