@@ -14,28 +14,37 @@ import imblearn.over_sampling as SMOTE
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-modelData = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features', 'mvpFeaturesHistorical.csv'))
+def trainModel(modelData):
+    """Train and fit the model based on the input data, then return it"""
+    X = modelData.loc[:, modelData.columns != 'is_winner']
+    y = modelData.loc[:, modelData.columns == 'is_winner']
 
-X = modelData.loc[:, modelData.columns != 'is_winner']
-y = modelData.loc[:, modelData.columns == 'is_winner']
+    over_sample = SMOTE.SMOTE(random_state = 0)
 
-over_sample = SMOTE.SMOTE(random_state = 0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+    columns = X_train.columns
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
-columns = X_train.columns
+    over_sample_X, over_sample_y = over_sample.fit_sample(X_train, y_train.values.ravel())
+    over_sample_X = pd.DataFrame(data=over_sample_X,columns=columns )
+    over_sample_y = pd.DataFrame(data=over_sample_y,columns=['is_winner'])
 
-over_sample_X, over_sample_y = over_sample.fit_sample(X_train, y_train.values.ravel())
-over_sample_X = pd.DataFrame(data=over_sample_X,columns=columns )
-over_sample_y = pd.DataFrame(data=over_sample_y,columns=['is_winner'])
+    model = RandomForestClassifier(n_estimators=100, max_depth=None, min_samples_split=2, random_state=0)
+    model.fit(over_sample_X, over_sample_y.values.ravel())
 
-model = RandomForestClassifier(n_estimators=100, max_depth=None, min_samples_split=2, random_state=0)
-model.fit(over_sample_X, over_sample_y.values.ravel())
+    logger.debug('Model created and trained with {} rows of data'.format(over_sample_X.shape[0]))
 
-writeToDir = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'model_files')
-h.silentCreateDir(writeToDir)
+    return model
 
-with open(os.path.join(writeToDir, 'mvp.model'), 'wb') as f:
-    pickle.dump(model, f)
-f.close()
+if __name__ == '__main__':
+    
+    modelData = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features', 'mvpFeaturesHistorical.csv'))
+    model = trainModel(modelData)
+    
+    writeToDir = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'model_files')
+    h.silentCreateDir(writeToDir)
 
-logger.info('Model created and trained with {} rows of data'.format(over_sample_X.shape[0]))
+    with open(os.path.join(writeToDir, 'mvp.model'), 'wb') as f:
+        pickle.dump(model, f)
+    f.close()
+
+    logger.info('Model saved to {}'.format(os.path.join(writeToDir, 'mvp.model')))
