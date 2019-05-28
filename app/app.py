@@ -4,7 +4,7 @@ sys.path.append(os.environ.get('PYTHONPATH'))
 
 import logging.config
 from config import config
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 from models.mlb_database.create_database import Player
@@ -31,19 +31,10 @@ def index():
 def player():
     try:
         logger.debug('Player page accessed')
-        return render_template('player.html')
+        return render_template('player.html')   
     except:
         logger.warning('Not able to display Player page')
         return render_template('error.html')
 
-@app.route('/test')
-def test():
-    try:
-        logger.debug('Index page accessed')
-        return render_template('test.html')
-    except:
-        logger.warning('Not able to display index')
-        return render_template('error.html')
-
 if __name__ == '__main__':
-    app.run()
+    app.run(host=app.config['HOST'])
