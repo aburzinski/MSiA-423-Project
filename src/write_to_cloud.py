@@ -10,11 +10,11 @@ import boto3
 
 parser = argparse.ArgumentParser(description='Write files to AWS s3.')
 parser.add_argument('directory', metavar='directory', type=str,
-    help='historical or projected')
+    help='historical, projected, or features')
 args = parser.parse_args()
 
-if args.directory not in ['historical', 'projected']:
-    raise ValueError('The directory argument must be either "historical" or "projected"')
+if args.directory not in ['historical', 'projected', 'features']:
+    raise ValueError('The directory argument must be either "historical", "projected", "features"')
 
 parentDir = config.PROJECT_ROOT_DIR
 readFromDir = os.path.join(parentDir, 'data', args.directory)
