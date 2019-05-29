@@ -1,3 +1,14 @@
 .parent-container {
     display: flex;
 }
+
+.head-blue {
+    background-color: #0f4871;
+    color: white
+}
+
+.head-gray {
+    background-color: #E8E8E8;
+    color: #444;
+    border: #C2C2C2 1px solid;
+}

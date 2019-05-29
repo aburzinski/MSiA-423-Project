@@ -1,34 +1,236 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Index.html</title>
-        <link href="static/team_colors.css" rel="stylesheet">
-    </head>
-    <body>
-        <h2>Header</h2>
-        <p>Some example text</p>
-        {% if True %}
-            <p class="blue">If test</p>
-        {% else %}
-            <p class="red">If test</p>
-        {% endif %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Player Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for player in players if player.playerName > 'T' %}
-                    <tr>
-                        <td class="red">{{ player.playerName }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td class="blue">{{ player.playerName }}</td>
-                    </tr>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="static/team_colors.css">
+    <link rel="stylesheet" href="static/layout.css">
+
+    <title>Index Page</title>
+</head>
+<style>
+    body {
+        background-color: #F2F2F2;
+    }
+</style>
+
+<body>
+    <div class="container head-blue mb-3">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 text-center">
+                    <h1>MLB Awards Predictor</h1>
+                    <!-- <img src="https://botw-pd.s3.amazonaws.com/styles/logo-thumbnail/s3/052014/mlb.png?itok=wlvCELtf" width="100" height="100"> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 pl-0">
+                <div class="col-md-12 head-blue text-center">
+                    <h4>National League</h4>
+                </div>
+            </div>
+            <div class="col-md-6 pr-0">
+                <div class="col-md-12 head-blue text-center">
+                    <h4>American League</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6 pl-0">
+                <div class="col-md-12 head-gray text-center">
+                    <t>Most Valuable Player Award</t>
+                </div>
+            </div>
+            <div class="col-md-6 pr-0">
+                <div class="col-md-12 head-gray text-center">
+                    <t>Most Valuable Player Award</t>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 pl-0">
+                <div class="col-md-12 head-gray pr-0 mb-1">
+                    <div class="row">
+                        <div class="col-md-4 font-italic">
+                            <t>Player</t>
+                        </div>
+                        <div class="col-md-4 font-italic">
+                            <t>Team</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Position</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Rank</t>
+                        </div>
+                    </div>
+                </div>
+
+                {% for player in nlMvp %}
+
+                <div class="col-md-12 {{ player.Team.teamName }}">
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <t>{{ player.Player.playerName }}</t>
+                        </div>
+                        <div class="col-md-5">
+                            <t>{{ player.Team.teamName }}</t>
+                        </div>
+                        <div class="col-md-2">
+                            <t>{{ player.Player.position }}</t>
+                        </div>
+                        <div class="col-md-1">
+                            <t>{{ player.CurrentStats.mvpRank }}</t>
+                        </div>
+                    </div>
+                </div>
+                
                 {% endfor %}
-            </tbody>
-        </table>
-    </body>
+
+            </div>
+            
+            <div class="col-md-6 pr-0">
+                <div class="col-md-12 head-gray pr-0 mb-1">
+                    <div class="row">
+                        <div class="col-md-4 font-italic">
+                            <t>Player</t>
+                        </div>
+                        <div class="col-md-4 font-italic">
+                            <t>Team</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Position</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Rank</t>
+                        </div>
+                    </div>
+                </div>
+                {% for player in alMvp %}
+
+                <div class="col-md-12 {{ player.Team.teamName }}">
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <t>{{ player.Player.playerName }}</t>
+                        </div>
+                        <div class="col-md-5">
+                            <t>{{ player.Team.teamName }}</t>
+                        </div>
+                        <div class="col-md-2">
+                            <t>{{ player.Player.position }}</t>
+                        </div>
+                        <div class="col-md-1">
+                            <t>{{ player.CurrentStats.mvpRank }}</t>
+                        </div>
+                    </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6 pl-0">
+                <div class="col-md-12 head-gray text-center">
+                    <t>Cy Young Award</t>
+                </div>
+            </div>
+            <div class="col-md-6 pr-0">
+                <div class="col-md-12 head-gray text-center">
+                    <t>Cy Young Award</t>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 pl-0">
+                <div class="col-md-12 head-gray pr-0 mb-1">
+                    <div class="row">
+                        <div class="col-md-4 font-italic">
+                            <t>Player</t>
+                        </div>
+                        <div class="col-md-4 font-italic">
+                            <t>Team</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Position</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Rank</t>
+                        </div>
+                    </div>
+                </div>
+
+                {% for player in nlCyYoung %}
+
+                <div class="col-md-12 {{ player.Team.teamName }}">
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <t>{{ player.Player.playerName }}</t>
+                        </div>
+                        <div class="col-md-5">
+                            <t>{{ player.Team.teamName }}</t>
+                        </div>
+                        <div class="col-md-2">
+                            <t>{{ player.Player.position }}</t>
+                        </div>
+                        <div class="col-md-1">
+                            <t>{{ player.CurrentStats.cyYoungRank }}</t>
+                        </div>
+                    </div>
+                </div>
+                
+                {% endfor %}
+
+            </div>
+            <div class="col-md-6 pr-0">
+                <div class="col-md-12 head-gray pr-0 mb-1">
+                    <div class="row">
+                        <div class="col-md-4 font-italic">
+                            <t>Player</t>
+                        </div>
+                        <div class="col-md-4 font-italic">
+                            <t>Team</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Position</t>
+                        </div>
+                        <div class="col-md-2 font-italic">
+                            <t>Rank</t>
+                        </div>
+                    </div>
+                </div>
+                {% for player in alCyYoung %}
+
+                <div class="col-md-12 {{ player.Team.teamName }}">
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <t>{{ player.Player.playerName }}</t>
+                        </div>
+                        <div class="col-md-5">
+                            <t>{{ player.Team.teamName }}</t>
+                        </div>
+                        <div class="col-md-2">
+                            <t>{{ player.Player.position }}</t>
+                        </div>
+                        <div class="col-md-1">
+                            <t>{{ player.CurrentStats.cyYoungRank }}</t>
+                        </div>
+                    </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

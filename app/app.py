@@ -7,7 +7,7 @@ from config import config
 from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 
-from models.mlb_database.create_database import Player
+from models.mlb_database.create_database import Player, Team, CurrentStats
 
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
@@ -19,11 +19,40 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def index():
+
+    numPlayersToShow = 5
+
     try:
-        players = db.session.query(Player).limit(app.config['MAX_ROWS_SHOW']).all()
+        nlMvp = db.session.query(Team, Player, CurrentStats).\
+            join(Player, Team.id == Player.currentTeamId).\
+            join(CurrentStats, Player.id == CurrentStats.playerId).\
+            filter(Team.league == 'NL').\
+            order_by(CurrentStats.mvpRank).limit(numPlayersToShow).all()
+
+        alMvp = db.session.query(Team, Player, CurrentStats).\
+            join(Player, Team.id == Player.currentTeamId).\
+            join(CurrentStats, Player.id == CurrentStats.playerId).\
+            filter(Team.league == 'AL').\
+            order_by(CurrentStats.mvpRank).limit(numPlayersToShow).all()
+
+        nlCyYoung = db.session.query(Team, Player, CurrentStats).\
+            join(Player, Team.id == Player.currentTeamId).\
+            join(CurrentStats, Player.id == CurrentStats.playerId).\
+            filter(Team.league == 'NL').\
+            order_by(CurrentStats.cyYoungRank).limit(numPlayersToShow).all()
+
+        alCyYoung = db.session.query(Team, Player, CurrentStats).\
+            join(Player, Team.id == Player.currentTeamId).\
+            join(CurrentStats, Player.id == CurrentStats.playerId).\
+            filter(Team.league == 'AL').\
+            order_by(CurrentStats.cyYoungRank).limit(numPlayersToShow).all()
+
+
         logger.debug('Index page accessed')
-        return render_template('index.html', players=players)
-    except:
+        return render_template('index.html',
+            nlMvp=nlMvp, alMvp=alMvp, nlCyYoung=nlCyYoung, alCyYoung=alCyYoung)
+    except Exception as e:
+        print(e)
         logger.warning('Not able to display index')
         return render_template('error.html')
 
@@ -37,4 +66,4 @@ def player():
         return render_template('error.html')
 
 if __name__ == '__main__':
-    app.run(host=app.config['HOST'])
+    app.run(host=app.config['HOST'], port=app.config['PORT'])
