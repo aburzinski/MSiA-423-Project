@@ -70,6 +70,6 @@ if __name__ == '__main__':
 
     writeToDir = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features')
     h.silentCreateDir(writeToDir)
-    modelData.to_csv(os.path.join(writeToDir, 'cyYoungFeatures{}.csv'.format(args.featureType)), index=False)
+    modelData.to_csv(os.path.join(writeToDir, 'cyYoungFeatures{}.csv'.format(args.featureType.capitalize())), index=False)
 
     logger.info('A file with {} rows and {} columns was created'.format(modelData.shape[0], modelData.shape[1]))
