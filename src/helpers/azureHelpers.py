@@ -1,9 +1,11 @@
 import sys
-sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 423\Project\MSiA-423-Project')
+import os
+sys.path.append(os.environ.get('PYTHONPATH'))
 
 import logging
-import os
+import io
 from config import config
+import pandas as pd
 
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
@@ -36,3 +38,7 @@ def writeDirToS3(dirPath, client, bucketName, bucketPath):
 def readFileFromS3(fileName, client, bucketName, bucketPath):
     response = client.get_object(Bucket=bucketName, Key=bucketPath + fileName)
     return response['Body'].read().decode('utf-8')
+
+def readDataframeFromS3(fileName, client, bucketName, bucketPath):
+    response = client.get_object(Bucket=bucketName, Key=bucketPath + fileName)
+    return pd.read_csv(io.BytesIO(response['Body'].read().decode('utf-8')))
