@@ -47,19 +47,19 @@ def cleanFeatures(merged):
     minimumInningsPitched = 10
     merged = merged[merged['ip'] > minimumInningsPitched]
 
-    merged.loc[:, 'sv_pct'] = merged['sv']/merged['svo']
-    merged.loc[:, 'win_pct'] = merged['w']/(merged['w'] + merged['l'])
-    merged.loc[:, 'hits_9'] = mh.nineInningNormalize(merged, 'h')
-    merged.loc[:, 'hrs_9'] = mh.nineInningNormalize(merged, 'hr')
-    merged.loc[:, 'bbs_9'] = mh.nineInningNormalize(merged, 'bb')
-    merged.loc[:, 'ks_9'] = mh.nineInningNormalize(merged, 'so')
-    merged.loc[:, 'ers_9'] = mh.nineInningNormalize(merged, 'er')
+    # merged.loc[:, 'sv_pct'] = merged['sv']/merged['svo']
+    # merged.loc[:, 'win_pct'] = merged['w']/(merged['w'] + merged['l'])
+    # merged.loc[:, 'hits_9'] = mh.nineInningNormalize(merged, 'h')
+    # merged.loc[:, 'hrs_9'] = mh.nineInningNormalize(merged, 'hr')
+    # merged.loc[:, 'bbs_9'] = mh.nineInningNormalize(merged, 'bb')
+    # merged.loc[:, 'ks_9'] = mh.nineInningNormalize(merged, 'so')
+    # merged.loc[:, 'ers_9'] = mh.nineInningNormalize(merged, 'er')
 
     if args.featureType == 'historical':
         merged['is_winner'] = merged['Winner'].apply(lambda x: 0 if isinstance(x, float) else 1)
-        modelData = merged[['hits_9', 'hrs_9', 'bbs_9', 'ks_9', 'ers_9', 'sv_pct', 'win_pct', 'era', 'whip', 'is_winner']].fillna(0)
+        modelData = merged[['h', 'hr', 'bb', 'so', 'er', 'sv', 'svo', 'w', 'l', 'era', 'whip', 'ip', 'is_winner']].fillna(0)
     elif args.featureType == 'projected':
-        modelData = merged[['player_id', 'hits_9', 'hrs_9', 'bbs_9', 'ks_9', 'ers_9', 'sv_pct', 'win_pct', 'era', 'whip']].fillna(0)
+        modelData = merged[['player_id', 'h', 'hr', 'bb', 'so', 'er', 'sv', 'svo', 'w', 'l', 'era', 'whip', 'ip']].fillna(0)
 
     return modelData
 

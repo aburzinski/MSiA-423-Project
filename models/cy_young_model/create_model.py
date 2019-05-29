@@ -7,7 +7,7 @@ from config import config
 import pandas as pd
 import pickle
 import src.helpers.helpers as h
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 import imblearn.over_sampling as SMOTE
 
@@ -28,7 +28,7 @@ def trainModel(modelData):
     over_sample_X = pd.DataFrame(data=over_sample_X,columns=columns )
     over_sample_y = pd.DataFrame(data=over_sample_y,columns=['is_winner'])
 
-    model = RandomForestClassifier(n_estimators=100, max_depth=None, min_samples_split=2, random_state=0)
+    model = LogisticRegression(random_state=0, solver='lbfgs', multi_class='ovr')
     model.fit(over_sample_X, over_sample_y.values.ravel())
 
     logger.debug('Model created and trained with {} rows of data'.format(over_sample_X.shape[0]))

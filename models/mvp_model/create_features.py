@@ -68,25 +68,29 @@ def cleanFeatures(merged):
     minimumAtBats = 10
     merged = merged[(merged['ip'] > minimumInningsPitched) | (merged['ab_y'] > minimumAtBats)]
 
-    merged.loc[:, 'sv_pct'] = merged['sv']/merged['svo']
-    merged.loc[:, 'win_pct'] = merged['w']/(merged['w'] + merged['l'])
-    merged.loc[:, 'hits_9'] = mh.nineInningNormalize(merged, 'h_x')
-    merged.loc[:, 'hrs_9'] = mh.nineInningNormalize(merged, 'hr_x')
-    merged.loc[:, 'bbs_9'] = mh.nineInningNormalize(merged, 'bb_x')
-    merged.loc[:, 'ks_9'] = mh.nineInningNormalize(merged, 'so_x')
-    merged.loc[:, 'ers_9'] = mh.nineInningNormalize(merged, 'er')
+    # No longer normalizing data by inning or at bat
 
-    merged.loc[:, 'hit_ab'] = mh.atBatNormalize(merged, 'h_y', 'ab_y')
-    merged.loc[:, 'hr_ab'] = mh.atBatNormalize(merged, 'hr_y', 'ab_y')
-    merged.loc[:, 'rbi_ab'] = mh.atBatNormalize(merged, 'rbi', 'ab_y')
-    merged.loc[:, 'bb_ab'] = mh.atBatNormalize(merged, 'bb_y', 'ab_y')
-    merged.loc[:, 'k_ab'] = mh.atBatNormalize(merged, 'so_y', 'ab_y')
+    # merged.loc[:, 'sv_pct'] = merged['sv']/merged['svo']
+    # merged.loc[:, 'win_pct'] = merged['w']/(merged['w'] + merged['l'])
+    # merged.loc[:, 'hits_9'] = mh.nineInningNormalize(merged, 'h_x')
+    # merged.loc[:, 'hrs_9'] = mh.nineInningNormalize(merged, 'hr_x')
+    # merged.loc[:, 'bbs_9'] = mh.nineInningNormalize(merged, 'bb_x')
+    # merged.loc[:, 'ks_9'] = mh.nineInningNormalize(merged, 'so_x')
+    # merged.loc[:, 'ers_9'] = mh.nineInningNormalize(merged, 'er')
+
+    # merged.loc[:, 'hit_ab'] = mh.atBatNormalize(merged, 'h_y', 'ab_y')
+    # merged.loc[:, 'hr_ab'] = mh.atBatNormalize(merged, 'hr_y', 'ab_y')
+    # merged.loc[:, 'rbi_ab'] = mh.atBatNormalize(merged, 'rbi', 'ab_y')
+    # merged.loc[:, 'bb_ab'] = mh.atBatNormalize(merged, 'bb_y', 'ab_y')
+    # merged.loc[:, 'k_ab'] = mh.atBatNormalize(merged, 'so_y', 'ab_y')
 
     if args.featureType == 'historical':
         merged['is_winner'] = merged['Winner'].apply(lambda x: 0 if isinstance(x, float) else 1)
-        modelData = merged[['hits_9', 'hrs_9', 'bbs_9', 'ks_9', 'ers_9', 'sv_pct', 'win_pct', 'era', 'whip', 'hit_ab', 'hr_ab', 'rbi_ab', 'bb_ab', 'k_ab', 'slg_y', 'obp_y', 'is_winner']]
+        modelData = merged[['h_x', 'hr_x', 'bb_x', 'so_x', 'er', 'sv', 'svo', 'w', 'l', 'ip', 'era', 'whip', 'h_y', 'hr_y',
+            'rbi', 'bb_y', 'so_y', 'slg_y', 'obp_y', 'ab_y', 'is_winner']]
     elif args.featureType == 'projected':
-        modelData = merged[['player_id', 'hits_9', 'hrs_9', 'bbs_9', 'ks_9', 'ers_9', 'sv_pct', 'win_pct', 'era', 'whip', 'hit_ab', 'hr_ab', 'rbi_ab', 'bb_ab', 'k_ab', 'slg_y', 'obp_y']]
+        modelData = merged[['player_id', 'h_x', 'hr_x', 'bb_x', 'so_x', 'er', 'sv', 'svo', 'w', 'l', 'ip', 'era', 'whip', 'h_y', 'hr_y',
+            'rbi', 'bb_y', 'so_y', 'slg_y', 'obp_y', 'ab_y']]
 
     modelData.is_copy = False
 
