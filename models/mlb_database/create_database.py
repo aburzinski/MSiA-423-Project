@@ -47,6 +47,7 @@ class Team(Base):
     league = Column(String(10), unique=False, nullable=True)
     division = Column(String(10), unique=False, nullable=True)
     yearFounded = Column(Integer, unique=False, nullable=True)
+    teamAbbrev = Column(String(100), unique=False, nullable=False)
     players = relationship('Player')
 
     def __repr__(self):

@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import src.helpers.helpers as h
 import src.helpers.azureHelpers as ah
+from data.auxiliary.teamMapping import teamMapping
 
 parentDir = config.PROJECT_ROOT_DIR
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
@@ -54,6 +55,7 @@ def ingestTeams(s3File, session, truncate=True):
             state = line[teamSchema['state'] - 1]
             league = line[teamSchema['league'] - 1]
             yearFounded = int(line[teamSchema['yearFounded'] - 1])
+            teamAbbrev = teamMapping[teamName]
             
             new_team = Team(id=teamId,
                 teamName=teamName,
@@ -61,7 +63,8 @@ def ingestTeams(s3File, session, truncate=True):
                 city=city,
                 state=state,
                 league=league,
-                yearFounded=yearFounded
+                yearFounded=yearFounded,
+                teamAbbrev=teamAbbrev
             )
             session.add(new_team)
             teamCount += 1
