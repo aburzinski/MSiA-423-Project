@@ -22,7 +22,7 @@ def makePredictions(modelData, model):
     modelData['prediction'] = model.predict_proba(predictData)[:,1]
 
     modelData['rank'] = modelData['prediction'].rank(method='dense', ascending=False).astype(int)
-    modelData = modelData[['player_id', 'prediction', 'rank']]
+    # modelData = modelData[['player_id', 'prediction', 'rank']]
 
     return modelData
 
