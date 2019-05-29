@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # Ingest statistics
     logger.info('Reading from the s3 bucket ' + bucketName)
-    bucketPath = 'data/{}/'.format('features')
+    bucketPath = 'data/{}/'.format('projected')
     statsFile = ah.readFileFromS3('mvpPredictions.csv', s3, bucketName, bucketPath)
     # statsFile = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'projected', 'mvpPredictions.csv')
 
