@@ -65,7 +65,7 @@ class CurrentStats(Base):
     earnedRunAverage = Column(Float, unique=False, nullable=True)
     whip = Column(Float, unique=False, nullable=True)
     saves = Column(Integer, unique=False, nullable=True)
-    strikeOuts = Column(Integer, unique=False, nullable=True)
+    strikeouts = Column(Integer, unique=False, nullable=True)
     inningsPitched = Column(Float, unique=False, nullable=True)
     wins = Column(Integer, unique=False, nullable=True)
     mvpLikelihood = Column(Float, unique=False, nullable=True)
