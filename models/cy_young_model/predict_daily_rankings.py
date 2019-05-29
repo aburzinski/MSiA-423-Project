@@ -20,7 +20,7 @@ def makePredictions(modelData):
     predictData = predictData.loc[:, predictData.columns != 'player_id']
 
     modelData['prediction'] = lr.predict_proba(predictData)[:,1]
-    modelData['rank'] = modelData['prediction'].rank(method='dense', ascending=False)
+    modelData['rank'] = modelData['prediction'].rank(method='dense', ascending=False).astype(int)
     modelData = modelData[['player_id', 'prediction', 'rank']]
 
     return modelData
