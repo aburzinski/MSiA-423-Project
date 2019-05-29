@@ -25,9 +25,9 @@ if args.featureType not in ['historical', 'projected']:
 def readFeatures():
     """Read the raw data from local fs or S3, and format it correctly for creating features"""
     # Specify columns to later check for missing values
-    pitching = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', args.featureType, 'pitching{}.csv'.format(args.featureType)),
+    pitching = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', args.featureType, 'pitching{}.csv'.format(args.featureType.capitalize())),
         encoding = 'latin', dtype = {'ppa': str, 'obp': str, 'era': str, 'whip': str})
-    hitting = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', args.featureType, 'hitting{}.csv'.format(args.featureType)),
+    hitting = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', args.featureType, 'hitting{}.csv'.format(args.featureType.capitalize())),
         encoding = 'latin', dtype = {'slg': str, 'obp': str})
     players = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'historical', 'players.csv'), encoding = 'latin')
     mvp = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'auxiliary', 'mvpWinners.csv'), encoding = 'latin')
