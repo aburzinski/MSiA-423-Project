@@ -12,6 +12,7 @@ __pycache__/
 data/*
 !data/sample/
 !data/auxiliary
+!data/__init__.py
 test/model/test/*
 !.gitkeep
 .idea
