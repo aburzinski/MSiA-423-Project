@@ -21,6 +21,7 @@ class Player(Base):
     """Create a table to hold player data"""
     __tablename__ = 'player'
     id = Column(Integer, primary_key=True)
+    currentTeamId = Column(Integer, ForeignKey('team.id'))
     playerName = Column(String(100), unique=False, nullable=False)
     birthCity = Column(String(100), unique=False, nullable=True)
     birthState = Column(String(10), unique=False, nullable=True)
@@ -30,7 +31,6 @@ class Player(Base):
     weight = Column(String(10), unique=False, nullable=True)
     debutDate = Column(String(20), unique=False, nullable=True)
     position = Column(String(20), unique=False, nullable=True)
-    currentTeamId = Column(Integer, ForeignKey('team.id'))
     stats = relationship('CurrentStats')
 
     def __repr__(self):
@@ -57,7 +57,7 @@ class CurrentStats(Base):
     __tablename__ = 'currentStats'
     statsId = Column(Integer, primary_key=True)
     playerId = Column(Integer, ForeignKey('player.id'))
-    isPitcher = Column(Integer, unique=False, nullable=False)
+    isPitcher = Column(Integer, unique=False, nullable=True)
     homeRuns = Column(Integer, unique=False, nullable=True)
     runsBattedIn = Column(Integer, unique=False, nullable=True)
     onBasePlusSlug = Column(Float, unique=False, nullable=True)
