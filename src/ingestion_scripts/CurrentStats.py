@@ -35,7 +35,7 @@ def ingestCurrentStats(s3File, session, truncate=True):
         # Need to subtract one to index from zero
         playerId = int(line[currentStatsSchema['playerId'] - 1])
         mvpLikelihood = float(line[currentStatsSchema['mvpLikelihood'] - 1])
-        mvpRank = int(line[currentStatsSchema['mvpRank'] - 1])
+        mvpRank = int(float(line[currentStatsSchema['mvpRank'] - 1]))
         
         new_statistic = CurrentStats(playerId=playerId,
             mvpLikelihood=mvpLikelihood,
