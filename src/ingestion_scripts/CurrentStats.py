@@ -44,7 +44,7 @@ def ingestCurrentStats(s3File, session, truncate=True):
     statsCount = 0
 
     for line in s3File.splitlines(False)[1:]:
-        line = line[1:][:-1].split(',')
+        line = line.split(',')
 
         # Need to subtract one to index from zero
         playerId = int(line[currentStatsSchema['playerId'] - 1])
