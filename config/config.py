@@ -2,11 +2,12 @@ import sys
 import os
 sys.path.append(os.environ.get('PYTHONPATH'))
 
-# DEBUG = True
+# Flask config
+DEBUG = True
 # LOGGING_CONFIG = "logging/local.conf"
-# PORT = 8000
+PORT = 8000
 # APP_NAME = "penny-lane"
-# HOST = "127.0.0.1"
+HOST = "127.0.0.1"
 # SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
 
 # Project
