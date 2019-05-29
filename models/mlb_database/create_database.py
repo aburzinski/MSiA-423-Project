@@ -5,8 +5,8 @@ sys.path.append(os.environ.get('PYTHONPATH'))
 import logging.config
 from config import config
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, MetaData
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String, Float, MetaData, ForeignKey
+from sqlalchemy.orm import sessionmaker, relationship
 import sqlalchemy as sql
 import pymysql
 from sqlalchemy_utils import create_database, database_exists
@@ -30,7 +30,8 @@ class Player(Base):
     weight = Column(String(10), unique=False, nullable=True)
     debutDate = Column(String(20), unique=False, nullable=True)
     position = Column(String(20), unique=False, nullable=True)
-    currentTeamId = Column(Integer, unique=False, nullable=True)
+    currentTeamId = Column(Integer, ForeignKey('team.id'))
+    stats = relationship('CurrentStats')
 
     def __repr__(self):
         return '<Player %r>' % self.playerName
@@ -46,6 +47,7 @@ class Team(Base):
     league = Column(String(10), unique=False, nullable=True)
     division = Column(String(10), unique=False, nullable=True)
     yearFounded = Column(Integer, unique=False, nullable=True)
+    players = relationship('Player')
 
     def __repr__(self):
         return '<Team %r>' % self.teamName
@@ -53,8 +55,8 @@ class Team(Base):
 class CurrentStats(Base):
     """Create a table to hold current stats and predictions"""
     __tablename__ = 'currentStats'
-    playerId = Column(Integer, primary_key=True)
-    teamId = Column(Integer, unique=False, nullable=False)
+    statsId = Column(Integer, primary_key=True)
+    playerId = Column(Integer, ForeignKey('player.id'))
     isPitcher = Column(Integer, unique=False, nullable=False)
     homeRuns = Column(Integer, unique=False, nullable=True)
     runsBattedIn = Column(Integer, unique=False, nullable=True)
