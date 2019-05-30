@@ -25,7 +25,7 @@
         } */
     </style>
     <body class="body-container">
-        <div class="container">
+        <div class="container mb-3">
             <div class="row pt-1 pb-1 rounded-top {{ player.Team.teamAbbrev }}">
                 <div class="col-md-7">{{ player.Player.playerName }}</div>
                 <div class="col-md-5">Hometown: {{ hometown }}</div>
@@ -39,13 +39,6 @@
                 <div class="col-md-5">Height: {{ player.Player.height }}   Weight: {{ player.Player.weight }}</div>
             </div>
         </div>
-
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-
         <div class="container">
             <div class="img-fluid text-center" alt="Responsive image">
                 <div class="img-fluid" id="chart"></div>
@@ -53,7 +46,9 @@
         </div>
 
         <script>
-            createRadar('{{ test }}', '{{ colors|tojson }}');
+            createRadar('{{ player.Player.playerName }}',
+                '{{ colors|tojson }}', '{{ stats|tojson }}',
+                '{{ maxValue|tojson }}');
         </script>
     </body>
 </html>

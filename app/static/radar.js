@@ -25,14 +25,11 @@ var RadarChart = {
 				}
 			}
 		}
-		// cfg.maxValue = Math.max(cfg.maxValue, d3.max(d, function (i) { return d3.max(i.map(function (o) { return o.value; })) }));
-
-		cfg.maxValue = [60, 60, 60, 1, 1]
 
 		var allAxis = (d[0].map(function (i, j) { return i.axis }));
 		var total = allAxis.length;
 		var radius = cfg.factor * Math.min(cfg.w / 2, cfg.h / 2);
-		var Format = d3.format('%');
+		var Format = d3.format("g");
 		d3.select(id).select("svg").remove();
 
 		var svg = d3.select(id)
@@ -65,21 +62,21 @@ var RadarChart = {
 		}
 
 		//Text indicating at what % each level is
-		for (var j = 0; j < cfg.levels; j++) {
-			var levelFactor = cfg.factor * radius * ((j + 1) / cfg.levels);
-			g.selectAll(".levels")
-				.data([1]) //dummy data
-				.enter()
-				.append("svg:text")
-				.attr("x", function (d) { return levelFactor * (1 - cfg.factor * Math.sin(0)); })
-				.attr("y", function (d) { return levelFactor * (1 - cfg.factor * Math.cos(0)); })
-				.attr("class", "legend")
-				.style("font-family", "sans-serif")
-				.style("font-size", "10px")
-				.attr("transform", "translate(" + (cfg.w / 2 - levelFactor + cfg.ToRight) + ", " + (cfg.h / 2 - levelFactor) + ")")
-				.attr("fill", "#737373")
-				.text(function (d, i) { return Format((j + 1) * cfg.maxValue[i] / cfg.levels); });
-		}
+		// for (var j = 0; j < cfg.levels; j++) {
+		// 	var levelFactor = cfg.factor * radius * ((j + 1) / cfg.levels);
+		// 	g.selectAll(".levels")
+		// 		.data([1]) //dummy data
+		// 		.enter()
+		// 		.append("svg:text")
+		// 		.attr("x", function (d) { return levelFactor * (1 - cfg.factor * Math.sin(0)); })
+		// 		.attr("y", function (d) { return levelFactor * (1 - cfg.factor * Math.cos(0)); })
+		// 		.attr("class", "legend")
+		// 		.style("font-family", "sans-serif")
+		// 		.style("font-size", "10px")
+		// 		.attr("transform", "translate(" + (cfg.w / 2 - levelFactor + cfg.ToRight) + ", " + (cfg.h / 2 - levelFactor) + ")")
+		// 		.attr("fill", "#737373")
+		// 		.text(function (d, i) { return Format((j + 1) * cfg.maxValue[i] / cfg.levels); });
+		// }
 
 		series = 0;
 

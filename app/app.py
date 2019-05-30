@@ -60,7 +60,10 @@ def index():
 @app.route('/player/<id>')
 def player(id):
     try:
-        player = db.session.query(Team, Player).join(Player).filter(Player.id == id).first()
+        player = db.session.query(Team, Player, CurrentStats).\
+            join(Player, Team.id == Player.currentTeamId).\
+            join(CurrentStats, Player.id == CurrentStats.playerId).\
+            filter(Player.id == id).first()
 
         birthCity = player.Player.birthCity
         birthState = player.Player.birthState
@@ -72,11 +75,34 @@ def player(id):
             hometown = '{}, {}'.format(birthCity, birthCountry)
 
         colors = [teamColors[player.Team.teamName]['primary'], teamColors[player.Team.teamName]['secondary']]
-        print(colors)
+        
+        if player.Player.position == 'P':
+            stats = [
+                {'axis': 'Innings Pitched', 'value': player.CurrentStats.inningsPitched},
+                {'axis': 'Wins', 'value': player.CurrentStats.wins},
+                {'axis': 'Saves', 'value': player.CurrentStats.saves},
+                {'axis': 'Strikeouts', 'value': player.CurrentStats.strikeouts},
+                {'axis': 'ERA', 'value': player.CurrentStats.earnedRunAverage},
+                {'axis': 'WHIP', 'value': player.CurrentStats.whip}
+            ]
+
+            maxValue = [800, 40, 60, 400, 15, 5]
+
+        else:
+            stats = [
+                {'axis': 'At Bats', 'value': player.CurrentStats.atBats},
+                {'axis': 'Hits', 'value': player.CurrentStats.hits},
+                {'axis': 'Home Runs', 'value': player.CurrentStats.homeRuns},
+                {'axis': 'RBIs', 'value': player.CurrentStats.runsBattedIn},
+                {'axis': 'OPS', 'value': player.CurrentStats.onBasePlusSlug},
+                {'axis': 'Runs', 'value': player.CurrentStats.homeRuns}
+            ]
+
+            maxValue = [800, 300, 60, 200, 2, 60]
 
         logger.debug('Player page accessed')
         return render_template('player.html', player=player, hometown=hometown,
-            test='qwerty', colors=colors)
+            test='qwerty', colors=colors, stats=stats, maxValue=maxValue)
     except Exception as e:
         print(e)
         logger.warning('Not able to display Player page')
