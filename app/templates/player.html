@@ -8,24 +8,35 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="static/team_colors.css">
-        <link rel="stylesheet" href="static/layout.css">
+        <link rel="stylesheet" href="/static/team_colors.css">
+        <link rel="stylesheet" href="/static/layout.css">   
+
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script type="text/javascript" src="/static/radar.js"></script>
+        <script type="text/javascript" src="/static/script.js"></script>
 
         <title>Player Page</title>
     </head>
-    <body>
-        <div class="container dodgers">
-            <div class="row">
-                <div class="col-md-7">First Name</div>
-                <div class="col-md-5">Hometown</div>
+    <style>
+        /* .dodgers {
+            background-color: #005A9C;
+            color: white;
+            border-bottom: #A5ACAF 3px solid;
+        } */
+    </style>
+    <body class="body-container">
+        <div class="container">
+            <div class="row pt-1 pb-1 rounded-top {{ player.Team.teamAbbrev }}">
+                <div class="col-md-7">{{ player.Player.playerName }}</div>
+                <div class="col-md-5">Hometown: {{ hometown }}</div>
             </div>
-            <div class="row">
-                <div class="col-md-7">Last Name</div>
-                <div class="col-md-5">MLB Debut</div>
+            <div class="row pt-1 pb-1 {{ player.Team.teamAbbrev }}">
+                <div class="col-md-7">{{ player.Team.teamName }}</div>
+                <div class="col-md-5">MLB Debut: {{ player.Player.debutDate }}</div>
             </div>
-            <div class="row">
-                <div class="col-md-7">Team Name</div>
-                <div class="col-md-5">Position</div>
+            <div class="row pt-1 pb-1 rounded-bottom {{ player.Team.teamAbbrev }}">
+                <div class="col-md-7">Position: {{ player.Player.position }}</div>
+                <div class="col-md-5">Height: {{ player.Player.height }}   Weight: {{ player.Player.weight }}</div>
             </div>
         </div>
 
@@ -34,5 +45,15 @@
         <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+        <div class="container">
+            <div class="img-fluid text-center" alt="Responsive image">
+                <div class="img-fluid" id="chart"></div>
+            </div>
+        </div>
+
+        <script>
+            createRadar('{{ test }}', '{{ colors|tojson }}');
+        </script>
     </body>
 </html>
