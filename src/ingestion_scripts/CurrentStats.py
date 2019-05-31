@@ -34,11 +34,7 @@ def ingestCurrentStats(s3File, session, truncate=True):
         'saves': 7,
         'strikeouts': 5,
         'inningsPitched': 11,
-        'wins': 9,
-        'mvpLikelihood': 22,
-        'mvpRank': 23,
-        'cyYoungLikelihood': 24,
-        'cyYoungRank': 25
+        'wins': 9
     }
 
     statsCount = 0
@@ -59,10 +55,6 @@ def ingestCurrentStats(s3File, session, truncate=True):
         strikeouts = int(float(line[currentStatsSchema['strikeouts'] - 1]))
         inningsPitched = int(float(line[currentStatsSchema['inningsPitched'] - 1]))
         wins = int(float(line[currentStatsSchema['wins'] - 1]))
-        mvpLikelihood = float(line[currentStatsSchema['mvpLikelihood'] - 1])
-        mvpRank = int(float(line[currentStatsSchema['mvpRank'] - 1]))
-        cyYoungLikelihood = float(line[currentStatsSchema['cyYoungLikelihood'] - 1])
-        cyYoungRank = int(float(line[currentStatsSchema['cyYoungRank'] - 1]))
         
         new_statistic = CurrentStats(playerId=playerId,
             hits=hits,
@@ -75,14 +67,10 @@ def ingestCurrentStats(s3File, session, truncate=True):
             saves=saves,
             strikeouts=strikeouts,
             inningsPitched=inningsPitched,
-            wins=wins,
-            mvpLikelihood=mvpLikelihood,
-            mvpRank=mvpRank,
-            cyYoungLikelihood=cyYoungLikelihood,
-            cyYoungRank=cyYoungRank
+            wins=wins
         )
         session.add(new_statistic)
         statsCount += 1
 
     session.commit()
-    logging.info('Added {} player statistics to database successfully'.format(str(statsCount)))
+    logging.info('Added {} current statistics to database successfully'.format(str(statsCount)))
