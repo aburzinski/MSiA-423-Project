@@ -22,19 +22,19 @@ def ingestCurrentStats(s3File, session, truncate=True):
 
     # Column numbers are indexed from one
     currentStatsSchema = {
-        'playerId': 1,
-        'hits': 14,
-        'homeRuns': 15,
-        'runsBattedIn': 16,
-        'onBasePct': 20,
-        'slugPct': 19,
-        'atBats': 21,
-        'earnedRunAverage': 12,
-        'whip': 13,
-        'saves': 7,
-        'strikeouts': 5,
-        'inningsPitched': 11,
-        'wins': 9
+        'playerId': 37,
+        'hits': 34,
+        'homeRuns': 25,
+        'runsBattedIn': 41,
+        'onBasePct': 45,
+        'slugPct': 43,
+        'atBats': 2,
+        'earnedRunAverage': 107,
+        'whip': 63,
+        'saves': 104,
+        'strikeouts': 106,
+        'inningsPitched': 51,
+        'wins': 79
     }
 
     statsCount = 0
