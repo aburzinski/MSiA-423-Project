@@ -18,13 +18,14 @@ def makePredictions(modelData, model):
     """
     predictData = modelData
     predictData = predictData.loc[:, predictData.columns != 'player_id']
+    predictData = predictData.loc[:, predictData.columns != 'league']
 
     modelData['prediction'] = model.predict_proba(predictData)[:,1]
 
-    modelData['rank'] = modelData['prediction'].rank(method='dense', ascending=False).astype(int)
+    modelData['rank'] = modelData.groupby('league')['prediction'].rank(method='dense', ascending=False).astype(int)
     # modelData = modelData[['player_id', 'prediction', 'rank']]
 
-    return modelData
+    return modelData.drop_duplicates()
 
 if __name__ == '__main__':
     with open(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'model_files', 'mvp.model'), 'rb') as f:

@@ -18,9 +18,10 @@ def makePredictions(modelData):
     """
     predictData = modelData
     predictData = predictData.loc[:, predictData.columns != 'player_id']
+    predictData = predictData.loc[:, predictData.columns != 'league']
 
     modelData['prediction'] = lr.predict_proba(predictData)[:,1]
-    modelData['rank'] = modelData['prediction'].rank(method='dense', ascending=False).astype(int)
+    modelData['rank'] = modelData.groupby('league')['prediction'].rank(method='dense', ascending=False).astype(int)
     modelData = modelData[['player_id', 'prediction', 'rank']]
 
     return modelData

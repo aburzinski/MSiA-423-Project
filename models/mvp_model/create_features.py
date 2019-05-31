@@ -31,12 +31,18 @@ def readFeatures():
         encoding = 'latin', dtype = {'slg': str, 'obp': str})
     players = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'historical', 'players.csv'), encoding = 'latin')
     mvp = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'auxiliary', 'mvpWinners.csv'), encoding = 'latin')
+    teams = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'historical', 'teams.csv'), encoding = 'latin')
 
     merged = players.merge(mvp, how='left', left_on='name_display_first_last', right_on='Winner')
     if args.featureType == 'projected':
         merged['season'] = config.CURRENT_SEASON
         pitching['season'] = config.CURRENT_SEASON
         hitting['season'] = config.CURRENT_SEASON
+
+    merged['season'] = config.CURRENT_SEASON
+    merged = merged.merge(teams, how = 'left', left_on=['team_id', 'season'], right_on=['team_id', 'season'])
+
+    league = merged[['player_id', 'season', 'league']]
 
     # Need to rename the columns because the historical data will be rename
     # during the join, by projected data will not
@@ -58,7 +64,8 @@ def readFeatures():
     }, inplace=True)
 
     stats = pitching.merge(hitting, how='outer', left_on=['player_id', 'season'], right_on=['player_id', 'season'])
-    merged = stats.merge(merged, how = 'left', left_on=['player_id','season'], right_on=['player_id', 'Year'])
+    merged = stats.merge(merged, how='left', left_on=['player_id','season'], right_on=['player_id', 'Year'])
+    merged = merged.merge(league, how='left', left_on=['player_id', 'season_x'], right_on=['player_id', 'season'])
 
     return merged
 
@@ -68,29 +75,16 @@ def cleanFeatures(merged):
     minimumAtBats = 10
     merged = merged[(merged['ip'] > minimumInningsPitched) | (merged['ab_y'] > minimumAtBats)]
 
-    # No longer normalizing data by inning or at bat
-
-    # merged.loc[:, 'sv_pct'] = merged['sv']/merged['svo']
-    # merged.loc[:, 'win_pct'] = merged['w']/(merged['w'] + merged['l'])
-    # merged.loc[:, 'hits_9'] = mh.nineInningNormalize(merged, 'h_x')
-    # merged.loc[:, 'hrs_9'] = mh.nineInningNormalize(merged, 'hr_x')
-    # merged.loc[:, 'bbs_9'] = mh.nineInningNormalize(merged, 'bb_x')
-    # merged.loc[:, 'ks_9'] = mh.nineInningNormalize(merged, 'so_x')
-    # merged.loc[:, 'ers_9'] = mh.nineInningNormalize(merged, 'er')
-
-    # merged.loc[:, 'hit_ab'] = mh.atBatNormalize(merged, 'h_y', 'ab_y')
-    # merged.loc[:, 'hr_ab'] = mh.atBatNormalize(merged, 'hr_y', 'ab_y')
-    # merged.loc[:, 'rbi_ab'] = mh.atBatNormalize(merged, 'rbi', 'ab_y')
-    # merged.loc[:, 'bb_ab'] = mh.atBatNormalize(merged, 'bb_y', 'ab_y')
-    # merged.loc[:, 'k_ab'] = mh.atBatNormalize(merged, 'so_y', 'ab_y')
-
     if args.featureType == 'historical':
         merged['is_winner'] = merged['Winner'].apply(lambda x: 0 if isinstance(x, float) else 1)
         modelData = merged[['h_x', 'hr_x', 'bb_x', 'so_x', 'er', 'sv', 'svo', 'w', 'l', 'ip', 'era', 'whip', 'h_y', 'hr_y',
             'rbi', 'bb_y', 'so_y', 'slg_y', 'obp_y', 'ab_y', 'is_winner']]
     elif args.featureType == 'projected':
-        modelData = merged[['player_id', 'h_x', 'hr_x', 'bb_x', 'so_x', 'er', 'sv', 'svo', 'w', 'l', 'ip', 'era', 'whip', 'h_y', 'hr_y',
+        modelData = merged[['player_id', 'league_y', 'h_x', 'hr_x', 'bb_x', 'so_x', 'er', 'sv', 'svo', 'w', 'l', 'ip', 'era', 'whip', 'h_y', 'hr_y',
             'rbi', 'bb_y', 'so_y', 'slg_y', 'obp_y', 'ab_y']]
+        modelData.rename(columns={
+            'league_y': 'league'
+        }, inplace=True)
 
     modelData.is_copy = False
 
@@ -104,7 +98,7 @@ def cleanFeatures(merged):
 
     modelData = modelData.replace([np.inf, -np.inf], np.nan).fillna(0)
 
-    return modelData
+    return modelData.drop_duplicates()
 
 if __name__ == '__main__':
 

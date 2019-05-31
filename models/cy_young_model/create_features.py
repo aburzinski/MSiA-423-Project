@@ -29,16 +29,23 @@ def readFeatures():
         encoding = 'latin', dtype = {'ppa': str, 'obp': str, 'era': str, 'whip': str})
     players = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'historical', 'players.csv'), encoding = 'latin')
     cyYoung = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'auxiliary', 'cyYoungWinners.csv'), encoding = 'latin')
+    teams = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'historical', 'teams.csv'), encoding = 'latin')
 
     merged = players.merge(cyYoung, how='left', left_on='name_display_first_last', right_on='Winner')
     if args.featureType == 'projected':
         merged['season'] = config.CURRENT_SEASON
         pitching['season'] = config.CURRENT_SEASON
 
+    merged['season'] = config.CURRENT_SEASON
+    merged = merged.merge(teams, how = 'left', left_on=['team_id', 'season'], right_on=['team_id', 'season'])
+
+    league = merged[['player_id', 'season', 'league']]
+
     # Need to rename the columns because the historical data will be rename
     # during the join, by projected data will not
 
     merged = pitching.merge(merged, how = 'left', left_on=['player_id','season'], right_on=['player_id', 'Year'])
+    merged = merged.merge(league, how='left', left_on=['player_id', 'season_x'], right_on=['player_id', 'season'])
 
     return merged
 
@@ -47,21 +54,16 @@ def cleanFeatures(merged):
     minimumInningsPitched = 10
     merged = merged[merged['ip'] > minimumInningsPitched]
 
-    # merged.loc[:, 'sv_pct'] = merged['sv']/merged['svo']
-    # merged.loc[:, 'win_pct'] = merged['w']/(merged['w'] + merged['l'])
-    # merged.loc[:, 'hits_9'] = mh.nineInningNormalize(merged, 'h')
-    # merged.loc[:, 'hrs_9'] = mh.nineInningNormalize(merged, 'hr')
-    # merged.loc[:, 'bbs_9'] = mh.nineInningNormalize(merged, 'bb')
-    # merged.loc[:, 'ks_9'] = mh.nineInningNormalize(merged, 'so')
-    # merged.loc[:, 'ers_9'] = mh.nineInningNormalize(merged, 'er')
-
     if args.featureType == 'historical':
         merged['is_winner'] = merged['Winner'].apply(lambda x: 0 if isinstance(x, float) else 1)
         modelData = merged[['h', 'hr', 'bb', 'so', 'er', 'sv', 'svo', 'w', 'l', 'era', 'whip', 'ip', 'is_winner']].fillna(0)
     elif args.featureType == 'projected':
-        modelData = merged[['player_id', 'h', 'hr', 'bb', 'so', 'er', 'sv', 'svo', 'w', 'l', 'era', 'whip', 'ip']].fillna(0)
+        modelData = merged[['player_id', 'league_y', 'h', 'hr', 'bb', 'so', 'er', 'sv', 'svo', 'w', 'l', 'era', 'whip', 'ip']].fillna(0)
+        modelData.rename(columns={
+            'league_y': 'league'
+        }, inplace=True)
 
-    return modelData
+    return modelData.drop_duplicates()
 
 if __name__ == '__main__':
 
