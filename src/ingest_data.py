@@ -54,7 +54,6 @@ if __name__ == '__main__':
     logger.info('Reading from the s3 bucket ' + bucketName)
     bucketPath = 'data/{}/'.format('projected')
     projectedStatsFile = ah.readFileFromS3('projectedStats.csv', s3, bucketName, bucketPath)
-    # statsFile = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'projected', 'mvpPredictions.csv')
 
     projectedStats.ingestProjectedStats(projectedStatsFile, dbsession, truncate=True)
 
@@ -62,7 +61,6 @@ if __name__ == '__main__':
     logger.info('Reading from the s3 bucket ' + bucketName)
     bucketPath = 'data/{}/'.format('projected')
     currentStatsFile = ah.readFileFromS3('currentStats.csv', s3, bucketName, bucketPath)
-    # statsFile = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'projected', 'mvpPredictions.csv')
 
     currentStats.ingestCurrentStats(currentStatsFile, dbsession, truncate=True)
 
