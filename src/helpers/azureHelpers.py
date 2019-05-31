@@ -37,8 +37,8 @@ def writeDirToS3(dirPath, client, bucketName, bucketPath):
 
 def readFileFromS3(fileName, client, bucketName, bucketPath):
     response = client.get_object(Bucket=bucketName, Key=bucketPath + fileName)
-    return response['Body'].read().decode('utf-8')
+    return response['Body'].read().decode('latin')
 
 def readDataframeFromS3(fileName, client, bucketName, bucketPath):
     response = client.get_object(Bucket=bucketName, Key=bucketPath + fileName)
-    return pd.read_csv(io.BytesIO(response['Body'].read().decode('utf-8')))
+    return pd.read_csv(io.BytesIO(response['Body'].read().decode('latin')))
