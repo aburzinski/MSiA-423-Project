@@ -18,6 +18,7 @@ from models.mlb_database.create_database import Base
 import src.ingestion_scripts.Player as player
 import src.ingestion_scripts.Team as team
 import src.ingestion_scripts.CurrentStats as currentStats
+import src.ingestion_scripts.ProjectedStats as projectedStats
 
 if __name__ == '__main__':
     engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
@@ -49,12 +50,21 @@ if __name__ == '__main__':
 
     team.ingestTeams(teamFile, dbsession, truncate=True)
 
-    # Ingest statistics
+    # Ingest projected statistics
     logger.info('Reading from the s3 bucket ' + bucketName)
     bucketPath = 'data/{}/'.format('projected')
-    statsFile = ah.readFileFromS3('currentStats.csv', s3, bucketName, bucketPath)
+    projectedStatsFile = ah.readFileFromS3('projectedStats.csv', s3, bucketName, bucketPath)
     # statsFile = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'projected', 'mvpPredictions.csv')
 
-    currentStats.ingestCurrentStats(statsFile, dbsession, truncate=True)
+    projectedStats.ingestProjectedStats(projectedStatsFile, dbsession, truncate=True)
+
+    # Ingest current statistics
+    logger.info('Reading from the s3 bucket ' + bucketName)
+    bucketPath = 'data/{}/'.format('projected')
+    currentStatsFile = ah.readFileFromS3('currentStats.csv', s3, bucketName, bucketPath)
+    # statsFile = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'projected', 'mvpPredictions.csv')
+
+    currentStats.ingestCurrentStats(currentStatsFile, dbsession, truncate=True)
+
 
     logger.info('Data ingestion conpleted')

@@ -30,6 +30,6 @@ if __name__ == '__main__':
     merged['cyYoungLikelihood'] = merged['cyYoungLikelihood'].fillna(0.0)
     merged['cyYoungRank'] = merged['cyYoungRank'].fillna(99999)
 
-    merged.to_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'projected', 'currentStats.csv'), index=False)
+    merged.to_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'projected', 'projectedStats.csv'), index=False)
 
     logger.info('Files merged successfully')

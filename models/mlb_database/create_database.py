@@ -31,7 +31,8 @@ class Player(Base):
     weight = Column(String(10), unique=False, nullable=True)
     debutDate = Column(String(20), unique=False, nullable=True)
     position = Column(String(20), unique=False, nullable=True)
-    stats = relationship('CurrentStats')
+    currentStats = relationship('CurrentStats')
+    projectedStats = relationship('ProjectedStats')
 
     def __repr__(self):
         return '<Player %r>' % self.playerName
@@ -56,7 +57,27 @@ class Team(Base):
 class CurrentStats(Base):
     """Create a table to hold current stats and predictions"""
     __tablename__ = 'currentStats'
-    statsId = Column(Integer, primary_key=True)
+    currentStatsId = Column(Integer, primary_key=True)
+    playerId = Column(Integer, ForeignKey('player.id'))
+    hits = Column(Integer, unique=False, nullable=True)
+    homeRuns = Column(Integer, unique=False, nullable=True)
+    runsBattedIn = Column(Integer, unique=False, nullable=True)
+    onBasePlusSlug = Column(Float, unique=False, nullable=True)
+    atBats = Column(Integer, unique=False, nullable=True)
+    earnedRunAverage = Column(Float, unique=False, nullable=True)
+    whip = Column(Float, unique=False, nullable=True)
+    saves = Column(Integer, unique=False, nullable=True)
+    strikeouts = Column(Integer, unique=False, nullable=True)
+    inningsPitched = Column(Float, unique=False, nullable=True)
+    wins = Column(Integer, unique=False, nullable=True)
+
+    def __repr__(self):
+        return '<Current Stats %r>' % self.playerId
+
+class ProjectedStats(Base):
+    """Create a table to hold current stats and predictions"""
+    __tablename__ = 'projectedStats'
+    projectedStatsId = Column(Integer, primary_key=True)
     playerId = Column(Integer, ForeignKey('player.id'))
     hits = Column(Integer, unique=False, nullable=True)
     homeRuns = Column(Integer, unique=False, nullable=True)
@@ -75,7 +96,7 @@ class CurrentStats(Base):
     cyYoungRank = Column(Integer, unique=False, nullable=True)
 
     def __repr__(self):
-        return '<Player Stats %r>' % self.playerId
+        return '<Projected Stats %r>' % self.playerId
 
 if __name__ == '__main__':
 
