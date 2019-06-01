@@ -29,7 +29,7 @@ def ingestTeams(s3File, session, truncate=True):
         'city': 7,
         'state': 40,
         'league': 23,
-        'division': 43,
+        'division': 36,
         'yearFounded': 48
     }
 
@@ -54,6 +54,7 @@ def ingestTeams(s3File, session, truncate=True):
             city = line[teamSchema['city'] - 1]
             state = line[teamSchema['state'] - 1]
             league = line[teamSchema['league'] - 1]
+            division = line[teamSchema['division'] - 1]
             yearFounded = int(line[teamSchema['yearFounded'] - 1])
             teamAbbrev = teamMapping[teamName]
             
@@ -63,6 +64,7 @@ def ingestTeams(s3File, session, truncate=True):
                 city=city,
                 state=state,
                 league=league,
+                division=division,
                 yearFounded=yearFounded,
                 teamAbbrev=teamAbbrev
             )
