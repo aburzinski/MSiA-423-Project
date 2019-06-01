@@ -29,7 +29,7 @@ def ingestTeams(s3File, session, truncate=True):
         'city': 7,
         'state': 40,
         'league': 23,
-        'division': 36,
+        'division': 35,
         'yearFounded': 48
     }
 
