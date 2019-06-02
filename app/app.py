@@ -7,10 +7,12 @@ from config import config
 from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 import traceback
+from datetime import datetime, timedelta
 
 from models.mlb_database.create_database import Player, Team, CurrentStats, ProjectedStats
 from data.auxiliary.teamColors import teamColors
 from data.auxiliary.divisionMapping import divisionMapping
+from data.auxiliary.endOfSeason import endOfSeason
 
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
@@ -68,14 +70,17 @@ def index():
         aleTeams = db.session.query(Team).filter(Team.division == 'ALE').\
             order_by(Team.teamName).all()
 
+        daysLeftDelta = endOfSeason[config.CURRENT_SEASON] - datetime.now()
+        daysLeft = daysLeftDelta.days
 
         logger.debug('Index page accessed')
-        return render_template('index.html',
+        return render_template('index.html', daysLeft=daysLeft,
             nlMvp=nlMvp, alMvp=alMvp, nlCyYoung=nlCyYoung, alCyYoung=alCyYoung,
             nlwTeams=nlwTeams, nlcTeams=nlcTeams, nleTeams=nleTeams,
             alwTeams=alwTeams, alcTeams=alcTeams, aleTeams=aleTeams)
     except Exception as e:
         print(e)
+        print(traceback.format_exc())
         logger.warning('Not able to display index page')
         return render_template('error.html')
 
@@ -182,7 +187,7 @@ def team(id):
         logger.debug('Team page accessed')
         return render_template('team.html', team=team, division=division,
             location=location, mvpPlayers=mvpPlayers, cyYoungPlayers=cyYoungPlayers)
-            
+
     except Exception as e:
         print(e)
         print(traceback.format_exc())
