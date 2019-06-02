@@ -104,7 +104,7 @@
                                 </a>
                             </div>
                             <div class="col-md-4 p-0" playerId="{{ player.Player.id }}">
-                                <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('team', id=player.Team.id) }}">
                                     <t>{{ player.Team.teamName }}</t>
                                 </a>
                             </div>
