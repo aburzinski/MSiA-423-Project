@@ -5,7 +5,7 @@ sys.path.append(os.environ.get('PYTHONPATH'))
 import logging.config
 from config import config
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, MetaData, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, MetaData, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship
 import sqlalchemy as sql
 import pymysql
@@ -97,6 +97,11 @@ class ProjectedStats(Base):
 
     def __repr__(self):
         return '<Projected Stats %r>' % self.playerId
+
+class LastUpdate(Base):
+    """Create a table to hold the last ingestion date"""
+    __tablename__ = 'lastUpdate'
+    lastUpdateDate = Column(DateTime, unique=True, nullable=False)
 
 if __name__ == '__main__':
 

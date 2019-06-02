@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 import boto3
 import src.helpers.helpers as h
 import src.helpers.azureHelpers as ah
+from datetime import datetime
 
 parentDir = config.PROJECT_ROOT_DIR
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
@@ -19,6 +20,7 @@ import src.ingestion_scripts.Player as player
 import src.ingestion_scripts.Team as team
 import src.ingestion_scripts.CurrentStats as currentStats
 import src.ingestion_scripts.ProjectedStats as projectedStats
+import src.ingestion_scripts.LastUpdateDate as lastUpdateDate
 
 if __name__ == '__main__':
     engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
@@ -64,5 +66,8 @@ if __name__ == '__main__':
 
     currentStats.ingestCurrentStats(currentStatsFile, dbsession, truncate=True)
 
+
+    # Update last updated table
+    lastUpdateDate.ingestLastUpdate(dbsession, truncate=True)
 
     logger.info('Data ingestion conpleted')
