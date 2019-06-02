@@ -78,6 +78,49 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="col-md-12 mb-3 rounded text-center {{ team.teamAbbrev }}">
+                        <p>Cy Young Award</p>
+                    </div>
+                    <div class="col-md-12 mb-3 head-gray rounded text-center font-italic">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>Player</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Position</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Rank</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+
+                            {% for player in cyYoungPlayers %}
+
+                            <div class="col-md-6 mb-2" playerId="{{ player.Player.id }}">
+                                <a class="btn btn-block btn-link {{ team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.Player.playerName }}</t>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a class="btn btn-block btn-link turned-off {{ team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.Player.position }}</t>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a class="btn btn-block btn-link turned-off {{ team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.ProjectedStats.cyYoungRank }}</t>
+                                </a>
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

@@ -173,9 +173,16 @@ def team(id):
             filter(Team.id == id).\
             order_by(ProjectedStats.mvpRank).limit(numPlayersToShow).all()
 
+        cyYoungPlayers = db.session.query(Team, Player, ProjectedStats).\
+            join(Player, Team.id == Player.currentTeamId).\
+            join(ProjectedStats, Player.id == ProjectedStats.playerId).\
+            filter(Team.id == id).\
+            order_by(ProjectedStats.cyYoungRank).limit(numPlayersToShow).all()
+
         logger.debug('Team page accessed')
         return render_template('team.html', team=team, division=division,
-            location=location, mvpPlayers=mvpPlayers)
+            location=location, mvpPlayers=mvpPlayers, cyYoungPlayers=cyYoungPlayers)
+            
     except Exception as e:
         print(e)
         print(traceback.format_exc())

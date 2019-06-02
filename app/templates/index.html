@@ -96,30 +96,28 @@
                 {% for player in nlMvp %}
 
                 <div class="col-md-12 mb-2">
-                    <!-- <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}"> -->
-                        <div class="row">
-                            <div class="col-md-4" playerId="{{ player.Player.id }}">
-                                <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
-                                    <t>{{ player.Player.playerName }}</t>
-                                </a>
-                            </div>
-                            <div class="col-md-4 p-0" playerId="{{ player.Player.id }}">
-                                <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('team', id=player.Team.id) }}">
-                                    <t>{{ player.Team.teamName }}</t>
-                                </a>
-                            </div>
-                            <div class="col-md-2 pr-0" playerId="{{ player.Player.id }}">
-                                <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
-                                    <t>{{ player.Player.position }}</t>
-                                </a>
-                            </div>
-                            <div class="col-md-2 text-right" playerId="{{ player.Player.id }}">
-                                <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
-                                    <t>{{ player.ProjectedStats.mvpRank }}</t>
-                                </a>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.Player.playerName }}</t>
+                            </a>
                         </div>
-                    <!-- </a> -->
+                        <div class="col-md-4 p-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('team', id=player.Team.id) }}">
+                                <t>{{ player.Team.teamName }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 pr-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.Player.position }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-right" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.ProjectedStats.mvpRank }}</t>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 
                 {% endfor %}
@@ -145,23 +143,29 @@
 
                 {% for player in alMvp %}
 
-                <div class="col-md-12 mb-1">
-                    <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
-                        <div class="row">
-                            <div class="col-md-4" playerId="{{ player.Player.id }}">
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
                                 <t>{{ player.Player.playerName }}</t>
-                            </div>
-                            <div class="col-md-4">
-                                <t>{{ player.Team.teamName }}</t>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.Player.position }}</t>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.ProjectedStats.mvpRank }}</t>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                        <div class="col-md-4 p-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('team', id=player.Team.id) }}">
+                                <t>{{ player.Team.teamName }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 pr-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.Player.position }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-right" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.ProjectedStats.mvpRank }}</t>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 
                 {% endfor %}
@@ -201,23 +205,29 @@
 
                 {% for player in nlCyYoung %}
 
-                <div class="col-md-12 mb-1">
-                    <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
-                        <div class="row">
-                            <div class="col-md-4" playerId="{{ player.Player.id }}">
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
                                 <t>{{ player.Player.playerName }}</t>
-                            </div>
-                            <div class="col-md-4">
-                                <t>{{ player.Team.teamName }}</t>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.Player.position }}</t>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.ProjectedStats.cyYoungRank }}</t>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                        <div class="col-md-4 p-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('team', id=player.Team.id) }}">
+                                <t>{{ player.Team.teamName }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 pr-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.Player.position }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-right" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.ProjectedStats.mvpRank }}</t>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 
                 {% endfor %}
@@ -243,23 +253,29 @@
 
                 {% for player in alCyYoung %}
 
-                <div class="col-md-12 mb-1">
-                    <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
-                        <div class="row">
-                            <div class="col-md-4" playerId="{{ player.Player.id }}">
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-4" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
                                 <t>{{ player.Player.playerName }}</t>
-                            </div>
-                            <div class="col-md-4">
-                                <t>{{ player.Team.teamName }}</t>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.Player.position }}</t>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.ProjectedStats.cyYoungRank }}</t>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                        <div class="col-md-4 p-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('team', id=player.Team.id) }}">
+                                <t>{{ player.Team.teamName }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 pr-0" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.Player.position }}</t>
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-right" playerId="{{ player.Player.id }}">
+                            <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                <t>{{ player.ProjectedStats.mvpRank }}</t>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 
                 {% endfor %}
