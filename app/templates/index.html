@@ -18,7 +18,7 @@
 
 
 <body class="body-container">
-    <div class="container head-blue mb-3">
+    <div class="container rounded head-blue mb-3">
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-12 text-center">
@@ -28,34 +28,55 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container mb-3">
         <div class="row">
-            <div class="col-md-6 pl-0">
-                <div class="col-md-12 head-blue text-center">
+            <div class="col-md-6">
+                <div class="col-md-12 rounded head-gray">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec tellus non justo ultrices euismod quis nec diam. Ut at diam turpis. Nam ac risus a turpis placerat venenatis eu quis nunc. Quisque dapibus quis metus sed consequat. Cras ante lectus, gravida volutpat neque ut, efficitur porta nulla. Nunc sed molestie dolor, in malesuada eros. Quisque enim nulla, efficitur laoreet scelerisque at, vehicula non metus.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="col-md-12 rounded head-gray">
+                    <p>Current as of XXX</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="col-md-12 rounded head-gray">
+                    <p>XXX days until end of season</p>
+                </div>
+            </div>
+            <div class="col-md-12">
+            </div>
+        </div>
+    </div>
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-12 head-blue text-center rounded">
                     <p class="h4">National League</p>
                 </div>
             </div>
-            <div class="col-md-6 pr-0">
-                <div class="col-md-12 head-blue text-center">
+            <div class="col-md-6">
+                <div class="col-md-12 head-blue text-center rounded">
                     <p class="h4">American League</p>
                 </div>
             </div>
         </div>
         <div class="row mb-2">
-            <div class="col-md-6 pl-0">
-                <div class="col-md-12 head-gray text-center">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray text-center rounded">
                     <t>Most Valuable Player Award</t>
                 </div>
             </div>
-            <div class="col-md-6 pr-0">
-                <div class="col-md-12 head-gray text-center">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray text-center rounded">
                     <t>Most Valuable Player Award</t>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 pl-0">
-                <div class="col-md-12 head-gray pr-0 mb-1">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray pr-0 mb-1 rounded">
                     <div class="row">
                         <div class="col-md-4 font-italic text-center">
                             <t>Player</t>
@@ -66,7 +87,7 @@
                         <div class="col-md-2 font-italic text-center">
                             <t>Position</t>
                         </div>
-                        <div class="col-md-2 font-italic text-center">
+                        <div class="col-md-2 font-italic">
                             <t>Rank</t>
                         </div>
                     </div>
@@ -74,30 +95,38 @@
 
                 {% for player in nlMvp %}
 
-                <div class="col-md-12 mb-1">
-                    <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                <div class="col-md-12 mb-2">
+                    <!-- <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}"> -->
                         <div class="row">
                             <div class="col-md-4" playerId="{{ player.Player.id }}">
-                                <t>{{ player.Player.playerName }}</t>
+                                <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.Player.playerName }}</t>
+                                </a>
                             </div>
-                            <div class="col-md-4">
-                                <t>{{ player.Team.teamName }}</t>
+                            <div class="col-md-4 p-0" playerId="{{ player.Player.id }}">
+                                <a class="btn btn-block btn-link {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.Team.teamName }}</t>
+                                </a>
                             </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.Player.position }}</t>
+                            <div class="col-md-2 pr-0" playerId="{{ player.Player.id }}">
+                                <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.Player.position }}</t>
+                                </a>
                             </div>
-                            <div class="col-md-2 text-right">
-                                <t>{{ player.CurrentStats.mvpRank }}</t>
+                            <div class="col-md-2 text-right" playerId="{{ player.Player.id }}">
+                                <a class="btn btn-block btn-link turned-off {{ player.Team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.ProjectedStats.mvpRank }}</t>
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    <!-- </a> -->
                 </div>
                 
                 {% endfor %}
 
             </div>
-            <div class="col-md-6 pr-0">
-                <div class="col-md-12 head-gray pr-0 mb-1">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray pr-0 mb-1 rounded">
                     <div class="row">
                         <div class="col-md-4 font-italic text-center">
                             <t>Player</t>
@@ -129,7 +158,7 @@
                                 <t>{{ player.Player.position }}</t>
                             </div>
                             <div class="col-md-2 text-right">
-                                <t>{{ player.CurrentStats.mvpRank }}</t>
+                                <t>{{ player.ProjectedStats.mvpRank }}</t>
                             </div>
                         </div>
                     </a>
@@ -140,20 +169,20 @@
             </div>
         </div>
         <div class="row mb-2 mt-2">
-            <div class="col-md-6 pl-0">
-                <div class="col-md-12 head-gray text-center">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray text-center rounded">
                     <t>Cy Young Award</t>
                 </div>
             </div>
-            <div class="col-md-6 pr-0">
-                <div class="col-md-12 head-gray text-center">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray text-center rounded">
                     <t>Cy Young Award</t>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 pl-0">
-                <div class="col-md-12 head-gray pr-0 mb-1">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray pr-0 mb-1 rounded">
                     <div class="row">
                         <div class="col-md-4 font-italic text-center">
                             <t>Player</t>
@@ -185,7 +214,7 @@
                                 <t>{{ player.Player.position }}</t>
                             </div>
                             <div class="col-md-2 text-right">
-                                <t>{{ player.CurrentStats.cyYoungRank }}</t>
+                                <t>{{ player.ProjectedStats.cyYoungRank }}</t>
                             </div>
                         </div>
                     </a>
@@ -194,8 +223,8 @@
                 {% endfor %}
 
             </div>
-            <div class="col-md-6 pr-0">
-                <div class="col-md-12 head-gray pr-0 mb-1">
+            <div class="col-md-6">
+                <div class="col-md-12 head-gray pr-0 mb-1 rounded">
                     <div class="row">
                         <div class="col-md-4 font-italic text-center">
                             <t>Player</t>
@@ -227,7 +256,7 @@
                                 <t>{{ player.Player.position }}</t>
                             </div>
                             <div class="col-md-2 text-right">
-                                <t>{{ player.CurrentStats.cyYoungRank }}</t>
+                                <t>{{ player.ProjectedStats.cyYoungRank }}</t>
                             </div>
                         </div>
                     </a>
@@ -235,6 +264,119 @@
                 
                 {% endfor %}
 
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="col-md-12 head-blue rounded">
+            <p class="h4 text-center">Search for Players</p>
+        </div>
+        <div class="col-md-12">
+            <p>Searchbox</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="col-md-12 head-blue rounded">
+            <p class="h4 text-center">Select a Team</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-md-12 mb-2 rounded head-gray text-center">
+                    <t>National League West</t>
+                </div>
+                {% for team in nlwTeams %}
+
+                    <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
+                            <a class="btn btn-link btn-block {{ team.teamAbbrev }}" href="{{ url_for('team', id=team.id) }}">
+                                <t>{{ team.teamName }}</t>
+                            </a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 mb-2 rounded head-gray text-center">
+                    <t>National League Central</t>
+                </div>
+                {% for team in nlcTeams %}
+
+                    <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
+                            <a class="btn btn-link btn-block {{ team.teamAbbrev }}" href="{{ url_for('team', id=team.id) }}">
+                                <t>{{ team.teamName }}</t>
+                            </a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 mb-2 rounded head-gray text-center">
+                    <t>National League East</t>
+                </div>
+                {% for team in nleTeams %}
+
+                    <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
+                            <a class="btn btn-link btn-block {{ team.teamAbbrev }}" href="{{ url_for('team', id=team.id) }}">
+                                <t>{{ team.teamName }}</t>
+                            </a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-md-12 mb-2 rounded head-gray text-center">
+                    <t>American League West</t>
+                </div>
+                {% for team in alwTeams %}
+
+                    <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
+                            <a class="btn btn-link btn-block {{ team.teamAbbrev }}" href="{{ url_for('team', id=team.id) }}">
+                                <t>{{ team.teamName }}</t>
+                            </a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 mb-2 rounded head-gray text-center">
+                    <t>American League Central</t>
+                </div>
+                {% for team in alcTeams %}
+
+                    <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
+                            <a class="btn btn-link btn-block {{ team.teamAbbrev }}" href="{{ url_for('team', id=team.id) }}">
+                                <t>{{ team.teamName }}</t>
+                            </a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-12 mb-2 rounded head-gray text-center">
+                    <t>American League East</t>
+                </div>
+                {% for team in aleTeams %}
+
+                    <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
+                            <a class="btn btn-link btn-block {{ team.teamAbbrev }}" href="{{ url_for('team', id=team.id) }}">
+                                <t>{{ team.teamName }}</t>
+                            </a>
+                        </div>
+                    </div>
+
+                {% endfor %}
             </div>
         </div>
     </div>

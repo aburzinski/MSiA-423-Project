@@ -17,13 +17,6 @@
 
         <title>Player Page</title>
     </head>
-    <style>
-        /* .dodgers {
-            background-color: #005A9C;
-            color: white;
-            border-bottom: #A5ACAF 3px solid;
-        } */
-    </style>
     <body class="body-container">
         <div class="container mb-3">
             <div class="row pt-1 pb-1 rounded-top {{ player.Team.teamAbbrev }}">
@@ -46,7 +39,7 @@
         </div>
 
         <script>
-            createRadar('{{ player.Player.playerName }}',
+            createRadar('{{ player.Player.playerName }}', '{{ legend|tojson }}',
                 '{{ colors|tojson }}', '{{ stats|tojson }}',
                 '{{ maxValue|tojson }}');
         </script>

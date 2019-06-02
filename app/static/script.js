@@ -1,32 +1,19 @@
-createRadar = function(playerName, colors, data, maxValue) {
+createRadar = function(player, legendTitles, colors, data, maxValue) {
   var w = 500,
     h = 500;
 
   var colors = JSON.parse(colors);
   var data = JSON.parse(data);
   var maxValue = JSON.parse(maxValue);
+  var legendTitles = JSON.parse(legendTitles);
+
+  console.log(data)
 
   //Legend titles
-  var LegendOptions = [playerName];
+  var LegendOptions = legendTitles;
 
   //Data
-  var d = [
-    data
-    // [
-    //   { axis: "Home Runs", value: 20 },
-    //   { axis: "RBIs", value: 35 },
-    //   { axis: "Runs", value: 35 },
-    //   { axis: "OBP", value: 0.34 },
-    //   { axis: "SLG", value: 0.75 }
-    // ]
-    // , [
-    //   { axis: "Home Runs", value: 15 },
-    //   { axis: "RBIs", value: 45 },
-    //   { axis: "Runs", value: 50 },
-    //   { axis: "OBP", value: 0.30 },
-    //   { axis: "SLG", value: 0.6 }
-    // ]
-  ];
+  var d = data;
 
   //Options for the Radar chart, other than default
   var mycfg = {
@@ -54,7 +41,7 @@ createRadar = function(playerName, colors, data, maxValue) {
     .attr("y", 10)
     .attr("font-size", "12px")
     .attr("fill", "#404040")
-    .text("Player Statistics");
+    .text(player + " Statistics");
 
   //Initiate Legend	
   var legend = svg.append("g")

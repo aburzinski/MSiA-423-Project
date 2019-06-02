@@ -12,3 +12,13 @@
     color: #444;
     border: #C2C2C2 1px solid;
 }
+
+.btn-link:hover {
+    background-color: #E8E8E8;
+    color: #0f4871;
+    border-bottom: #E8E8E8 5px solid;
+}
+
+.turned-off {
+    pointer-events: none;
+}

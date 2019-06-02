@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="/static/team_colors.css">
+        <link rel="stylesheet" href="/static/layout.css">   
+
+        <title>Team Page</title>
+    </head>
+    <body class="body-container">
+        <div class="container mb-3">
+            <div class="row pt-1 pb-1 rounded-top {{ team.teamAbbrev }}">
+                <div class="col-md-7">{{ team.teamName }}</div>
+                <div class="col-md-5">Venue: {{ team.venueName }}</div>
+            </div>
+            <div class="row pt-1 pb-1 {{ team.teamAbbrev }}">
+                <div class="col-md-7">{{ division }}</div>
+                <div class="col-md-5">Location: {{ location }}</div>
+            </div>
+            <div class="row pt-1 pb-1 rounded-bottom {{ team.teamAbbrev }}">
+                <div class="col-md-7"></div>
+                <div class="col-md-5">Year Founded: {{ team.yearFounded }}</div>
+            </div>
+        </div>
+        <div class="container mb-3">
+            <div class="col-md-12 head-gray rounded">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec tellus non justo ultrices euismod quis nec diam. Ut at diam turpis. Nam ac risus a turpis placerat venenatis eu quis nunc. Quisque dapibus quis metus sed consequat. Cras ante lectus, gravida volutpat neque ut, efficitur porta nulla. Nunc sed molestie dolor, in malesuada eros. Quisque enim nulla, efficitur laoreet scelerisque at, vehicula non metus.</p>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="col-md-12 mb-3 rounded text-center {{ team.teamAbbrev }}">
+                        <p>MVP Award</p>
+                    </div>
+                    <div class="col-md-12 mb-3 head-gray rounded text-center font-italic">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>Player</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Position</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Rank</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+
+                            {% for player in mvpPlayers %}
+
+                            <div class="col-md-6 mb-2" playerId="{{ player.Player.id }}">
+                                <a class="btn btn-block btn-link {{ team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.Player.playerName }}</t>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a class="btn btn-block btn-link turned-off {{ team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.Player.position }}</t>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a class="btn btn-block btn-link turned-off {{ team.teamAbbrev }}" href="{{ url_for('player', id=player.Player.id) }}">
+                                    <t>{{ player.ProjectedStats.mvpRank }}</t>
+                                </a>
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
