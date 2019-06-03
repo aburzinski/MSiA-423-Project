@@ -178,13 +178,13 @@ def team(id):
         mvpPlayers = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.id == id).filter(ProjectedStats.mvpRank > 0)\
+            filter(Team.id == id).filter(ProjectedStats.mvpRank > 0).\
             order_by(ProjectedStats.mvpRank).limit(numPlayersToShow).all()
 
         cyYoungPlayers = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.id == id).filter(ProjectedStats.cyYoungRank > 0)\
+            filter(Team.id == id).filter(ProjectedStats.cyYoungRank > 0).\
             order_by(ProjectedStats.cyYoungRank).limit(numPlayersToShow).all()
 
         logger.debug('Team page accessed')
