@@ -8,6 +8,7 @@ import pandas as pd
 import pickle
 import src.helpers.helpers as h
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import imblearn.over_sampling as SMOTE
 
@@ -28,23 +29,32 @@ def trainModel(modelData):
     over_sample_X = pd.DataFrame(data=over_sample_X,columns=columns )
     over_sample_y = pd.DataFrame(data=over_sample_y,columns=['is_winner'])
 
-    model = LogisticRegression(random_state=0, solver='lbfgs', multi_class='ovr')
-    model.fit(over_sample_X, over_sample_y.values.ravel())
+    model_lr = LogisticRegression(random_state=0, solver='lbfgs', multi_class='ovr')
+    model_lr.fit(over_sample_X, over_sample_y.values.ravel())
 
-    logger.debug('Model created and trained with {} rows of data'.format(over_sample_X.shape[0]))
+    model_rf = RandomForestClassifier(n_estimators=100, random_state=0)
+    model_rf.fit(over_sample_X, over_sample_y.values.ravel())
 
-    return model
+    logger.debug('Models created and trained with {} rows of data'.format(over_sample_X.shape[0]))
+
+    return (model_lr, model_rf)
 
 if __name__ == '__main__':
     
     modelData = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features', 'mvpFeaturesHistorical.csv'))
-    model = trainModel(modelData)
+    model_lr, model_rf = trainModel(modelData)
     
     writeToDir = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'model_files')
     h.silentCreateDir(writeToDir)
 
-    with open(os.path.join(writeToDir, 'mvp.model'), 'wb') as f:
-        pickle.dump(model, f)
+    with open(os.path.join(writeToDir, 'mvp_lr.model'), 'wb') as f:
+        pickle.dump(model_lr, f)
     f.close()
 
-    logger.info('Model saved to {}'.format(os.path.join(writeToDir, 'mvp.model')))
+    logger.info('Model saved to {}'.format(os.path.join(writeToDir, 'mvp_lr.model')))
+
+    with open(os.path.join(writeToDir, 'mvp_rf.model'), 'wb') as f:
+        pickle.dump(model_rf, f)
+    f.close()
+
+    logger.info('Model saved to {}'.format(os.path.join(writeToDir, 'mvp_rf.model')))
