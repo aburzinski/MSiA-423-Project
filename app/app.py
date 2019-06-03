@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 import traceback
 from datetime import datetime, timedelta
 
-from models.mlb_database.create_database import Player, Team, CurrentStats, ProjectedStats
+from models.mlb_database.create_database import Player, Team, CurrentStats, ProjectedStats, LastUpdate
 from data.auxiliary.teamColors import teamColors
 from data.auxiliary.divisionMapping import divisionMapping
 from data.auxiliary.endOfSeason import endOfSeason
@@ -70,11 +70,14 @@ def index():
         aleTeams = db.session.query(Team).filter(Team.division == 'ALE').\
             order_by(Team.teamName).all()
 
+        lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
+        lastUpdate = lastUpdate.strftime('%b %d')
+
         daysLeftDelta = endOfSeason[config.CURRENT_SEASON] - datetime.now()
         daysLeft = daysLeftDelta.days
 
         logger.debug('Index page accessed')
-        return render_template('index.html', daysLeft=daysLeft,
+        return render_template('index.html', daysLeft=daysLeft, lastUpdate=lastUpdate,
             nlMvp=nlMvp, alMvp=alMvp, nlCyYoung=nlCyYoung, alCyYoung=alCyYoung,
             nlwTeams=nlwTeams, nlcTeams=nlcTeams, nleTeams=nleTeams,
             alwTeams=alwTeams, alcTeams=alcTeams, aleTeams=aleTeams)
