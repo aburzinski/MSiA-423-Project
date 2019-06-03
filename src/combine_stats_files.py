@@ -53,6 +53,8 @@ if __name__ == '__main__':
         merged['cyYoungLikelihood'] = merged['cyYoungLikelihood'].fillna(0.0)
         merged['cyYoungRank'] = merged['cyYoungRank'].fillna(99999)
 
+        merged = merge.fillna(0)
+
     elif args.type == 'current':
         
         merged.loc[merged['era'] == '-.--', 'era'] = 0.0
