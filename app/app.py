@@ -31,25 +31,25 @@ def index():
         nlMvp = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.league == 'NL').\
+            filter(Team.league == 'NL').filter(ProjectedStats.mvpRank > 0).\
             order_by(ProjectedStats.mvpRank).limit(numPlayersToShow).all()
 
         alMvp = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.league == 'AL').\
+            filter(Team.league == 'AL').filter(ProjectedStats.mvpRank > 0).\
             order_by(ProjectedStats.mvpRank).limit(numPlayersToShow).all()
 
         nlCyYoung = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.league == 'NL').\
+            filter(Team.league == 'NL').filter(ProjectedStats.cyYoungRank > 0).\
             order_by(ProjectedStats.cyYoungRank).limit(numPlayersToShow).all()
 
         alCyYoung = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.league == 'AL').\
+            filter(Team.league == 'AL').filter(ProjectedStats.cyYoungRank > 0).\
             order_by(ProjectedStats.cyYoungRank).limit(numPlayersToShow).all()
 
         nlwTeams = db.session.query(Team).filter(Team.division == 'NLW').\
@@ -178,13 +178,13 @@ def team(id):
         mvpPlayers = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.id == id).\
+            filter(Team.id == id).filter(ProjectedStats.mvpRank > 0)\
             order_by(ProjectedStats.mvpRank).limit(numPlayersToShow).all()
 
         cyYoungPlayers = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
-            filter(Team.id == id).\
+            filter(Team.id == id).filter(ProjectedStats.cyYoungRank > 0)\
             order_by(ProjectedStats.cyYoungRank).limit(numPlayersToShow).all()
 
         logger.debug('Team page accessed')
