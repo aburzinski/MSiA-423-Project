@@ -101,7 +101,7 @@ class ProjectedStats(Base):
 class LastUpdate(Base):
     """Create a table to hold the last ingestion date"""
     __tablename__ = 'lastUpdate'
-    lastUpdateDate = Column(DateTime, unique=True, nullable=False)
+    lastUpdateDate = Column(DateTime, primary_key=True)
 
 if __name__ == '__main__':
 
