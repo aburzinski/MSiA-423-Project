@@ -44,7 +44,7 @@ if __name__ == '__main__':
     else:
         raise Exception('The type argument must be either "projected" or "current"')
 
-    merged = df1.merge(df2, how='left', on='player_id').drop_duplicates()
+    merged = df1.merge(df2, how='outer', on='player_id').drop_duplicates()
     logger.debug('Merging files of size {} and size {} to a file of size {} by {}'.format(df1.shape[0],
         df2.shape[0], merged.shape[0], merged.shape[1]))
 
