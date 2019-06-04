@@ -26,19 +26,18 @@ def ingestProjectedStats(s3File, session, truncate=True):
         'hits': 15,
         'homeRuns': 16,
         'runsBattedIn': 17,
-        'onBasePct': 21,
-        'slugPct': 20,
-        'atBats': 22,
+        'onBasePlusSlug': 21,
+        'atBats': 20,
         'earnedRunAverage': 13,
         'whip': 14,
         'saves': 8,
         'strikeouts': 6,
         'inningsPitched': 12,
         'wins': 10,
-        'mvpLikelihood': 23,
-        'mvpRank': 24,
-        'cyYoungLikelihood': 25,
-        'cyYoungRank': 26
+        'mvpLikelihood': 22,
+        'mvpRank': 23,
+        'cyYoungLikelihood': 24,
+        'cyYoungRank': 25
     }
 
     statsCount = 0
@@ -51,7 +50,7 @@ def ingestProjectedStats(s3File, session, truncate=True):
         hits = int(float(line[projectedStatsSchema['hits'] - 1]))
         homeRuns = int(float(line[projectedStatsSchema['homeRuns'] - 1]))
         runsBattedIn = int(float(line[projectedStatsSchema['runsBattedIn'] - 1]))
-        onBasePlusSlug = float(line[projectedStatsSchema['onBasePct'] - 1]) + float(line[projectedStatsSchema['slugPct'] - 1])
+        onBasePlusSlug = float(line[projectedStatsSchema['onBasePlusSlug'] - 1])
         atBats = int(float(line[projectedStatsSchema['atBats'] - 1]))
         earnedRunAverage = float(line[projectedStatsSchema['earnedRunAverage'] - 1])
         whip = float(line[projectedStatsSchema['whip'] - 1])
