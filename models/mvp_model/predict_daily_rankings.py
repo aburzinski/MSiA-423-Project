@@ -21,7 +21,7 @@ def makePredictions(modelData, models):
     predictData = predictData.loc[:, predictData.columns != 'player_id']
     predictData = predictData.loc[:, predictData.columns != 'league']
 
-    probs = np.stack((models[0].predict_proba(predictData)[:,1], models[1].predict_proba(predictData)[:,1]))
+    # probs = np.stack((models[0].predict_proba(predictData)[:,1], models[1].predict_proba(predictData)[:,1]))
     # avgProbs = np.mean(probs, axis=0)
     avgProbs = np.multiply(models[0].predict_proba(predictData)[:,1], models[1].predict_proba(predictData)[:,1]+.001)
 

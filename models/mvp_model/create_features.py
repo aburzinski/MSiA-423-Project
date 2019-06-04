@@ -96,6 +96,11 @@ def cleanFeatures(merged):
     modelData.loc[modelData['slg_y'] == '.---', 'slg_y'] = 0.0
     modelData.loc[modelData['obp_y'] == '.---', 'obp_y'] = 0.0
 
+    modelData['ops'] = modelData['slg_y'].astype(float) + modelData['obp_y'].astype(float)
+
+    modelData = modelData.loc[:, modelData.columns != 'slg_y']
+    modelData = modelData.loc[:, modelData.columns != 'obp_y']
+
     modelData = modelData.replace([np.inf, -np.inf], np.nan).fillna(0)
 
     return modelData.drop_duplicates()
