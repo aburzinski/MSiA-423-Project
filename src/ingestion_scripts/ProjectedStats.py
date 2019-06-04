@@ -28,10 +28,12 @@ def ingestProjectedStats(s3File, session, truncate=True):
         'runsBattedIn': 17,
         'onBasePlusSlug': 21,
         'atBats': 20,
+        'walks': 18,
+        'strikeoutsBatting': 19,
         'earnedRunAverage': 13,
         'whip': 14,
         'saves': 8,
-        'strikeouts': 6,
+        'strikeoutsPitching': 6,
         'inningsPitched': 12,
         'wins': 10,
         'mvpLikelihood': 22,
@@ -52,10 +54,12 @@ def ingestProjectedStats(s3File, session, truncate=True):
         runsBattedIn = int(float(line[projectedStatsSchema['runsBattedIn'] - 1]))
         onBasePlusSlug = float(line[projectedStatsSchema['onBasePlusSlug'] - 1])
         atBats = int(float(line[projectedStatsSchema['atBats'] - 1]))
+        walks = int(float(line[projectedStatsSchema['walks'] - 1]))
+        strikeoutsBatting = int(float(line[projectedStatsSchema['strikeoutsBatting'] - 1]))
         earnedRunAverage = float(line[projectedStatsSchema['earnedRunAverage'] - 1])
         whip = float(line[projectedStatsSchema['whip'] - 1])
         saves = int(float(line[projectedStatsSchema['saves'] - 1]))
-        strikeouts = int(float(line[projectedStatsSchema['strikeouts'] - 1]))
+        strikeoutsPitching = int(float(line[projectedStatsSchema['strikeoutsPitching'] - 1]))
         inningsPitched = int(float(line[projectedStatsSchema['inningsPitched'] - 1]))
         wins = int(float(line[projectedStatsSchema['wins'] - 1]))
         mvpLikelihood = float(line[projectedStatsSchema['mvpLikelihood'] - 1])
@@ -69,10 +73,12 @@ def ingestProjectedStats(s3File, session, truncate=True):
             runsBattedIn=runsBattedIn,
             onBasePlusSlug=onBasePlusSlug,
             atBats=atBats,
+            walks=walks,
+            strikeoutsBatting=strikeoutsBatting,
             earnedRunAverage=earnedRunAverage,
             whip=whip,
             saves=saves,
-            strikeouts=strikeouts,
+            strikeoutsPitching=strikeoutsPitching,
             inningsPitched=inningsPitched,
             wins=wins,
             mvpLikelihood=mvpLikelihood,
