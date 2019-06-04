@@ -6,6 +6,7 @@ import logging.config
 from config import config
 from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 import traceback
 from datetime import datetime, timedelta
 
@@ -21,6 +22,8 @@ app = Flask(__name__)
 app.config.from_pyfile(os.path.join(config.PROJECT_ROOT_DIR, 'config', 'config.py'))
 
 db = SQLAlchemy(app)
+
+UTC_OFFSET_TIMEDELTA = datetime.utcnow() - datetime.now()
 
 @app.route('/')
 def index():
@@ -71,13 +74,14 @@ def index():
             order_by(Team.teamName).all()
 
         lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
-        lastUpdate = lastUpdate.strftime('%b %d')
+        lastUpdateLocal = lastUpdate - UTC_OFFSET_TIMEDELTA
+        lastUpdateLocal = lastUpdateLocal.strftime('%b %d')
 
         daysLeftDelta = endOfSeason[config.CURRENT_SEASON] - datetime.now()
         daysLeft = daysLeftDelta.days
 
         logger.debug('Index page accessed')
-        return render_template('index.html', daysLeft=daysLeft, lastUpdate=lastUpdate,
+        return render_template('index.html', daysLeft=daysLeft, lastUpdate=lastUpdateLocal,
             nlMvp=nlMvp, alMvp=alMvp, nlCyYoung=nlCyYoung, alCyYoung=alCyYoung,
             nlwTeams=nlwTeams, nlcTeams=nlcTeams, nleTeams=nleTeams,
             alwTeams=alwTeams, alcTeams=alcTeams, aleTeams=aleTeams)
@@ -96,8 +100,6 @@ def player(id):
             join(CurrentStats, Player.id == CurrentStats.playerId).\
             filter(Player.id == id).first()
 
-        print(player)
-
         birthCity = player.Player.birthCity
         birthState = player.Player.birthState
         birthCountry = player.Player.birthCountry
@@ -107,7 +109,11 @@ def player(id):
         else:
             hometown = '{}, {}'.format(birthCity, birthCountry)
 
-        legend = ['Current as of XXX', 'End of Season Prediction']
+        lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
+        lastUpdateLocal = lastUpdate - UTC_OFFSET_TIMEDELTA
+        lastUpdateLocal = lastUpdateLocal.strftime('%b %d')
+
+        legend = ['End of Season Prediction', 'Current as of {}'.format(lastUpdateLocal)]
         colors = [teamColors[player.Team.teamName]['primary'], teamColors[player.Team.teamName]['secondary']]
         
         if player.Player.position == 'P':
@@ -115,7 +121,7 @@ def player(id):
                 {'axis': 'Innings Pitched', 'value': player.CurrentStats.inningsPitched},
                 {'axis': 'Wins', 'value': player.CurrentStats.wins},
                 {'axis': 'Saves', 'value': player.CurrentStats.saves},
-                {'axis': 'Strikeouts', 'value': player.CurrentStats.strikeouts},
+                {'axis': 'Strikeouts', 'value': player.CurrentStats.strikeoutsPitching},
                 {'axis': 'ERA', 'value': player.CurrentStats.earnedRunAverage},
                 {'axis': 'WHIP', 'value': player.CurrentStats.whip}
             ]
@@ -124,12 +130,19 @@ def player(id):
                 {'axis': 'Innings Pitched', 'value': player.ProjectedStats.inningsPitched},
                 {'axis': 'Wins', 'value': player.ProjectedStats.wins},
                 {'axis': 'Saves', 'value': player.ProjectedStats.saves},
-                {'axis': 'Strikeouts', 'value': player.ProjectedStats.strikeouts},
+                {'axis': 'Strikeouts', 'value': player.ProjectedStats.strikeoutsPitching},
                 {'axis': 'ERA', 'value': player.ProjectedStats.earnedRunAverage},
                 {'axis': 'WHIP', 'value': player.ProjectedStats.whip}
             ]
 
-            maxValue = [800, 40, 60, 400, 15, 5]
+            maxValues = db.session.query(func.max(ProjectedStats.inningsPitched), 
+                func.max(ProjectedStats.wins),
+                func.max(ProjectedStats.saves),
+                func.max(ProjectedStats.strikeoutsPitching),
+                func.max(ProjectedStats.earnedRunAverage),
+                func.max(ProjectedStats.whip)).first()
+
+            limits = [1.25 * maxValue for maxValue in maxValues]
 
         else:
             current = [
@@ -147,17 +160,26 @@ def player(id):
                 {'axis': 'Home Runs', 'value': player.ProjectedStats.homeRuns},
                 {'axis': 'RBIs', 'value': player.ProjectedStats.runsBattedIn},
                 {'axis': 'OPS', 'value': player.ProjectedStats.onBasePlusSlug},
-                {'axis': 'Runs', 'value': player.ProjectedStats.homeRuns}
+                {'axis': 'Strikeouts', 'value': player.ProjectedStats.strikeoutsBatting},
+                {'axis': 'Walks', 'value': player.ProjectedStats.walks}
             ]
 
-            maxValue = [800, 300, 60, 200, 2, 60]
+            maxValues = db.session.query(func.max(ProjectedStats.atBats), 
+                func.max(ProjectedStats.hits),
+                func.max(ProjectedStats.homeRuns),
+                func.max(ProjectedStats.runsBattedIn),
+                func.max(ProjectedStats.onBasePlusSlug),
+                func.max(ProjectedStats.strikeoutsBatting),
+                func.max(ProjectedStats.walks)).first()
 
-        stats = [current, projected]
+            limits = [1.25 * maxValue for maxValue in maxValues]
+
+        stats = [projected, current]
 
         logger.debug('Player page accessed')
         return render_template('player.html', player=player,
             legend=legend, hometown=hometown, colors=colors,
-            stats=stats, maxValue=maxValue)
+            stats=stats, limits=limits)
     except Exception as e:
         print(e)
         print(traceback.format_exc())
