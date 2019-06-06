@@ -21,7 +21,7 @@ createRadar = function(player, legendTitles, colors, data, maxValue) {
     h: h,
     maxValue: maxValue,
     levels: 6,
-    ExtraWidthX: 300,
+    ExtraWidthX: 400,
     color: colors
   }
 

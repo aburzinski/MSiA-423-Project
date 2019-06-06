@@ -2,8 +2,8 @@ var RadarChart = {
 	draw: function (id, d, options) {
 		var cfg = {
 			radius: 5,
-			w: 600,
-			h: 600,
+			w: 900,
+			h: 900,
 			factor: 1,
 			factorLegend: .85,
 			levels: 3,

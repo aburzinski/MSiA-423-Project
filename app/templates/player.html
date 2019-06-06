@@ -33,8 +33,38 @@
             </div>
         </div>
         <div class="container">
-            <div class="img-fluid text-center" alt="Responsive image">
-                <div class="img-fluid" id="chart"></div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="col-md-12 head-gray mb-3">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec tellus non justo ultrices euismod quis nec diam. Ut at diam turpis. Nam ac risus a turpis placerat venenatis eu quis nunc. Quisque dapibus quis metus sed consequat. Cras ante lectus, gravida volutpat neque ut, efficitur porta nulla. Nunc sed molestie dolor, in malesuada eros. Quisque enim nulla, efficitur laoreet scelerisque at, vehicula non metus.</p>
+                    </div>
+                    <div class="col-md-12 head-gray mb-3">
+                        <!-- <form action="{{ url_for('newStats', id=player.Player.id) }}" method="POST">
+                            <label for="homeRuns">Home Runs:</label>
+                            <input type="text" id="homeRuns" name="homeRuns" value="{{ player.ProjectedStats.homeRuns }}">
+                            <label for="rbis">Runs Batted In:</label>
+                            <input type="text" id="rbis" name="rbis" value="{{ player.ProjectedStats.runsBattedIn }}">
+                            <input type="submit" value="Test">
+                        </form> -->
+                        {% from '_formhelper.html' import render_field %}
+                        <form class="mb-3" action="{{ url_for('newStats', id=player.Player.id) }}" method="POST">
+                            <dl>
+                            {% for field in form %}
+                                <p>
+                                    {{ render_field(field) }}
+                                </p>
+                            {% endfor %}
+                            </dl>
+                            <input type="submit" value="Submit">
+                            <button onclick="returnToPlayer()">Reset</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-7 head-gray pt-1">
+                    <div class="img-fluid" alt="Responsive image">
+                        <div class="img-fluid" id="chart"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -42,6 +72,11 @@
             createRadar('{{ player.Player.playerName }}', '{{ legend|tojson }}',
                 '{{ colors|tojson }}', '{{ stats|tojson }}',
                 '{{ limits|tojson }}');
+
+            function returnToPlayer() {
+                console.log('{{ url_for("player", id=player.Player.id) }}')
+                window.location.href = '{{ url_for("player", id=player.Player.id) }}';
+            }
         </script>
     </body>
 </html>

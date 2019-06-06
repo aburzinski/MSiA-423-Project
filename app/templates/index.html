@@ -285,15 +285,24 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <!-- <div class="container">
         <div class="col-md-12 head-blue rounded">
             <p class="h4 text-center">Search for Players</p>
         </div>
         <div class="col-md-12">
-            <p>Searchbox</p>
+            <label for="playerSearch">Choose a Player:</label>
+            <input list="playerList" id="playerSearch">
+            <button onclick="playerFind()">Search</button>
+            <datalist id="playerList">
+
+                {% for player in players %}
+                    <option value="{{ player.playerName }}" playerId="{{ player.id }}"></option>
+                {% endfor %}   
+
+            </datalist>
         </div>
-    </div>
-    <div class="container">
+    </div> -->
+    <div class="container mb-3">
         <div class="col-md-12 head-blue rounded">
             <p class="h4 text-center">Select a Team</p>
         </div>
@@ -398,6 +407,12 @@
             </div>
         </div>
     </div>
+    <!-- <script>
+        function playerFind() {
+            document.getElementById('playerSearch').innerHTML
+            window.location.href = 'http://google.com'
+        }
+    </script> -->
 </body>
 
 </html>

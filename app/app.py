@@ -4,7 +4,7 @@ sys.path.append(os.environ.get('PYTHONPATH'))
 
 import logging.config
 from config import config
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import traceback
@@ -14,6 +14,7 @@ from models.mlb_database.create_database import Player, Team, CurrentStats, Proj
 from data.auxiliary.teamColors import teamColors
 from data.auxiliary.divisionMapping import divisionMapping
 from data.auxiliary.endOfSeason import endOfSeason
+from static.forms import BattingForm, PitchingForm
 
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
@@ -73,6 +74,9 @@ def index():
         aleTeams = db.session.query(Team).filter(Team.division == 'ALE').\
             order_by(Team.teamName).all()
 
+        players = db.session.query(Player).join(ProjectedStats).order_by(Player.playerName).all()
+        print(players[0])
+
         lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
         lastUpdateLocal = lastUpdate - UTC_OFFSET_TIMEDELTA
         lastUpdateLocal = lastUpdateLocal.strftime('%b %d')
@@ -84,14 +88,15 @@ def index():
         return render_template('index.html', daysLeft=daysLeft, lastUpdate=lastUpdateLocal,
             nlMvp=nlMvp, alMvp=alMvp, nlCyYoung=nlCyYoung, alCyYoung=alCyYoung,
             nlwTeams=nlwTeams, nlcTeams=nlcTeams, nleTeams=nleTeams,
-            alwTeams=alwTeams, alcTeams=alcTeams, aleTeams=aleTeams)
+            alwTeams=alwTeams, alcTeams=alcTeams, aleTeams=aleTeams,
+            players=players)
     except Exception as e:
         print(e)
         print(traceback.format_exc())
         logger.warning('Not able to display index page')
         return render_template('error.html')
 
-@app.route('/player/<id>')
+@app.route('/player/<id>', methods=['GET', 'POST'])
 def player(id):
     try:
         player = db.session.query(Team, Player, CurrentStats, ProjectedStats).\
@@ -144,14 +149,20 @@ def player(id):
 
             limits = [1.25 * maxValue for maxValue in maxValues]
 
+            form = PitchingForm(request.form, inningsPitched=player.ProjectedStats.inningsPitched,
+                wins=player.ProjectedStats.wins, saves=player.ProjectedStats.saves,
+                strikeouts=player.ProjectedStats.strikeoutsPitching, era=player.ProjectedStats.earnedRunAverage,
+                whip=player.ProjectedStats.whip)
+
         else:
             current = [
                 {'axis': 'At Bats', 'value': player.CurrentStats.atBats},
                 {'axis': 'Hits', 'value': player.CurrentStats.hits},
                 {'axis': 'Home Runs', 'value': player.CurrentStats.homeRuns},
                 {'axis': 'RBIs', 'value': player.CurrentStats.runsBattedIn},
-                {'axis': 'OPS', 'value': player.CurrentStats.onBasePlusSlug},
-                {'axis': 'Runs', 'value': player.CurrentStats.homeRuns}
+                # {'axis': 'OPS', 'value': player.CurrentStats.onBasePlusSlug},
+                {'axis': 'Strikeouts', 'value': player.CurrentStats.strikeoutsBatting},
+                {'axis': 'Walks', 'value': player.CurrentStats.walks}
             ]
 
             projected = [
@@ -159,7 +170,7 @@ def player(id):
                 {'axis': 'Hits', 'value': player.ProjectedStats.hits},
                 {'axis': 'Home Runs', 'value': player.ProjectedStats.homeRuns},
                 {'axis': 'RBIs', 'value': player.ProjectedStats.runsBattedIn},
-                {'axis': 'OPS', 'value': player.ProjectedStats.onBasePlusSlug},
+                # {'axis': 'OPS', 'value': player.ProjectedStats.onBasePlusSlug},
                 {'axis': 'Strikeouts', 'value': player.ProjectedStats.strikeoutsBatting},
                 {'axis': 'Walks', 'value': player.ProjectedStats.walks}
             ]
@@ -168,18 +179,25 @@ def player(id):
                 func.max(ProjectedStats.hits),
                 func.max(ProjectedStats.homeRuns),
                 func.max(ProjectedStats.runsBattedIn),
-                func.max(ProjectedStats.onBasePlusSlug),
+                # func.max(ProjectedStats.onBasePlusSlug),
                 func.max(ProjectedStats.strikeoutsBatting),
                 func.max(ProjectedStats.walks)).first()
 
             limits = [1.25 * maxValue for maxValue in maxValues]
 
+
+            form = BattingForm(request.form, atBats=player.ProjectedStats.atBats,
+                hits=player.ProjectedStats.hits, homeRuns=player.ProjectedStats.homeRuns,
+                rbis=player.ProjectedStats.runsBattedIn, strikeouts=player.ProjectedStats.strikeoutsBatting,
+                walks=player.ProjectedStats.walks)
+
         stats = [projected, current]
+
 
         logger.debug('Player page accessed')
         return render_template('player.html', player=player,
             legend=legend, hometown=hometown, colors=colors,
-            stats=stats, limits=limits)
+            stats=stats, limits=limits, form=form)
     except Exception as e:
         print(e)
         print(traceback.format_exc())
@@ -217,6 +235,116 @@ def team(id):
         print(e)
         print(traceback.format_exc())
         logger.warning('Not able to display Team page')
+        return render_template('error.html')
+
+@app.route('/player/newStats/<id>', methods=['GET', 'POST'])
+def newStats(id):
+    try:
+        print(request.form)
+
+        player = db.session.query(Team, Player, CurrentStats, ProjectedStats).\
+            join(Player, Team.id == Player.currentTeamId).\
+            join(ProjectedStats, Player.id == ProjectedStats.playerId).\
+            join(CurrentStats, Player.id == CurrentStats.playerId).\
+            filter(Player.id == id).first()
+
+        birthCity = player.Player.birthCity
+        birthState = player.Player.birthState
+        birthCountry = player.Player.birthCountry
+
+        if len(birthState) > 0:
+            hometown = '{}, {}, {}'.format(birthCity, birthState, birthCountry)
+        else:
+            hometown = '{}, {}'.format(birthCity, birthCountry)
+
+        lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
+        lastUpdateLocal = lastUpdate - UTC_OFFSET_TIMEDELTA
+        lastUpdateLocal = lastUpdateLocal.strftime('%b %d')
+
+        legend = ['End of Season Prediction', 'Current as of {}'.format(lastUpdateLocal)]
+        colors = [teamColors[player.Team.teamName]['primary'], teamColors[player.Team.teamName]['secondary']]
+        
+        if player.Player.position == 'P':
+            current = [
+                {'axis': 'Innings Pitched', 'value': player.CurrentStats.inningsPitched},
+                {'axis': 'Wins', 'value': player.CurrentStats.wins},
+                {'axis': 'Saves', 'value': player.CurrentStats.saves},
+                {'axis': 'Strikeouts', 'value': player.CurrentStats.strikeoutsPitching},
+                {'axis': 'ERA', 'value': player.CurrentStats.earnedRunAverage},
+                {'axis': 'WHIP', 'value': player.CurrentStats.whip}
+            ]
+
+            projected = [
+                {'axis': 'Innings Pitched', 'value': request.form.get('inningsPitched')},
+                {'axis': 'Wins', 'value': request.form.get('wins')},
+                {'axis': 'Saves', 'value': request.form.get('saves')},
+                {'axis': 'Strikeouts', 'value': request.form.get('strikeouts')},
+                {'axis': 'ERA', 'value': request.form.get('era')},
+                {'axis': 'WHIP', 'value': request.form.get('whip')}
+            ]
+
+            maxValues = db.session.query(func.max(ProjectedStats.inningsPitched), 
+                func.max(ProjectedStats.wins),
+                func.max(ProjectedStats.saves),
+                func.max(ProjectedStats.strikeoutsPitching),
+                func.max(ProjectedStats.earnedRunAverage),
+                func.max(ProjectedStats.whip)).first()
+
+            limits = [1.25 * maxValue for maxValue in maxValues]
+
+            form = PitchingForm(request.form, inningsPitched=request.form.get('inningsPitched'),
+                wins=request.form.get('wins'), saves=request.form.get('saves'),
+                strikeouts=request.form.get('strikeouts'), era=request.form.get('era'),
+                whip=request.form.get('whip'))
+
+        else:
+            current = [
+                {'axis': 'At Bats', 'value': player.CurrentStats.atBats},
+                {'axis': 'Hits', 'value': player.CurrentStats.hits},
+                {'axis': 'Home Runs', 'value': player.CurrentStats.homeRuns},
+                {'axis': 'RBIs', 'value': player.CurrentStats.runsBattedIn},
+                # {'axis': 'OPS', 'value': player.CurrentStats.onBasePlusSlug},
+                {'axis': 'Strikeouts', 'value': player.CurrentStats.strikeoutsBatting},
+                {'axis': 'Walks', 'value': player.CurrentStats.walks}
+            ]
+
+            projected = [
+                {'axis': 'At Bats', 'value': request.form.get('atBats')},
+                {'axis': 'Hits', 'value': request.form.get('hits')},
+                {'axis': 'Home Runs', 'value': request.form.get('homeRuns')},
+                {'axis': 'RBIs', 'value': request.form.get('rbis')},
+                # {'axis': 'OPS', 'value': player.ProjectedStats.onBasePlusSlug},
+                {'axis': 'Strikeouts', 'value': request.form.get('strikeouts')},
+                {'axis': 'Walks', 'value': request.form.get('walks')}
+            ]
+
+            maxValues = db.session.query(func.max(ProjectedStats.atBats), 
+                func.max(ProjectedStats.hits),
+                func.max(ProjectedStats.homeRuns),
+                func.max(ProjectedStats.runsBattedIn),
+                # func.max(ProjectedStats.onBasePlusSlug),
+                func.max(ProjectedStats.strikeoutsBatting),
+                func.max(ProjectedStats.walks)).first()
+
+            limits = [1.25 * maxValue for maxValue in maxValues]
+
+
+            form = BattingForm(request.form, atBats=request.form.get('atBats'),
+                hits=request.form.get('hits'), homeRuns=request.form.get('homeRuns'),
+                rbis=request.form.get('rbis'), strikeouts=request.form.get('strikeouts'),
+                walks=request.form.get('walks'))
+
+        stats = [projected, current]
+
+
+        logger.debug('Player page accessed')
+        return render_template('player.html', player=player,
+            legend=legend, hometown=hometown, colors=colors,
+            stats=stats, limits=limits, form=form)
+    except Exception as e:
+        print(e)
+        print(traceback.format_exc())
+        logger.warning('Not able to display Updated Statistics page')
         return render_template('error.html')
 
 if __name__ == '__main__':
