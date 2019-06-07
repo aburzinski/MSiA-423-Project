@@ -56,3 +56,27 @@ def textParseDate(origDate):
             raise ValueError('Input date not in the correct formate')
         
         return year + '/' + month + '/' + day
+
+
+def appendNumberEnding(number):
+    """This function appends the ending of a number to be human readable
+        For example, this will changed 4 to 4th and 21 to 21st
+
+        Args:
+            number (`int`): The number to be converted to human readable string
+        Returns:
+            (`str`): The human readable number representation
+    """
+    if not isinstance(number, int):
+        raise ValueError('Please enter an integer value')
+
+    if number % 100 == 11 or number % 100 == 12 or number % 100 == 13:
+        return str(number) + 'th'
+    elif number % 10 == 1:
+        return str(number) + 'st'
+    elif number % 10 == 2:
+        return str(number) + 'nd'
+    elif number % 10 == 3:
+        return str(number) + 'rd'
+    else:
+        return str(number) + 'th'

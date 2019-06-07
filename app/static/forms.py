@@ -19,5 +19,6 @@ class PitchingForm(Form):
     wins = IntegerField('Wins:', validators=[validators.required()])
     saves = IntegerField('Saves:', validators=[validators.required()])
     strikeouts = IntegerField('Strikeouts:', validators=[validators.required()])
-    era = IntegerField('Era:', validators=[validators.required()])
-    whip = IntegerField('Whip:', validators=[validators.required()])
+    earnedRuns = IntegerField('Earned Runs:', validators=[validators.required()])
+    hits = IntegerField('Hts Allowed:', validators=[validators.required()])
+    walks = IntegerField('Walks Allowed:', validators=[validators.required()])

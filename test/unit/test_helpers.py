@@ -1,5 +1,6 @@
 import sys
-sys.path.append(r'C:\Users\aburz\OneDrive\Documents\Northwestern\Classes\MSiA 423\Project\MSiA-423-Project')
+import os
+sys.path.append(os.environ.get('PYTHONPATH'))
 
 import os
 import src.helpers.helpers as base
@@ -98,7 +99,7 @@ def test_writeIterLine():
     with open(filename, 'w') as f:
         try:
             base.writeIterLine({'testKey': 123}.values(), f)
-            assert False
+            assert(False)
         except TypeError:
             assert(True)
     f.close()
@@ -123,6 +124,41 @@ def test_textParseDate():
     testValue = '01-03-1999'
     try:
         base.textParseDate(testValue)
-        assert False
+        assert(False)
     except ValueError:
         assert(True)
+
+def test_appendNumberEnding():
+    """Test the appendNumberEnding method"""
+    # Test for incorrect data type
+    testValue = 'test'
+    try:
+        base.appendNumberEnding(testValue)
+        assert(False)
+    except ValueError:
+        assert(True)
+
+    # Test for st cases
+    testValue = 101
+    expectedValue = '101st'
+    assert(base.appendNumberEnding(testValue) == expectedValue)
+
+    # Test for nd cases
+    testValue = 22
+    expectedValue = '22nd'
+    assert(base.appendNumberEnding(testValue) == expectedValue)
+
+    # Test for rd cases
+    testValue = 333
+    expectedValue = '333rd'
+    assert(base.appendNumberEnding(testValue) == expectedValue)
+
+    # Test for th cases
+    testValue = 5
+    expectedValue = '5th'
+    assert(base.appendNumberEnding(testValue) == expectedValue)
+
+    # Test for teens cases
+    testValue = 1112
+    expectedValue = '1112th'
+    assert(base.appendNumberEnding(testValue) == expectedValue)

@@ -77,30 +77,16 @@ def cleanFeatures(merged):
 
     if args.featureType == 'historical':
         merged['is_winner'] = merged['Winner'].apply(lambda x: 0 if isinstance(x, float) else 1)
-        modelData = merged[['h_x', 'hr_x', 'bb_x', 'so_x', 'er', 'sv', 'svo', 'w', 'l', 'ip', 'era', 'whip', 'h_y', 'hr_y',
-            'rbi', 'bb_y', 'so_y', 'slg_y', 'obp_y', 'ab_y', 'is_winner']]
+        modelData = merged[['h_x', 'bb_x', 'so_x', 'er', 'sv', 'w', 'ip', 'h_y', 'hr_y',
+            'rbi', 'bb_y', 'so_y', 'ab_y', 'is_winner']]
     elif args.featureType == 'projected':
-        modelData = merged[['player_id', 'league_y', 'h_x', 'hr_x', 'bb_x', 'so_x', 'er', 'sv', 'svo', 'w', 'l', 'ip', 'era', 'whip', 'h_y', 'hr_y',
-            'rbi', 'bb_y', 'so_y', 'slg_y', 'obp_y', 'ab_y']]
+        modelData = merged[['player_id', 'league_y', 'h_x', 'bb_x', 'so_x', 'er', 'sv', 'w', 'ip', 'h_y', 'hr_y',
+            'rbi', 'bb_y', 'so_y', 'ab_y']]
         modelData.rename(columns={
             'league_y': 'league'
         }, inplace=True)
 
     modelData.is_copy = False
-
-    modelData.loc[modelData['era'] == '-.--', 'era'] = 0.0
-    modelData.loc[modelData['era'] == '*.**', 'era'] = 0.0
-    modelData.loc[modelData['whip'] == '-.--', 'whip'] = 0.0
-    modelData.loc[modelData['whip'] == '*.**', 'whip'] = 0.0
-
-    modelData.loc[modelData['slg_y'] == '.---', 'slg_y'] = 0.0
-    modelData.loc[modelData['obp_y'] == '.---', 'obp_y'] = 0.0
-
-    modelData['ops'] = modelData['slg_y'].astype(float) + modelData['obp_y'].astype(float)
-
-    modelData = modelData.loc[:, modelData.columns != 'slg_y']
-    modelData = modelData.loc[:, modelData.columns != 'obp_y']
-
     modelData = modelData.replace([np.inf, -np.inf], np.nan).fillna(0)
 
     return modelData.drop_duplicates()

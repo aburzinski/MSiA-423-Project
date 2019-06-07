@@ -34,20 +34,13 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div class="col-md-12 head-gray mb-3">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec tellus non justo ultrices euismod quis nec diam. Ut at diam turpis. Nam ac risus a turpis placerat venenatis eu quis nunc. Quisque dapibus quis metus sed consequat. Cras ante lectus, gravida volutpat neque ut, efficitur porta nulla. Nunc sed molestie dolor, in malesuada eros. Quisque enim nulla, efficitur laoreet scelerisque at, vehicula non metus.</p>
+                        <p class="mt-2" id="playerMessage"><b>{{ player.Player.playerName }}</b> is currently <b>{{ message }}</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.</p>
                     </div>
                     <div class="col-md-12 head-gray mb-3">
-                        <!-- <form action="{{ url_for('newStats', id=player.Player.id) }}" method="POST">
-                            <label for="homeRuns">Home Runs:</label>
-                            <input type="text" id="homeRuns" name="homeRuns" value="{{ player.ProjectedStats.homeRuns }}">
-                            <label for="rbis">Runs Batted In:</label>
-                            <input type="text" id="rbis" name="rbis" value="{{ player.ProjectedStats.runsBattedIn }}">
-                            <input type="submit" value="Test">
-                        </form> -->
                         {% from '_formhelper.html' import render_field %}
-                        <form class="mb-3" action="{{ url_for('newStats', id=player.Player.id) }}" method="POST">
+                        <form class="mb-3" >
                             <dl>
                             {% for field in form %}
                                 <p>
@@ -55,12 +48,12 @@
                                 </p>
                             {% endfor %}
                             </dl>
-                            <input type="submit" value="Submit">
-                            <button onclick="returnToPlayer()">Reset</button>
                         </form>
+                        <button class="btn btn-link {{ player.Team.teamAbbrev }} mb-3" onclick="updateRadar()">Submit</button>
+                        <button class="btn btn-link {{ player.Team.teamAbbrev }} mb-3" onclick="resetRadar()">Reset</button>
                     </div>
                 </div>
-                <div class="col-md-7 head-gray pt-1">
+                <div class="col-md-8 head-gray pt-3 mb-3">
                     <div class="img-fluid" alt="Responsive image">
                         <div class="img-fluid" id="chart"></div>
                     </div>
@@ -71,11 +64,138 @@
         <script>
             createRadar('{{ player.Player.playerName }}', '{{ legend|tojson }}',
                 '{{ colors|tojson }}', '{{ stats|tojson }}',
-                '{{ limits|tojson }}');
+                '{{ limits|tojson }}'
+            );
 
-            function returnToPlayer() {
-                console.log('{{ url_for("player", id=player.Player.id) }}')
-                window.location.href = '{{ url_for("player", id=player.Player.id) }}';
+            function updateRadar() {
+
+                if ('{{ player.Player.position }}' === 'P') {
+                    var inningsPitched = document.getElementById('inningsPitched').value;
+                    var wins = document.getElementById('wins').value;
+                    var saves = document.getElementById('saves').value;
+                    var strikeouts = document.getElementById('strikeouts').value;
+                    var earnedRuns = document.getElementById('earnedRuns').value;
+                    var hits = document.getElementById('hits').value;
+                    var walks = document.getElementById('walks').value;
+
+                    var current = [
+                        {'axis': 'Innings Pitched', 'value': '{{ player.CurrentStats.inningsPitched }}'},
+                        {'axis': 'Wins', 'value': '{{ player.CurrentStats.wins }}'},
+                        {'axis': 'Saves', 'value': '{{ player.CurrentStats.saves }}'},
+                        {'axis': 'Strikeouts', 'value': '{{ player.CurrentStats.strikeoutsPitching }}'},
+                        {'axis': 'Earned Runs', 'value': '{{ player.CurrentStats.earnedRuns }}'},
+                        {'axis': 'Hits', 'value': '{{ player.CurrentStats.hitsAllowed }}'},
+                        {'axis': 'Walks', 'value': '{{ player.CurrentStats.walksAllowed }}'}
+                    ]
+
+                    var projected = [
+                        {'axis': 'Innings Pitched', 'value': inningsPitched},
+                        {'axis': 'Wins', 'value': wins},
+                        {'axis': 'Saves', 'value': saves},
+                        {'axis': 'Strikeouts', 'value': strikeouts},
+                        {'axis': 'Earned Runs', 'value': earnedRuns},
+                        {'axis': 'Hits', 'value': hits},
+                        {'axis': 'Walks', 'value': walks}
+                    ]
+
+                    var body = JSON.stringify({
+                        'h_x': hits,
+                        'bb_x': walks,
+                        'so_x': strikeouts,
+                        'er': earnedRuns,
+                        'sv': saves,
+                        'w': wins,
+                        'ip': inningsPitched
+                    });
+
+                } else {
+                    var atBats = document.getElementById('atBats').value;
+                    var hits = document.getElementById('hits').value;
+                    var homeRuns = document.getElementById('homeRuns').value;
+                    var rbis = document.getElementById('rbis').value;
+                    var strikeouts = document.getElementById('strikeouts').value;
+                    var walks = document.getElementById('walks').value;
+                    
+                    var current = [
+                        {'axis': 'At Bats', 'value': '{{ player.CurrentStats.atBats }}'},
+                        {'axis': 'Hits', 'value': '{{ player.CurrentStats.hits }}'},
+                        {'axis': 'Home Runs', 'value': '{{ player.CurrentStats.homeRuns }}'},
+                        {'axis': 'RBIs', 'value': '{{ player.CurrentStats.runsBattedIn }}'},
+                        {'axis': 'Strikeouts', 'value': '{{ player.CurrentStats.strikeoutsBatting }}'},
+                        {'axis': 'Walks', 'value': '{{ player.CurrentStats.walks }}'}
+                    ]
+
+                    var projected = [
+                        {'axis': 'At Bats', 'value': atBats},
+                        {'axis': 'Hits', 'value': hits},
+                        {'axis': 'Home Runs', 'value': homeRuns},
+                        {'axis': 'RBIs', 'value': rbis},
+                        {'axis': 'Strikeouts', 'value': strikeouts},
+                        {'axis': 'Walks', 'value': walks}
+                    ]
+
+                    var body = JSON.stringify({
+                        'h_x': '{{ player.ProjectedStats.hitsAllowed }}',
+                        'bb_x': '{{ player.ProjectedStats.walksAllowed }}',
+                        'so_x': '{{ player.ProjectedStats.strikeoutsPitching }}',
+                        'er': '{{ player.ProjectedStats.earnedRuns }}',
+                        'sv': '{{ player.ProjectedStats.saves }}',
+                        'w': '{{ player.ProjectedStats.wins }}',
+                        'ip': '{{ player.ProjectedStats.inningsPitched }}',
+                        'h_y': hits,
+                        'hr_y': homeRuns,
+                        'rbi': rbis,
+                        'bb_y': walks,
+                        'so_y': strikeouts,
+                        'ab_y': atBats
+                    });
+                }
+
+                createRadar('{{ player.Player.playerName }}', '{{ legend|tojson }}',
+                    '{{ colors|tojson }}', JSON.stringify([projected, current]),
+                    '{{ limits|tojson }}'
+                );
+
+                
+                var newRank = fetch("{{ url_for('predict', id=player.Player.id) }}", {
+                    method: 'POST',
+                    body: body
+                }).then((response) => {
+                    return response.json()
+                }).then((data) => {
+                    console.log(data.message);
+                    document.getElementById('playerMessage').innerHTML = '<b>{{ player.Player.playerName }}</b> is currently <b>' + data.message + '</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.'
+                }).catch((err) => {
+                    console.log(err);
+                });
+            };
+
+            function resetRadar() {
+
+                if ('{{ player.Player.position }}' === 'P') {
+                    document.getElementById('inningsPitched').value = '{{ player.ProjectedStats.inningsPitched }}';
+                    document.getElementById('wins').value = '{{ player.ProjectedStats.wins }}';
+                    document.getElementById('saves').value = '{{ player.ProjectedStats.saves }}';
+                    document.getElementById('strikeouts').value = '{{ player.ProjectedStats.strikeoutsPitching }}';
+                    document.getElementById('earnedRuns').value = '{{ player.ProjectedStats.earnedRuns }}';
+                    document.getElementById('hits').value = '{{ player.ProjectedStats.hitsAllowed }}';
+                    document.getElementById('walks').value = '{{ player.ProjectedStats.walksAllowed }}';
+
+                } else {
+                    document.getElementById('atBats').value = '{{ player.ProjectedStats.atBats }}';
+                    document.getElementById('hits').value = '{{ player.ProjectedStats.hits }}';
+                    document.getElementById('homeRuns').value = '{{ player.ProjectedStats.homeRuns }}';
+                    document.getElementById('rbis').value = '{{ player.ProjectedStats.runsBattedIn }}';
+                    document.getElementById('strikeouts').value = '{{ player.ProjectedStats.strikeoutsBatting }}';
+                    document.getElementById('walks').value = '{{ player.ProjectedStats.walks }}';
+                }
+
+                document.getElementById('playerMessage').innerHTML = '<b>{{ player.Player.playerName }}</b> is currently <b>{{ message }}</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.'
+
+                createRadar('{{ player.Player.playerName }}', '{{ legend|tojson }}',
+                    '{{ colors|tojson }}', '{{ stats|tojson }}',
+                    '{{ limits|tojson }}'
+                );
             }
         </script>
     </body>

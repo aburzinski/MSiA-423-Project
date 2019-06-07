@@ -26,16 +26,16 @@ def ingestCurrentStats(s3File, session, truncate=True):
         'hits': 34,
         'homeRuns': 25,
         'runsBattedIn': 41,
-        'onBasePlusSlug': 24,
         'atBats': 2,
         'walks': 23,
         'strikeoutsBatting': 39,
-        'earnedRunAverage': 107,
-        'whip': 63,
         'saves': 104,
         'strikeoutsPitching': 106,
         'inningsPitched': 51,
-        'wins': 79
+        'wins': 79,
+        'walksAllowed': 80,
+        'hitsAllowed': 102,
+        'earnedRuns': 75
     }
 
     statsCount = 0
@@ -48,31 +48,31 @@ def ingestCurrentStats(s3File, session, truncate=True):
         hits = int(float(line[currentStatsSchema['hits'] - 1]))
         homeRuns = int(float(line[currentStatsSchema['homeRuns'] - 1]))
         runsBattedIn = int(float(line[currentStatsSchema['runsBattedIn'] - 1]))
-        onBasePlusSlug = float(line[currentStatsSchema['onBasePlusSlug'] - 1])
         atBats = int(float(line[currentStatsSchema['atBats'] - 1]))
         walks = int(float(line[currentStatsSchema['walks'] - 1]))
         strikeoutsBatting = int(float(line[currentStatsSchema['strikeoutsBatting'] - 1]))
-        earnedRunAverage = float(line[currentStatsSchema['earnedRunAverage'] - 1])
-        whip = float(line[currentStatsSchema['whip'] - 1])
         saves = int(float(line[currentStatsSchema['saves'] - 1]))
         strikeoutsPitching = int(float(line[currentStatsSchema['strikeoutsPitching'] - 1]))
         inningsPitched = int(float(line[currentStatsSchema['inningsPitched'] - 1]))
         wins = int(float(line[currentStatsSchema['wins'] - 1]))
+        walksAllowed = int(float(line[currentStatsSchema['walksAllowed'] - 1]))
+        hitsAllowed = int(float(line[currentStatsSchema['hitsAllowed'] - 1]))
+        earnedRuns = int(float(line[currentStatsSchema['earnedRuns'] - 1]))
         
         new_statistic = CurrentStats(playerId=playerId,
             hits=hits,
             homeRuns=homeRuns,
             runsBattedIn=runsBattedIn,
-            onBasePlusSlug=onBasePlusSlug,
             atBats=atBats,
             walks=walks,
             strikeoutsBatting=strikeoutsBatting,
-            earnedRunAverage=earnedRunAverage,
-            whip=whip,
             saves=saves,
             strikeoutsPitching=strikeoutsPitching,
             inningsPitched=inningsPitched,
-            wins=wins
+            wins=wins,
+            walksAllowed=walksAllowed,
+            hitsAllowed=hitsAllowed,
+            earnedRuns=earnedRuns
         )
         session.add(new_statistic)
         statsCount += 1

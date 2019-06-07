@@ -61,23 +61,6 @@ var RadarChart = {
 				.attr("transform", "translate(" + (cfg.w / 2 - levelFactor) + ", " + (cfg.h / 2 - levelFactor) + ")");
 		}
 
-		//Text indicating at what % each level is
-		// for (var j = 0; j < cfg.levels; j++) {
-		// 	var levelFactor = cfg.factor * radius * ((j + 1) / cfg.levels);
-		// 	g.selectAll(".levels")
-		// 		.data([1]) //dummy data
-		// 		.enter()
-		// 		.append("svg:text")
-		// 		.attr("x", function (d) { return levelFactor * (1 - cfg.factor * Math.sin(0)); })
-		// 		.attr("y", function (d) { return levelFactor * (1 - cfg.factor * Math.cos(0)); })
-		// 		.attr("class", "legend")
-		// 		.style("font-family", "sans-serif")
-		// 		.style("font-size", "10px")
-		// 		.attr("transform", "translate(" + (cfg.w / 2 - levelFactor + cfg.ToRight) + ", " + (cfg.h / 2 - levelFactor) + ")")
-		// 		.attr("fill", "#737373")
-		// 		.text(function (d, i) { return Format((j + 1) * cfg.maxValue[i] / cfg.levels); });
-		// }
-
 		series = 0;
 
 		var axis = g.selectAll(".axis")
@@ -99,7 +82,7 @@ var RadarChart = {
 			.attr("class", "legend")
 			.text(function (d) { return d })
 			.style("font-family", "sans-serif")
-			.style("font-size", "11px")
+			.style("font-size", "14px")
 			.attr("text-anchor", "middle")
 			.attr("dy", "1.5em")
 			.attr("transform", function (d, i) { return "translate(0, -10)" })
