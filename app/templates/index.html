@@ -21,9 +21,19 @@
     <div class="container rounded head-blue mb-3">
         <div class="row">
             <div class="col-md-12">
-                <div class="col-md-12 text-center">
-                    <p class="display-3">MLB Awards Predictor</p>
-                    <!-- <img src="https://botw-pd.s3.amazonaws.com/styles/logo-thumbnail/s3/052014/mlb.png?itok=wlvCELtf" width="100" height="100"> -->
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <p class="display-3">Image</p>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <p class="display-3">Who's in First?</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <p class="display-3">Image</p>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <p class="display-4">A Major League Baseball Awards Predictor</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -32,19 +42,19 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="col-md-12 rounded head-gray">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec tellus non justo ultrices euismod quis nec diam. Ut at diam turpis. Nam ac risus a turpis placerat venenatis eu quis nunc. Quisque dapibus quis metus sed consequat. Cras ante lectus, gravida volutpat neque ut, efficitur porta nulla. Nunc sed molestie dolor, in malesuada eros. Quisque enim nulla, efficitur laoreet scelerisque at, vehicula non metus.</p>
+                    <p>This website displays the likelihood that each player with win either the Most Valuable Player Award or the Cy Young Award, as of {{ lastUpdate }}.  The lists below show the most likely players for each award, based on a model using data dating back to 1970.  Click on a player or team to see more!</p>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="col-md-12 rounded head-gray text-center">
                     <p>Data Current as of</p>
-                    <p class="display-2">{{ lastUpdate }}</p>
+                    <p class="display-3">{{ lastUpdate }}</p>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="col-md-12 rounded head-gray text-center">
                     <p>Days Remaining</p>
-                    <p class="display-2">{{ daysLeft }}</p>
+                    <p class="display-3">{{ daysLeft }}</p>
                 </div>
             </div>
             <div class="col-md-12">

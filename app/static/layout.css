@@ -8,7 +8,7 @@
 }
 
 .head-gray {
-    background-color: #E8E8E8;
+    background-color: #C2C2C2;
     color: #444;
     border: #C2C2C2 1px solid;
 }
@@ -21,4 +21,8 @@
 
 .turned-off {
     pointer-events: none;
+}
+
+input {
+    background-color: #E8E8E8;
 }
