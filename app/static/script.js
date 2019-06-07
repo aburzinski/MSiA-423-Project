@@ -7,8 +7,6 @@ createRadar = function(player, legendTitles, colors, data, maxValue) {
   var maxValue = JSON.parse(maxValue);
   var legendTitles = JSON.parse(legendTitles);
 
-  console.log(data)
-
   //Legend titles
   var LegendOptions = legendTitles;
 
