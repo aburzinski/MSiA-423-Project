@@ -15,6 +15,7 @@ import numpy as np
 from datetime import datetime, timedelta
 
 from models.mlb_database.create_database import Player, Team, CurrentStats, ProjectedStats, LastUpdate
+import src.helpers.helpers as h
 from data.auxiliary.teamColors import teamColors
 from data.auxiliary.divisionMapping import divisionMapping
 from data.auxiliary.endOfSeason import endOfSeason
@@ -172,6 +173,9 @@ def player(id):
                 strikeouts=player.ProjectedStats.strikeoutsPitching, earnedRuns=player.ProjectedStats.earnedRuns,
                 hits=player.ProjectedStats.hitsAllowed, walks=player.ProjectedStats.walksAllowed)
 
+            message = h.appendNumberEnding(player.ProjectedStats.cyYoungRank)
+            award = 'Cy Young'
+
         else:
             current = [
                 {'axis': 'At Bats', 'value': player.CurrentStats.atBats},
@@ -206,13 +210,16 @@ def player(id):
                 rbis=player.ProjectedStats.runsBattedIn, strikeouts=player.ProjectedStats.strikeoutsBatting,
                 walks=player.ProjectedStats.walks)
 
-        stats = [projected, current]
+            message = h.appendNumberEnding(player.ProjectedStats.mvpRank)
+            award = 'Most Valuable Player'
 
+        stats = [projected, current]
 
         logger.debug('Player page accessed')
         return render_template('player.html', player=player,
             legend=legend, hometown=hometown, colors=colors,
-            stats=stats, limits=limits, form=form)
+            stats=stats, limits=limits, form=form, message=message,
+            award=award)
     except Exception as e:
         print(e)
         print(traceback.format_exc())
@@ -291,12 +298,14 @@ def predict(id):
                 filter(Team.league == currentPlayer.Team.league).\
                 filter(ProjectedStats.mvpLikelihood > avgProbs).count()
 
-        return json.dumps({'newRank': newRank})
+            message = h.appendNumberEnding(newRank)
+
+        return json.dumps({'message': message})
     except Exception as e:
         print(e)
         print(traceback.format_exc())
         logger.warning('Not able to display Updated Statistics page')
-        return json.dumps({'newRank': 'Error!'})
+        return json.dumps({'message': 'Error!'})
 
 if __name__ == '__main__':
     app.run(host=app.config['HOST'], port=app.config['PORT'])

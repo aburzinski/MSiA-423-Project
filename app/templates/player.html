@@ -34,9 +34,9 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div class="col-md-12 head-gray mb-3">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec tellus non justo ultrices euismod quis nec diam. Ut at diam turpis. Nam ac risus a turpis placerat venenatis eu quis nunc. Quisque dapibus quis metus sed consequat. Cras ante lectus, gravida volutpat neque ut, efficitur porta nulla. Nunc sed molestie dolor, in malesuada eros.  Current player rank: {{ player.ProjectedStats.mvpRank }}</p>
+                        <p class="mt-2" id="playerMessage"><b>{{ player.Player.playerName }}</b> is currently <b>{{ message }}</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.</p>
                     </div>
                     <div class="col-md-12 head-gray mb-3">
                         {% from '_formhelper.html' import render_field %}
@@ -53,7 +53,7 @@
                         <button class="btn btn-link {{ player.Team.teamAbbrev }} mb-3" onclick="resetRadar()">Reset</button>
                     </div>
                 </div>
-                <div class="col-md-7 head-gray pt-1">
+                <div class="col-md-8 head-gray pt-3 mb-3">
                     <div class="img-fluid" alt="Responsive image">
                         <div class="img-fluid" id="chart"></div>
                     </div>
@@ -106,12 +106,6 @@
                         'sv': saves,
                         'w': wins,
                         'ip': inningsPitched
-                        // 'h_y': '{{ player.ProjectedStats.hits }}',
-                        // 'hr_y': '{{ player.ProjectedStats.homeRuns }}',
-                        // 'rbi': '{{ player.ProjectedStats.runsBattedIn }}',
-                        // 'bb_y': '{{ player.ProjectedStats.walks }}',
-                        // 'so_y': '{{ player.ProjectedStats.strikeoutsBatting }}',
-                        // 'ab_y': '{{ player.ProjectedStats.atBats }}'
                     });
 
                 } else {
@@ -169,10 +163,11 @@
                 }).then((response) => {
                     return response.json()
                 }).then((data) => {
-                    console.log(data.newRank);
+                    console.log(data.message);
+                    document.getElementById('playerMessage').innerHTML = '<b>{{ player.Player.playerName }}</b> is currently <b>' + data.message + '</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.'
                 }).catch((err) => {
                     console.log(err);
-                })
+                });
             };
 
             function resetRadar() {
@@ -194,6 +189,8 @@
                     document.getElementById('strikeouts').value = '{{ player.ProjectedStats.strikeoutsBatting }}';
                     document.getElementById('walks').value = '{{ player.ProjectedStats.walks }}';
                 }
+
+                document.getElementById('playerMessage').innerHTML = '<b>{{ player.Player.playerName }}</b> is currently <b>{{ message }}</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.'
 
                 createRadar('{{ player.Player.playerName }}', '{{ legend|tojson }}',
                     '{{ colors|tojson }}', '{{ stats|tojson }}',
