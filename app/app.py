@@ -288,6 +288,11 @@ def predict(id):
             for key, value in data.items():
                 data[key] = float(value)
             predictData = pd.DataFrame(data, index=[0])
+            cols = ['h_x', 'bb_x', 'so_x', 'er', 'sv', 'w', 'ip', 'h_y', 'hr_y', 'rbi', 'bb_y', 'so_y', 'ab_y']
+            predictionData = predictData[cols]
+
+            print(predictData)
+
             avgProbs = np.multiply(mvp_model_lr.predict_proba(predictData)[:,1],
                 mvp_model_rf.predict_proba(predictData)[:,1]+.001)
 
