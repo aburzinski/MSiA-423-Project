@@ -56,9 +56,9 @@ def cleanFeatures(merged):
 
     if args.featureType == 'historical':
         merged['is_winner'] = merged['Winner'].apply(lambda x: 0 if isinstance(x, float) else 1)
-        modelData = merged[['h', 'hr', 'bb', 'so', 'er', 'sv', 'svo', 'w', 'l', 'era', 'whip', 'ip', 'is_winner']].fillna(0)
+        modelData = merged[['h', 'bb', 'so', 'er', 'sv', 'w', 'ip', 'is_winner']].fillna(0)
     elif args.featureType == 'projected':
-        modelData = merged[['player_id', 'league_y', 'h', 'hr', 'bb', 'so', 'er', 'sv', 'svo', 'w', 'l', 'era', 'whip', 'ip']].fillna(0)
+        modelData = merged[['player_id', 'league_y', 'h', 'bb', 'so', 'er', 'sv', 'w', 'ip']].fillna(0)
         modelData.rename(columns={
             'league_y': 'league'
         }, inplace=True)
