@@ -34,10 +34,10 @@ createRadar = function(player, legendTitles, colors, data, maxValue) {
   //Create the title for the legend
   var text = svg.append("text")
     .attr("class", "title")
-    .attr('transform', 'translate(90,0)')
+    .attr('transform', 'translate(90,10)')
     .attr("x", w - 70)
     .attr("y", 10)
-    .attr("font-size", "12px")
+    .attr("font-size", "16px")
     .attr("fill", "#404040")
     .text(player + " Statistics");
 
@@ -46,7 +46,7 @@ createRadar = function(player, legendTitles, colors, data, maxValue) {
     .attr("class", "legend")
     .attr("height", 100)
     .attr("width", 200)
-    .attr('transform', 'translate(90,20)');
+    .attr('transform', 'translate(90,30)');
 
   //Create colour squares
   legend.selectAll('rect')
@@ -66,7 +66,7 @@ createRadar = function(player, legendTitles, colors, data, maxValue) {
     .append("text")
     .attr("x", w - 52)
     .attr("y", function (d, i) { return i * 20 + 9; })
-    .attr("font-size", "11px")
-    .attr("fill", "#737373")
+    .attr("font-size", "14px")
+    // .attr("fill", "#737373")
     .text(function (d) { return d; });
 }
