@@ -68,7 +68,7 @@ def test_writeIterLine():
     assert(testValue == expectedValue)
 
     # Test two inputs
-    expectedValue = '"testValue","test2Value"\n'
+    expectedValue = ['"testValue","test2Value"\n', '"test2Value","testValue"\n']
     testValue = ''
 
     with open(filename, 'wb') as f:
@@ -79,10 +79,10 @@ def test_writeIterLine():
         testValue = f.read()
     f.close()
 
-    assert(testValue == expectedValue)
+    assert(testValue in expectedValue)
 
     # Test comma in iterator
-    expectedValue = '"testValue","test2,test3"\n'
+    expectedValue = ['"testValue","test2,test3"\n', '"test2,test3","testValue"\n']
     testValue = ''
 
     with open(filename, 'wb') as f:
@@ -93,10 +93,10 @@ def test_writeIterLine():
         testValue = f.read()
     f.close()
 
-    assert(testValue == expectedValue)
+    assert(testValue in expectedValue)
 
     # Test incorrect type
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         try:
             base.writeIterLine({'testKey': 123}.values(), f)
             assert(False)
