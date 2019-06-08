@@ -4,15 +4,17 @@ sys.path.append(os.environ.get('PYTHONPATH'))
 
 # Flask config
 DEBUG = True
-# LOGGING_CONFIG = "logging/local.conf"
 PORT = 8000
-# APP_NAME = "penny-lane"
-HOST = "127.0.0.1"
-# SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
+APP_NAME = 'whosinfirst'
+HOST = '127.0.0.1'
 
 # Project
 PROJECT_ROOT_DIR = os.environ.get('PYTHONPATH')
 CURRENT_SEASON = 2019
+
+# Yaml File Locations
+MVP_YML = os.path.join(PROJECT_ROOT_DIR, 'config', 'models', 'mvp.yml')
+CY_YOUNG_YML = os.path.join(PROJECT_ROOT_DIR, 'config', 'models', 'cyYoung.yml')
 
 # S3
 AWS_S3_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
@@ -48,8 +50,3 @@ SQLALCHEMY_DATABASE_URI = ch.createDatabaseURI(dbtype=SQLALCHEMY_TYPE,
     host=SQLALCHEMY_HOST, dbname=SQLALCHEMY_DATABASE_NAME,
     port=SQLALCHEMY_MYSQL_PORT, username=SQLALCHEMY_MYSQL_USERNAME,
     password=SQLALCHEMY_MYSQL_PASSWORD)
-
-# Flask App
-DEBUG = True
-MAX_ROWS_SHOW = 100
-SQLALCHEMY_TRACK_MODIFICATIONS = False

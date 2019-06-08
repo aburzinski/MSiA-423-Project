@@ -6,6 +6,7 @@ import logging.config
 from config import config
 import pandas as pd
 import pickle
+import yaml
 import src.helpers.helpers as h
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -15,24 +16,27 @@ import imblearn.over_sampling as SMOTE
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
+with open(config.MVP_YML, 'r') as f:
+    modelParams = yaml.load(f)
+
 def trainModel(modelData):
     """Train and fit the model based on the input data, then return it"""
     X = modelData.loc[:, modelData.columns != 'is_winner']
     y = modelData.loc[:, modelData.columns == 'is_winner']
 
-    over_sample = SMOTE.SMOTE(random_state = 0)
+    over_sample = SMOTE.SMOTE(**modelParams['SMOTE'])
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, **modelParams['train_test_split'])
     columns = X_train.columns
 
     over_sample_X, over_sample_y = over_sample.fit_sample(X_train, y_train.values.ravel())
-    over_sample_X = pd.DataFrame(data=over_sample_X,columns=columns )
+    over_sample_X = pd.DataFrame(data=over_sample_X,columns=columns)
     over_sample_y = pd.DataFrame(data=over_sample_y,columns=['is_winner'])
 
-    model_lr = LogisticRegression(random_state=0, solver='lbfgs', multi_class='ovr')
+    model_lr = LogisticRegression(**modelParams['LogisticRegression'])
     model_lr.fit(over_sample_X, over_sample_y.values.ravel())
 
-    model_rf = RandomForestClassifier(n_estimators=100, random_state=0)
+    model_rf = RandomForestClassifier(**modelParams['RandomForestClassifier'])
     model_rf.fit(over_sample_X, over_sample_y.values.ravel())
 
     logger.debug('Models created and trained with {} rows of data'.format(over_sample_X.shape[0]))
