@@ -45,7 +45,7 @@ def test_writeIterLine():
     expectedValue = '""\n'
     testValue = ''
 
-    with open(filename, 'w') as f:
+    with open(filename, 'wb') as f:
         base.writeIterLine({}.values(), f)
     f.close()
 
@@ -57,7 +57,7 @@ def test_writeIterLine():
     expectedValue = '"testValue"\n'
     testValue = ''
 
-    with open(filename, 'w') as f:
+    with open(filename, 'wb') as f:
         base.writeIterLine({'testKey': 'testValue'}.values(), f)
     f.close()
 
@@ -71,7 +71,7 @@ def test_writeIterLine():
     expectedValue = '"testValue","test2Value"\n'
     testValue = ''
 
-    with open(filename, 'w') as f:
+    with open(filename, 'wb') as f:
         base.writeIterLine({'testKey': 'testValue', 'test2Key': 'test2Value'}.values(), f)
     f.close()
 
@@ -85,7 +85,7 @@ def test_writeIterLine():
     expectedValue = '"testValue","test2,test3"\n'
     testValue = ''
 
-    with open(filename, 'w') as f:
+    with open(filename, 'wb') as f:
         base.writeIterLine({'testKey': 'testValue', 'test2Key': 'test2,test3'}.values(), f)
     f.close()
 
@@ -96,7 +96,7 @@ def test_writeIterLine():
     assert(testValue == expectedValue)
 
     # Test incorrect type
-    with open(filename, 'w') as f:
+    with open(filename, 'wb') as f:
         try:
             base.writeIterLine({'testKey': 123}.values(), f)
             assert(False)
