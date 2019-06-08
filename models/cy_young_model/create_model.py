@@ -15,7 +15,7 @@ import imblearn.over_sampling as SMOTE
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-with open(config.MVP_YML, 'r') as f:
+with open(config.CY_YOUNG_YML, 'r') as f:
     modelParams = yaml.load(f)
 
 def trainModel(modelData):
