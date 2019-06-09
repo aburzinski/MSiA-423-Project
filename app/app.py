@@ -280,7 +280,7 @@ def predict(id):
                 join(ProjectedStats, ProjectedStats.playerId == Player.id).\
                 filter(ProjectedStats.playerId != id).\
                 filter(Team.league == currentPlayer.Team.league).\
-                filter(ProjectedStats.cyYoungLikelihood > likelihood).count()
+                filter(ProjectedStats.cyYoungLikelihood > likelihood).count() + 1
         
         else:
             
@@ -289,7 +289,7 @@ def predict(id):
                 data[key] = float(value)
             predictData = pd.DataFrame(data, index=[0])
             cols = ['h_x', 'bb_x', 'so_x', 'er', 'sv', 'w', 'ip', 'h_y', 'hr_y', 'rbi', 'bb_y', 'so_y', 'ab_y']
-            predictionData = predictData[cols]
+            predictData = predictData[cols]
 
             print(predictData)
 
@@ -301,7 +301,7 @@ def predict(id):
                 join(ProjectedStats, ProjectedStats.playerId == Player.id).\
                 filter(ProjectedStats.playerId != id).\
                 filter(Team.league == currentPlayer.Team.league).\
-                filter(ProjectedStats.mvpLikelihood > avgProbs).count()
+                filter(ProjectedStats.mvpLikelihood > avgProbs).count() + 1
 
             message = h.appendNumberEnding(newRank)
 
