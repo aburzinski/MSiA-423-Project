@@ -66,6 +66,7 @@ if __name__ == '__main__':
         merged.loc[merged['obp_x'] == '.---', 'obp_x'] = 0.0
 
         merged = merged.replace([np.inf, -np.inf], np.nan).fillna(0)
+        merged = merged.drop_duplicates()
 
     else:
         raise Exception('The type argument must be either "projected" or "current"')
