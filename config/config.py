@@ -7,6 +7,7 @@ DEBUG = True
 PORT = 8000
 APP_NAME = 'whosinfirst'
 HOST = '127.0.0.1'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Project
 PROJECT_ROOT_DIR = os.environ.get('PYTHONPATH')
