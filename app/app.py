@@ -95,7 +95,7 @@ def index():
             order_by(Team.teamName).all()
 
         # Get a list of all players for a search box
-        players = db.session.query(Player).join(ProjectedStats).order_by(Player.playerName).all()
+        players = db.session.query(Player, ProjectedStats).join(ProjectedStats, Player.id == ProjectedStats.playerid).order_by(Player.playerName).all()
 
         # Calculate the last updated date and the days left in the mlb season
         lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
