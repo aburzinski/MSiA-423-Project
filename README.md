@@ -55,28 +55,28 @@ Build an application incorporating an intuitive user interface, data updated dai
 - Epic 5: Create Team Performance Based Model
 
 ### Backlog
-1. Epic1 - Engineer and Transform Features: 1 Point - PLANNED
-2. Epic1 - Create Models with Python: 1 Point - PLANNED
-3. Epic1 - Assess Model Performance: 1 Point - PLANNED
-4. Epic1 - Tune Models: 4 Points - PLANNED
-5. Epic1 - Create Documentation for Models: 2 Points - PLANNED
-6. Epic2 - Create Web App Using Flask and HTML: Create Landing Page - 2 Points - PLANNED
-7. Epic2 - Create Web App Using Flask and HTML: Create Player Page - 2 Points - PLANNED
-8. Epic2 - Create Web App Using Flask and HTML: Create Team Page - 2 Points - PLANNED
-9. Epic2 - Create Web App Using Flask and HTML: Create Comparison Page - 2 Points - PLANNED
-10. Epic2 - Improve UX with CSS and Javascript: 8 Points - PLANNED
-11. Epic3 - Automate Training of model: - 2 Points - PLANNED
+1. Epic1 - Create Documentation for Models: 2 Points - PLANNED
 
 ### Completed
 1. Epic1 - Collect Historical Data
 2. Epic1 - Clean Historical Data
-3. Epic3 - Create Puthon Scripts to Ingest Data
-4. Epic4 - Create Resources in AWS: Private S3 Bucket
-5. Epic4 - Create Resources in AWS: Public S3 Bucket
-6. Epic4 - Create Resources in AWS: RDS Instance
-7. Epic4 - Create Resources in AWS: EC2 Instance
+3. Epic1 - Engineer and Transform Features
+4. Epic1 - Create Models with Python
+5. Epic1 - Assess Model Performance
+6. Epic1 - Tune Models
+7. Epic2 - Create Web App Using Flask and HTML: Create Index Page
+8. Epic2 - Create Web App Using Flask and HTML: Create Player Page
+9. Epic2 - Create Web App Using Flask and HTML: Create Team Page
+10. Epic2 - Improve UX with CSS and Javascript
+11. Epic3 - Create Python Scripts to Ingest Data
+12. Epic3 - Automate Training of model
+13. Epic4 - Create Resources in AWS: Private S3 Bucket
+14. Epic4 - Create Resources in AWS: Public S3 Bucket
+15. Epic4 - Create Resources in AWS: RDS Instance
+16. Epic4 - Create Resources in AWS: EC2 Instance
 
 ### Icebox
+- Epic2 - Create Web App Using Flask and HTML: Create Comparison Page
 - Epic2 - Create Web App Using Flask and HTML: Create History Page
 - Epic5
 
@@ -144,35 +144,38 @@ export MYSQL_USER='my_db_username'
 export MYSQL_PASSWORD='my_db_password'
 ```
 
-#### 4. Download the historical data required for the app to the local machine
-This data will be created in the `data/historical` directory
+#### 4. Update the configuration file
+The file `config/config.py` contains configurations for each part of the project.  Key configurations to update are:
 
-This can be done running the following script:
+- The Flask App Port and Host
+- The Yaml file locations (if these are different from the Github defaults)
+- The model artifact location (if these are different from the Github defaults)
+- The logging file location (if different from the Github defaults)
+- The Sql Alchemy database type (this should only be set to either `sqlite` or `mysql`)
+- The Sql Alchemy SQLite Host/File Path (if this differs from the Github default)
+- The Sql Alchemy database name (if this differs from the Github)
+
+
+#### 5. Run the script project_init.sh
+
+`bash project_init.sh`
+
+This script will download the historical data from S3, create features, models, and predictions, format the data, create a database in RDS (or SQLite) and populate the database.
+
+__Note:__ Bash scripts rather than makefiles were used for this projects as some of the file dependencies used in makefiles live in S3 rather than the local file system.
+
+__Note:__ By default, the `project_init.sh` script will download historical data that has already been created from S3.  To re-create the historical data from the API, run the following script:
 
 `python src/pull_historical_data.py`
 
-This script pulls the data from an API, and can take over an hour to run.  To pull the same historical data from a public AWS S3 bucket, run:
+This script pulls the data from an API, but takes over an hour to run.
 
-`python src/read_historical_files.py`
+#### 6. Run the App
+After running the `project_init.sh` script, the app is ready to be run.  To run the app, use the following command:
 
-#### 5. Move the historical data from the local machine to an AWS S3 bucket
-This can be done by running the following script (based on the AWS environment variables created above):
+`python app/app.py`
 
-`python src/write_to_cloud.py historical`
-
-#### 6. Create SQL Database
-Make sure to change the `SQLALCHEMY_TYPE` variable in the `config/config.py` file to either _sqlite_ or _mysql_.  This determines which type of database will be created.
-  - If using sqlite, change the `SQLALCHEMY_SQLITE_HOST` variable in the `config/config.py` file to the desired location for the sqlite database.
-  - If using MySQL in RDS, no addition changes are necessary
-
-After updating the configuration file, create the database by running:
-
-`python models/mlb_database/create_database.py`
-
-#### 7. Add data to the database
-To add data to the database, run the following python script:
-
-`python src/ingest_data.py`
+At this point, the app should be running on the host and port specified in the `config/config.py` file.
 
 
 ## Testing
