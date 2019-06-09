@@ -48,7 +48,7 @@ elif SQLALCHEMY_TYPE == 'mysql':
     SQLALCHEMY_HOST = SQLALCHEMY_MYSQL_HOST
 else:
     raise ValueError('SQLALCHEMY_TYPE not set ccorrectly in config/config.py')
-SQLALCHEMY_DATABASE_NAME = 'mlb'
+SQLALCHEMY_DATABASE_NAME = 'whosinfirst'
 
 import src.helpers.configHelpers as ch
 SQLALCHEMY_DATABASE_URI = ch.createDatabaseURI(dbtype=SQLALCHEMY_TYPE,
