@@ -40,17 +40,17 @@ if __name__ == '__main__':
     s3 = s3session.client('s3')
     logger.debug('Connected to s3 successfully')
 
-    # Ingest players
-    logger.info('Reading from the s3 bucket ' + bucketName)
-    playerFile = ah.readFileFromS3('players.csv', s3, bucketName, bucketPath)
-
-    player.ingestPlayers(playerFile, dbsession, truncate=True)
-    
     # Ingest teams
     logger.info('Reading from the s3 bucket ' + bucketName)
     teamFile = ah.readFileFromS3('teams.csv', s3, bucketName, bucketPath)
 
     team.ingestTeams(teamFile, dbsession, truncate=True)
+
+    # Ingest players
+    logger.info('Reading from the s3 bucket ' + bucketName)
+    playerFile = ah.readFileFromS3('players.csv', s3, bucketName, bucketPath)
+
+    player.ingestPlayers(playerFile, dbsession, truncate=True)
 
     # Ingest projected statistics
     logger.info('Reading from the s3 bucket ' + bucketName)
