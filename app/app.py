@@ -301,8 +301,6 @@ def predict(id):
                 filter(ProjectedStats.cyYoungLikelihood > likelihood).count() + 1
 
             message = h.appendNumberEnding(newRank)
-            print(predictData)
-            print(message)
         
         else:
             
@@ -316,12 +314,15 @@ def predict(id):
             avgProbs = np.multiply(mvp_model_lr.predict_proba(predictData)[:,1],
                 mvp_model_rf.predict_proba(predictData)[:,1]+.001)
 
+            avgProbs = float(avgProbs)
+
             newRank = db.session.query(Team, Player, ProjectedStats).\
                 join(Player, Player.currentTeamId == Team.id).\
                 join(ProjectedStats, ProjectedStats.playerId == Player.id).\
                 filter(ProjectedStats.playerId != id).\
                 filter(Team.league == currentPlayer.Team.league).\
                 filter(ProjectedStats.mvpLikelihood > avgProbs).count() + 1
+                
 
             message = h.appendNumberEnding(newRank)
 
