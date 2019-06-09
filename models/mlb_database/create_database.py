@@ -49,7 +49,7 @@ class Team(Base):
     division = Column(String(10), unique=False, nullable=True)
     yearFounded = Column(Integer, unique=False, nullable=True)
     teamAbbrev = Column(String(100), unique=False, nullable=False)
-    # players = relationship('Player')
+    players = relationship('Player')
 
     def __repr__(self):
         return '<Team %r>' % self.teamName
@@ -58,7 +58,7 @@ class CurrentStats(Base):
     """Create a table to hold current stats and predictions"""
     __tablename__ = 'currentStats'
     currentStatsId = Column(Integer, primary_key=True)
-    playerId = Column(Integer, ForeignKey('player.id'))
+    # playerId = Column(Integer, ForeignKey('player.id'))
     hits = Column(Integer, unique=False, nullable=True)
     homeRuns = Column(Integer, unique=False, nullable=True)
     runsBattedIn = Column(Integer, unique=False, nullable=True)
@@ -80,7 +80,7 @@ class ProjectedStats(Base):
     """Create a table to hold current stats and predictions"""
     __tablename__ = 'projectedStats'
     projectedStatsId = Column(Integer, primary_key=True)
-    playerId = Column(Integer, ForeignKey('player.id'))
+    # playerId = Column(Integer, ForeignKey('player.id'))
     hits = Column(Integer, unique=False, nullable=True)
     homeRuns = Column(Integer, unique=False, nullable=True)
     runsBattedIn = Column(Integer, unique=False, nullable=True)
