@@ -69,7 +69,7 @@ class Player(Base):
     """Create a table to hold player data"""
     __tablename__ = 'player'
     id = Column(Integer, primary_key=True)
-    currentTeamId = Column(Integer, ForeignKey('team.id'))
+    currentTeamId = Column(Integer, unique=False, nullable=False)
     playerName = Column(String(100), unique=False, nullable=False)
     birthCity = Column(String(100), unique=False, nullable=True)
     birthState = Column(String(10), unique=False, nullable=True)
@@ -98,7 +98,7 @@ class Team(Base):
     division = Column(String(10), unique=False, nullable=True)
     yearFounded = Column(Integer, unique=False, nullable=True)
     teamAbbrev = Column(String(100), unique=False, nullable=False)
-    players = relationship('Player')
+    # players = relationship('Player')
 
     def __repr__(self):
         return '<Team %r>' % self.teamName
