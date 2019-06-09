@@ -30,7 +30,8 @@ def ingestTeams(s3File, session, truncate=True):
         'state': 25,
         'league': 4,
         'division': 62,
-        'yearFounded': 24
+        'yearFounded': 24,
+        'season': 39
     }
 
     teamCount = 0
@@ -38,14 +39,14 @@ def ingestTeams(s3File, session, truncate=True):
 
     for line in s3File.splitlines(False)[1:]:
         line = line[1:][:-1].split('","')
-        if int(line[32]) > maxYear:
-            maxYear = int(line[32])
+        if int(line[teamSchema['season'] - 1]) > maxYear:
+            maxYear = int(line[teamSchema['season'] - 1])
 
     for line in s3File.splitlines(False)[1:]:
         line = line[1:][:-1].split('","')
 
         # Only pull most recent records
-        if int(line[32]) == maxYear:
+        if int(line[teamSchema['season'] - 1]) == maxYear:
 
             # Need to subtract one to index from zero
             teamId = int(line[teamSchema['id'] - 1])
