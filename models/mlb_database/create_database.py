@@ -21,7 +21,7 @@ class CurrentStats(Base):
     """Create a table to hold current stats and predictions"""
     __tablename__ = 'currentStats'
     currentStatsId = Column(Integer, primary_key=True)
-    # playerId = Column(Integer, ForeignKey('player.id'))
+    playerId = Column(Integer, unique=True, nullable=False)
     hits = Column(Integer, unique=False, nullable=True)
     homeRuns = Column(Integer, unique=False, nullable=True)
     runsBattedIn = Column(Integer, unique=False, nullable=True)
@@ -43,7 +43,7 @@ class ProjectedStats(Base):
     """Create a table to hold current stats and predictions"""
     __tablename__ = 'projectedStats'
     projectedStatsId = Column(Integer, primary_key=True)
-    # playerId = Column(Integer, ForeignKey('player.id'))
+    playerId = Column(Integer, unique=True, nullable=False)
     hits = Column(Integer, unique=False, nullable=True)
     homeRuns = Column(Integer, unique=False, nullable=True)
     runsBattedIn = Column(Integer, unique=False, nullable=True)
@@ -64,7 +64,7 @@ class ProjectedStats(Base):
 
     def __repr__(self):
         return '<Projected Stats %r>' % self.playerId
-        
+
 class Player(Base):
     """Create a table to hold player data"""
     __tablename__ = 'player'
