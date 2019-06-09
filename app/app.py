@@ -31,6 +31,7 @@ db = SQLAlchemy(app)
 
 UTC_OFFSET_TIMEDELTA = datetime.utcnow() - datetime.now()
 
+# Import models
 with open(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'model_files', 'mvp_lr.model'), 'rb') as f:
     mvp_model_lr = pickle.load(f)
 f.close()
@@ -45,10 +46,11 @@ f.close()
 
 @app.route('/')
 def index():
-
+"""Render and return the index template"""
     numPlayersToShow = 10
 
     try:
+        # Get a list of the top players per league per award
         nlMvp = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
@@ -73,6 +75,7 @@ def index():
             filter(Team.league == 'AL').filter(ProjectedStats.cyYoungRank > 0).\
             order_by(ProjectedStats.cyYoungRank).limit(numPlayersToShow).all()
 
+        # Get a list of teams by division
         nlwTeams = db.session.query(Team).filter(Team.division == 'NLW').\
             order_by(Team.teamName).all()
 
@@ -91,8 +94,10 @@ def index():
         aleTeams = db.session.query(Team).filter(Team.division == 'ALE').\
             order_by(Team.teamName).all()
 
+        # Get a list of all players for a search box
         players = db.session.query(Player).join(ProjectedStats).order_by(Player.playerName).all()
 
+        # Calculate the last updated date and the days left in the mlb season
         lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
         lastUpdateLocal = lastUpdate - UTC_OFFSET_TIMEDELTA
         lastUpdateLocal = lastUpdateLocal.strftime('%b %d')
@@ -114,7 +119,9 @@ def index():
 
 @app.route('/player/<id>', methods=['GET', 'POST'])
 def player(id):
+"""Render and return the player template"""
     try:
+        # Pull player from SQL
         player = db.session.query(Team, Player, CurrentStats, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
@@ -130,10 +137,12 @@ def player(id):
         else:
             hometown = '{}, {}'.format(birthCity, birthCountry)
 
+        # Calculate last update date
         lastUpdate = db.session.query(LastUpdate).first().lastUpdateDate
         lastUpdateLocal = lastUpdate - UTC_OFFSET_TIMEDELTA
         lastUpdateLocal = lastUpdateLocal.strftime('%b %d')
 
+        # Format data to feed to d3 radar chart
         legend = ['End of Season Prediction', 'Current as of {}'.format(lastUpdateLocal)]
         colors = [teamColors[player.Team.teamName]['primary'], teamColors[player.Team.teamName]['secondary']]
         
@@ -228,7 +237,7 @@ def player(id):
 
 @app.route('/team/<id>')
 def team(id):
-
+"""Render and return the team template"""
     numPlayersToShow = 12
 
     try:
@@ -237,6 +246,7 @@ def team(id):
         division = divisionMapping[team.division]
         location = '{}, {}'.format(team.city, team.state)
 
+        # Rank players on team
         mvpPlayers = db.session.query(Team, Player, ProjectedStats).\
             join(Player, Team.id == Player.currentTeamId).\
             join(ProjectedStats, Player.id == ProjectedStats.playerId).\
@@ -261,11 +271,17 @@ def team(id):
 
 @app.route('/predict/<id>', methods=['GET', 'POST'])
 def predict(id):
+""" Receive a POST request with user input statistics,
+    predict a new rank based on those statistics,
+    and return the rank as a JSON oject
+"""
     try:
+        # Get data about current player
         currentPlayer = db.session.query(Team, Player).\
             join(Player, Player.currentTeamId == Team.id).\
             filter(Player.id == id).first()
 
+        # Determine new rank of player
         if currentPlayer.Player.position == 'P':
             
             data = json.loads(request.data)
@@ -305,6 +321,7 @@ def predict(id):
 
             message = h.appendNumberEnding(newRank)
 
+        # Return json object
         return json.dumps({'message': message})
     except Exception as e:
         print(e)
