@@ -164,7 +164,7 @@
                     return response.json()
                 }).then((data) => {
                     console.log(data.message);
-                    document.getElementById('playerMessage').innerHTML = '<b>{{ player.Player.playerName }}</b> is currently <b>' + data.message + '</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.'
+                    document.getElementById('playerMessage').innerHTML = 'If the season ended today, <b>{{ player.Player.playerName }}</b> would be ranked <b>{{ message }}</b> amongst all players when it comes to winning the <b>{{ award }}</b> award.   This projection is based on his end-of-season predicted baseball statistics shown in the boxes below.   Try updating any of these statistics and click SUBMIT to see how his ranking changes.  Click on RESET to start over.  You can also hover over each data point on the radar chart to see both his current and season ending projected statistics.'
                 }).catch((err) => {
                     console.log(err);
                 });
@@ -190,7 +190,7 @@
                     document.getElementById('walks').value = '{{ player.ProjectedStats.walks }}';
                 }
 
-                document.getElementById('playerMessage').innerHTML = '<b>{{ player.Player.playerName }}</b> is currently <b>{{ message }}</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.'
+                document.getElementById('playerMessage').innerHTML = 'If the season ended today, <b>{{ player.Player.playerName }}</b> would be ranked <b>{{ message }}</b> amongst all players when it comes to winning the <b>{{ award }}</b> award.   This projection is based on his end-of-season predicted baseball statistics shown in the boxes below.   Try updating any of these statistics and click SUBMIT to see how his ranking changes.  Click on RESET to start over.  You can also hover over each data point on the radar chart to see both his current and season ending projected statistics.'
 
                 createRadar('{{ player.Player.playerName }}', '{{ legend|tojson }}',
                     '{{ colors|tojson }}', '{{ stats|tojson }}',

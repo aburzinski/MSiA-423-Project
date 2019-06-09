@@ -297,6 +297,8 @@ def predict(id):
                 filter(ProjectedStats.playerId != id).\
                 filter(Team.league == currentPlayer.Team.league).\
                 filter(ProjectedStats.cyYoungLikelihood > likelihood).count() + 1
+
+            message = h.appendNumberEnding(newRank)
         
         else:
             
