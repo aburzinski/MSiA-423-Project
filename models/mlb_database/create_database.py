@@ -17,6 +17,23 @@ logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
+class Team(Base):
+    """Create a table to hold team data"""
+    __tablename__ = 'team'
+    id = Column(Integer, primary_key=True)
+    teamName = Column(String(100), unique=False, nullable=False)
+    venueName = Column(String(100), unique=False, nullable=True)
+    city = Column(String(100), unique=False, nullable=True)
+    state = Column(String(100), unique=False, nullable=True)
+    league = Column(String(10), unique=False, nullable=True)
+    division = Column(String(10), unique=False, nullable=True)
+    yearFounded = Column(Integer, unique=False, nullable=True)
+    teamAbbrev = Column(String(100), unique=False, nullable=False)
+    players = relationship('Player')
+
+    def __repr__(self):
+        return '<Team %r>' % self.teamName
+
 class Player(Base):
     """Create a table to hold player data"""
     __tablename__ = 'player'
@@ -36,23 +53,6 @@ class Player(Base):
 
     def __repr__(self):
         return '<Player %r>' % self.playerName
-
-class Team(Base):
-    """Create a table to hold team data"""
-    __tablename__ = 'team'
-    id = Column(Integer, primary_key=True)
-    teamName = Column(String(100), unique=False, nullable=False)
-    venueName = Column(String(100), unique=False, nullable=True)
-    city = Column(String(100), unique=False, nullable=True)
-    state = Column(String(100), unique=False, nullable=True)
-    league = Column(String(10), unique=False, nullable=True)
-    division = Column(String(10), unique=False, nullable=True)
-    yearFounded = Column(Integer, unique=False, nullable=True)
-    teamAbbrev = Column(String(100), unique=False, nullable=False)
-    players = relationship('Player')
-
-    def __repr__(self):
-        return '<Team %r>' % self.teamName
 
 class CurrentStats(Base):
     """Create a table to hold current stats and predictions"""
