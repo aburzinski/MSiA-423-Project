@@ -23,14 +23,14 @@ def ingestTeams(s3File, session, truncate=True):
 
     # Column numbers are indexed from one
     teamSchema = {
-        'id': 37,
-        'teamName': 8,
-        'venueName': 2,
-        'city': 7,
-        'state': 40,
-        'league': 23,
-        'division': 35,
-        'yearFounded': 48
+        'id': 8,
+        'teamName': 55,
+        'venueName': 20,
+        'city': 18,
+        'state': 25,
+        'league': 4,
+        'division': 62,
+        'yearFounded': 24
     }
 
     teamCount = 0
