@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="col-md-12 head-gray mb-3">
-                        <p class="mt-2" id="playerMessage"><b>{{ player.Player.playerName }}</b> is currently <b>{{ message }}</b> most likely to win the <b>{{ award }}</b> award.  This is based on the projected statistics below.  Try changing the statistics and click submit to see how likely he will be with different statistics.</p>
+                        <p class="mt-2" id="playerMessage">If the season ended today, <b>{{ player.Player.playerName }}</b> would be ranked <b>{{ message }}</b> amongst all players when it comes to winning the <b>{{ award }}</b> award.   This projection is based on his end-of-season predicted baseball statistics shown in the boxes below.   Try updating any of these statistics and click SUBMIT to see how his ranking changes.  Click on RESET to start over.  You can also hover over each data point on the radar chart to see both his current and season ending projected statistics.</p>
                     </div>
                     <div class="col-md-12 head-gray mb-3">
                         {% from '_formhelper.html' import render_field %}

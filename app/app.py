@@ -46,7 +46,7 @@ f.close()
 
 @app.route('/')
 def index():
-"""Render and return the index template"""
+    """Render and return the index template"""
     numPlayersToShow = 10
 
     try:
@@ -119,7 +119,7 @@ def index():
 
 @app.route('/player/<id>', methods=['GET', 'POST'])
 def player(id):
-"""Render and return the player template"""
+    """Render and return the player template"""
     try:
         # Pull player from SQL
         player = db.session.query(Team, Player, CurrentStats, ProjectedStats).\
@@ -237,7 +237,7 @@ def player(id):
 
 @app.route('/team/<id>')
 def team(id):
-"""Render and return the team template"""
+    """Render and return the team template"""
     numPlayersToShow = 12
 
     try:
@@ -271,10 +271,10 @@ def team(id):
 
 @app.route('/predict/<id>', methods=['GET', 'POST'])
 def predict(id):
-""" Receive a POST request with user input statistics,
-    predict a new rank based on those statistics,
-    and return the rank as a JSON oject
-"""
+    """ Receive a POST request with user input statistics,
+        predict a new rank based on those statistics,
+        and return the rank as a JSON oject
+    """
     try:
         # Get data about current player
         currentPlayer = db.session.query(Team, Player).\
