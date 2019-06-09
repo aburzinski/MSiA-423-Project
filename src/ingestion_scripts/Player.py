@@ -22,18 +22,18 @@ def ingestPlayers(s3File, session, truncate=True):
 
     # Column numbers are indexed from one
     playerSchema = {
-        'id': 24,
-        'playerName': 3,
-        'birthCity': 40,
-        'birthState': 30,
-        'birthCountry': 1,
-        'age': 7,
-        'heightInches': 5,
-        'heightFeet': 10,
-        'weight': 31,
-        'debutDate': 11,
-        'position': 20,
-        'currentTeamId': 27
+        'id': 14,
+        'playerName': 47,
+        'birthCity': 17,
+        'birthState': 32,
+        'birthCountry': 12,
+        'age': 41,
+        'heightInches': 33,
+        'heightFeet': 37,
+        'weight': 4,
+        'debutDate': 22,
+        'position': 48,
+        'currentTeamId': 9
     }
 
     playerCount = 0
