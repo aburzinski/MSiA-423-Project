@@ -16,7 +16,7 @@ ${project}-env/bin/activate: requirements.txt
 venv: ${project}-env/bin/activate
 
 # Historical Raw Data
-${historical}/hittingHistorical.csv ${historical}/pitchingHistorical.csv ${historical}/players.csv ${historical}/teams.csv:
+${historical}/hittingHistorical.csv ${historical}/pitchingHistorical.csv ${historical}/players.csv ${historical}/teams.csv: FORCE
 	# The following command pulls already created training data
 	python src/read_historical_files_from_S3.py
 	# Use the follwing instead to recreate the training data
