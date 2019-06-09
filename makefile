@@ -33,16 +33,16 @@ daily-data: ${projected}/hittingCurrent.csv ${projected}/hittingProjected.csv ${
 
 # Features
 ${features}/cyYoungFeatureshistorical.csv: ${historical}/pitchingHistorical.csv ${historical}/players.csv ${historical}/teams.csv
-	python models/cy_young_model/create_features historical
+	python models/cy_young_model/create_features.py historical
 
 ${features}/cyYoungFeaturesprojected.csv: ${projected}/pitchingProjected.csv ${historical}/players.csv ${historical}/teams.csv
-	python models/cy_young_model/create_features projected
+	python models/cy_young_model/create_features.py projected
 
 ${features}/mvpFeatureshistorical.csv: ${historical}/hittingHistorical.csv ${historical}/pitchingHistorical.csv ${historical}/players.csv ${historical}/teams.csv
-	python models/mvp_model/create_features historical
+	python models/mvp_model/create_features.py historical
 
 ${features}/mvpFeaturesprojected.csv: ${projected}/hittingProjected.csv ${projected}/pitchingProjected.csv ${historical}/players.csv ${historical}/teams.csv
-	python models/mvp_model/create_features projected
+	python models/mvp_model/create_features.py projected
 
 features: ${features}/cyYoungFeatureshistorical.csv ${features}/cyYoungFeaturesprojected.csv ${features}/mvpFeatureshistorical.csv ${features}/mvpFeaturesprojected.csv
 
