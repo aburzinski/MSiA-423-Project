@@ -41,10 +41,10 @@ def trainModel(modelData):
 
 if __name__ == '__main__':
     
-    modelData = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features', 'cyYoungFeaturesHistorical.csv'))
+    modelData = pd.read_csv(os.path.join(config.FEATURES_DIR, 'cyYoungFeaturesHistorical.csv'))
     model = trainModel(modelData)
     
-    writeToDir = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'model_files')
+    writeToDir = config.MODEL_DIR
     h.silentCreateDir(writeToDir)
 
     with open(os.path.join(writeToDir, 'cyYoung.model'), 'wb') as f:

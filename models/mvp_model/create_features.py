@@ -96,7 +96,7 @@ if __name__ == '__main__':
     merged = readFeatures()
     modelData = cleanFeatures(merged)
 
-    writeToDir = os.path.join(config.PROJECT_ROOT_DIR, 'data', 'features')
+    writeToDir = config.FEATURES_DIR
     h.silentCreateDir(writeToDir)
     modelData.to_csv(os.path.join(writeToDir, 'mvpFeatures{}.csv'.format(args.featureType.capitalize())), index=False)
 

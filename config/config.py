@@ -16,6 +16,10 @@ CURRENT_SEASON = 2019
 MVP_YML = os.path.join(PROJECT_ROOT_DIR, 'config', 'models', 'mvp.yml')
 CY_YOUNG_YML = os.path.join(PROJECT_ROOT_DIR, 'config', 'models', 'cyYoung.yml')
 
+# Model Artifact Locations
+FEATURES_DIR = os.path.join(PROJECT_ROOT_DIR, 'data', 'features')
+MODEL_DIR = os.path.join(PROJECT_ROOT_DIR, 'data', 'model_files')
+
 # S3
 AWS_S3_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
