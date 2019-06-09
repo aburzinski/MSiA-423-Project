@@ -293,6 +293,8 @@ def predict(id):
             
             likelihood = cyYoung_model_lr.predict_proba(predictData)[:,1]
 
+            likelihood = float(likelihood)
+
             newRank = db.session.query(Team, Player, ProjectedStats).\
                 join(Player, Player.currentTeamId == Team.id).\
                 join(ProjectedStats, ProjectedStats.playerId == Player.id).\
