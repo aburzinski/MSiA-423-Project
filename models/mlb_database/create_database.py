@@ -31,8 +31,8 @@ class Player(Base):
     weight = Column(String(10), unique=False, nullable=True)
     debutDate = Column(String(20), unique=False, nullable=True)
     position = Column(String(20), unique=False, nullable=True)
-    currentStats = relationship('CurrentStats')
-    projectedStats = relationship('ProjectedStats')
+    # currentStats = relationship('CurrentStats')
+    # projectedStats = relationship('ProjectedStats')
 
     def __repr__(self):
         return '<Player %r>' % self.playerName
@@ -49,7 +49,7 @@ class Team(Base):
     division = Column(String(10), unique=False, nullable=True)
     yearFounded = Column(Integer, unique=False, nullable=True)
     teamAbbrev = Column(String(100), unique=False, nullable=False)
-    players = relationship('Player')
+    # players = relationship('Player')
 
     def __repr__(self):
         return '<Team %r>' % self.teamName
