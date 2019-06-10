@@ -100,7 +100,7 @@ Run the following from the command line:
 Create the environemnt from the `requirements.txt` file
 
 ```
-pip install virtual env
+pip install virtualenv
 
 virtualenv env_name
 
