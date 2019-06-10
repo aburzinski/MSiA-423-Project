@@ -20,26 +20,29 @@ def ingestProjectedStats(s3File, session, truncate=True):
     if truncate:
         session.query(ProjectedStats).delete()
 
+    columns = s3File.splitlines(False)[0]
+    columns = columns[1:][:-1].split('","')
+
     # Column numbers are indexed from one
     projectedStatsSchema = {
-        'playerId': 1,
-        'hits': 10,
-        'homeRuns': 11,
-        'runsBattedIn': 12,
-        'atBats': 15,
-        'walks': 13,
-        'strikeoutsBatting': 14,
-        'saves': 7,
-        'strikeoutsPitching': 5,
-        'inningsPitched': 9,
-        'wins': 8,
-        'walksAllowed': 4,
-        'hitsAllowed': 3,
-        'earnedRuns': 6,
-        'mvpLikelihood': 16,
-        'mvpRank': 17,
-        'cyYoungLikelihood': 18,
-        'cyYoungRank': 19
+        'playerId': columns.index('player_id'),
+        'hits': columns.index('h_y'),
+        'homeRuns': columns.index('hr_y'),
+        'runsBattedIn': columns.index('rbi'),
+        'atBats': columns.index('ab_y'),
+        'walks': columns.index('bb_y'),
+        'strikeoutsBatting': columns.index('so_y'),
+        'saves': columns.index('sv'),
+        'strikeoutsPitching': columns.index('so_x'),
+        'inningsPitched': columns.index('ip'),
+        'wins': columns.index('w'),
+        'walksAllowed': columns.index('bb_x'),
+        'hitsAllowed': columns.index('h_x'),
+        'earnedRuns': columns.index('er'),
+        'mvpLikelihood': columns.index('mvpLikelihood'),
+        'mvpRank': columns.index('mvpRank'),
+        'cyYoungLikelihood': columns.index('cyYoungLikelihood'),
+        'cyYoungRank': columns.index('cyYoungRank')
     }
 
     statsCount = 0
@@ -48,24 +51,24 @@ def ingestProjectedStats(s3File, session, truncate=True):
         line = line.split(',')
 
         # Need to subtract one to index from zero
-        playerId = int(line[projectedStatsSchema['playerId'] - 1])
-        hits = int(float(line[projectedStatsSchema['hits'] - 1]))
-        homeRuns = int(float(line[projectedStatsSchema['homeRuns'] - 1]))
-        runsBattedIn = int(float(line[projectedStatsSchema['runsBattedIn'] - 1]))
-        atBats = int(float(line[projectedStatsSchema['atBats'] - 1]))
-        walks = int(float(line[projectedStatsSchema['walks'] - 1]))
-        strikeoutsBatting = int(float(line[projectedStatsSchema['strikeoutsBatting'] - 1]))
-        saves = int(float(line[projectedStatsSchema['saves'] - 1]))
-        strikeoutsPitching = int(float(line[projectedStatsSchema['strikeoutsPitching'] - 1]))
-        inningsPitched = int(float(line[projectedStatsSchema['inningsPitched'] - 1]))
-        wins = int(float(line[projectedStatsSchema['wins'] - 1]))
-        walksAllowed = int(float(line[projectedStatsSchema['walksAllowed'] - 1]))
-        hitsAllowed = int(float(line[projectedStatsSchema['hitsAllowed'] - 1]))
-        earnedRuns = int(float(line[projectedStatsSchema['earnedRuns'] - 1]))
-        mvpLikelihood = float(line[projectedStatsSchema['mvpLikelihood'] - 1])
-        mvpRank = int(float(line[projectedStatsSchema['mvpRank'] - 1]))
-        cyYoungLikelihood = float(line[projectedStatsSchema['cyYoungLikelihood'] - 1])
-        cyYoungRank = int(float(line[projectedStatsSchema['cyYoungRank'] - 1]))
+        playerId = int(line[projectedStatsSchema['playerId']])
+        hits = int(float(line[projectedStatsSchema['hits']]))
+        homeRuns = int(float(line[projectedStatsSchema['homeRuns']]))
+        runsBattedIn = int(float(line[projectedStatsSchema['runsBattedIn']]))
+        atBats = int(float(line[projectedStatsSchema['atBats']]))
+        walks = int(float(line[projectedStatsSchema['walks']]))
+        strikeoutsBatting = int(float(line[projectedStatsSchema['strikeoutsBatting']]))
+        saves = int(float(line[projectedStatsSchema['saves']]))
+        strikeoutsPitching = int(float(line[projectedStatsSchema['strikeoutsPitching']]))
+        inningsPitched = int(float(line[projectedStatsSchema['inningsPitched']]))
+        wins = int(float(line[projectedStatsSchema['wins']]))
+        walksAllowed = int(float(line[projectedStatsSchema['walksAllowed']]))
+        hitsAllowed = int(float(line[projectedStatsSchema['hitsAllowed']]))
+        earnedRuns = int(float(line[projectedStatsSchema['earnedRuns']]))
+        mvpLikelihood = float(line[projectedStatsSchema['mvpLikelihood']])
+        mvpRank = int(float(line[projectedStatsSchema['mvpRank']]))
+        cyYoungLikelihood = float(line[projectedStatsSchema['cyYoungLikelihood']])
+        cyYoungRank = int(float(line[projectedStatsSchema['cyYoungRank']]))
         
         new_statistic = ProjectedStats(playerId=playerId,
             hits=hits,
