@@ -20,20 +20,23 @@ def ingestPlayers(s3File, session, truncate=True):
     if truncate:
         session.query(Player).delete()
 
+    columns = s3File.splitlines(False)[0]
+    columns = columns[1:][:-1].split('","')
+
     # Column numbers are indexed from one
     playerSchema = {
-        'id': 24,
-        'playerName': 3,
-        'birthCity': 40,
-        'birthState': 30,
-        'birthCountry': 1,
-        'age': 7,
-        'heightInches': 5,
-        'heightFeet': 10,
-        'weight': 31,
-        'debutDate': 11,
-        'position': 20,
-        'currentTeamId': 27
+        'id': columns.index('player_id'),
+        'playerName': columns.index('name_display_first_last'),
+        'birthCity': columns.index('birth_city'),
+        'birthState': columns.index('birth_state'),
+        'birthCountry': columns.index('birth_country'),
+        'age': columns.index('age'),
+        'heightInches': columns.index('height_index'),
+        'heightFeet': columns.index('height_feet'),
+        'weight': columns.index('weight'),
+        'debutDate': columns.index('pro_debut_date'),
+        'position': columns.index('primary_position_txt'),
+        'currentTeamId': columns.index('team_id')
     }
 
     playerCount = 0

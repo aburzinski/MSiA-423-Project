@@ -21,17 +21,20 @@ def ingestTeams(s3File, session, truncate=True):
     if truncate:
         session.query(Team).delete()
 
+    columns = s3File.splitlines(False)[0]
+    columns = columns[1:][:-1].split('","')
+
     # Column numbers are indexed from one
     teamSchema = {
-        'id': 9,
-        'teamName': 55,
-        'venueName': 20,
-        'city': 18,
-        'state': 25,
-        'league': 4,
-        'division': 62,
-        'yearFounded': 24,
-        'season': 39
+        'id': columns.index('team_id'),
+        'teamName': columns.index('name_display_long'),
+        'venueName': columns.index('venue_name'),
+        'city': columns.index('city'),
+        'state': columns.index('state'),
+        'league': columns.index('league'),
+        'division': columns.index('division_abbrev'),
+        'yearFounded': columns.index('first_year_of_play'),
+        'season': columns.index('season')
     }
 
     teamCount = 0
