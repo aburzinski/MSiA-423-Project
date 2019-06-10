@@ -160,7 +160,7 @@ The file `config/config.py` contains configurations for each part of the project
 
 `bash project_init.sh`
 
-This script will download the historical data from S3, create features, models, and predictions, format the data, create a database in RDS (or SQLite) and populate the database.
+This script will download the historical data from S3, create features, models, and predictions, format the data, create a database in RDS (or SQLite) and populate the database.  This script may take about 5 minutes to run as it has to update player statistics data to the current date.
 
 __Note:__ Bash scripts rather than makefiles were used for this projects as some of the file dependencies used in makefiles live in S3 rather than the local file system.
 
