@@ -31,7 +31,7 @@ def ingestPlayers(s3File, session, truncate=True):
         'birthState': columns.index('birth_state'),
         'birthCountry': columns.index('birth_country'),
         'age': columns.index('age'),
-        'heightInches': columns.index('height_index'),
+        'heightInches': columns.index('height_inches'),
         'heightFeet': columns.index('height_feet'),
         'weight': columns.index('weight'),
         'debutDate': columns.index('pro_debut_date'),
