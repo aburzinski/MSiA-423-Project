@@ -50,7 +50,7 @@ def ingestTeams(s3File, session, truncate=True):
         line = line[1:][:-1].split('","')
 
         # Only pull most recent records
-        if int(line[teamSchema['season'] - 1]) == maxYear:
+        if int(line[teamSchema['season']]) == maxYear:
 
             # No longer need to subtract one to index from zero
             teamId = int(line[teamSchema['id']])
