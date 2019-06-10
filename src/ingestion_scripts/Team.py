@@ -31,7 +31,7 @@ def ingestTeams(s3File, session, truncate=True):
         'league': 23,
         'division': 35,
         'yearFounded': 48,
-        'season': 32
+        'season': 33
     }
 
     teamCount = 0
