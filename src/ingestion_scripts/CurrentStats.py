@@ -29,7 +29,7 @@ def ingestCurrentStats(s3File, session, truncate=True):
         'hits': columns.index('h_x'),
         'homeRuns': columns.index('hr_x'),
         'runsBattedIn': columns.index('rbi'),
-        'atBats': columns.index('ab+x'),
+        'atBats': columns.index('ab_x'),
         'walks': columns.index('bb_x'),
         'strikeoutsBatting': columns.index('so_x'),
         'saves': columns.index('sv'),
