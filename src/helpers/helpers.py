@@ -35,7 +35,7 @@ def writeIterLine(iter, f):
     elems = []
     for elem in iter:
         elems.append(elem)
-    f.write(str(('"' + '","'.join(elems) + '"\n').encode('latin-1', 'ignore')))
+    f.write(str(('"' + '","'.join(elems) + '"\n').decode('latin-1', 'ignore')))
 
 def textParseDate(origDate):
     """Take a date of the format YYYY-MM-DDTHH:MM:SS and parse
