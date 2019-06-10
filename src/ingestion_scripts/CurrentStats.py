@@ -21,7 +21,7 @@ def ingestCurrentStats(s3File, session, truncate=True):
         session.query(CurrentStats).delete()
 
     columns = s3File.splitlines(False)[0]
-    columns = columns[1:][:-1].split('","')
+    columns = columns.split(',')
 
     # Column numbers are indexed from one
     currentStatsSchema = {
