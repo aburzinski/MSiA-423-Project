@@ -23,7 +23,7 @@ def ingestPlayers(s3File, session, truncate=True):
     columns = s3File.splitlines(False)[0]
     columns = columns[1:][:-1].split('","')
 
-    # Column numbers are indexed from one
+    # Column numbers are indexed from zero
     playerSchema = {
         'id': columns.index('player_id'),
         'playerName': columns.index('name_display_first_last'),
@@ -44,18 +44,18 @@ def ingestPlayers(s3File, session, truncate=True):
     for line in s3File.splitlines(False)[1:]:
         line = line[1:][:-1].split('","')
 
-        # Need to subtract one to index from zero
-        playerId = int(line[playerSchema['id'] - 1])
-        playerName = line[playerSchema['playerName'] - 1]
-        birthCity = line[playerSchema['birthCity'] - 1]
-        birthState = line[playerSchema['birthState'] - 1]
-        birthCountry = line[playerSchema['birthCountry'] - 1]
-        age = int(line[playerSchema['age'] - 1])
-        height = line[playerSchema['heightFeet'] - 1] + '\'' + line[playerSchema['heightInches'] - 1] + '"'
-        weight = int(line[playerSchema['weight'] - 1])
-        debutDate = h.textParseDate(line[playerSchema['debutDate'] - 1])
-        position = line[playerSchema['position'] - 1]
-        currentTeamId = int(line[playerSchema['currentTeamId'] - 1])
+        # No longer need to subtract one to index from zero
+        playerId = int(line[playerSchema['id']])
+        playerName = line[playerSchema['playerName']]
+        birthCity = line[playerSchema['birthCity']]
+        birthState = line[playerSchema['birthState']]
+        birthCountry = line[playerSchema['birthCountry']]
+        age = int(line[playerSchema['age']])
+        height = line[playerSchema['heightFeet']] + '\'' + line[playerSchema['heightInches']] + '"'
+        weight = int(line[playerSchema['weight']])
+        debutDate = h.textParseDate(line[playerSchema['debutDate']])
+        position = line[playerSchema['position']]
+        currentTeamId = int(line[playerSchema['currentTeamId']])
         
         new_player = Player(id=playerId,
             playerName=playerName,

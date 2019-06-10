@@ -24,7 +24,8 @@ def ingestTeams(s3File, session, truncate=True):
     columns = s3File.splitlines(False)[0]
     columns = columns[1:][:-1].split('","')
 
-    # Column numbers are indexed from one
+    # Column numbers are indexed from zero
+    # No longer need to subtract one
     teamSchema = {
         'id': columns.index('team_id'),
         'teamName': columns.index('name_display_long'),
@@ -42,8 +43,8 @@ def ingestTeams(s3File, session, truncate=True):
 
     for line in s3File.splitlines(False)[1:]:
         line = line[1:][:-1].split('","')
-        if int(line[teamSchema['season'] - 1]) > maxYear:
-            maxYear = int(line[teamSchema['season'] - 1])
+        if int(line[teamSchema['season']]) > maxYear:
+            maxYear = int(line[teamSchema['season']])
 
     for line in s3File.splitlines(False)[1:]:
         line = line[1:][:-1].split('","')
@@ -51,15 +52,15 @@ def ingestTeams(s3File, session, truncate=True):
         # Only pull most recent records
         if int(line[teamSchema['season'] - 1]) == maxYear:
 
-            # Need to subtract one to index from zero
-            teamId = int(line[teamSchema['id'] - 1])
-            teamName = line[teamSchema['teamName'] - 1]
-            venueName = line[teamSchema['venueName'] - 1]
-            city = line[teamSchema['city'] - 1]
-            state = line[teamSchema['state'] - 1]
-            league = line[teamSchema['league'] - 1]
-            division = line[teamSchema['division'] - 1]
-            yearFounded = int(line[teamSchema['yearFounded'] - 1])
+            # No longer need to subtract one to index from zero
+            teamId = int(line[teamSchema['id']])
+            teamName = line[teamSchema['teamName']]
+            venueName = line[teamSchema['venueName']]
+            city = line[teamSchema['city']]
+            state = line[teamSchema['state']]
+            league = line[teamSchema['league']]
+            division = line[teamSchema['division']]
+            yearFounded = int(line[teamSchema['yearFounded']])
             teamAbbrev = teamMapping[teamName]
             
             new_team = Team(id=teamId,
