@@ -14,25 +14,17 @@ parentDir = config.PROJECT_ROOT_DIR
 logging.config.fileConfig(config.LOGGING_CONFIG_FILE, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-parser = argparse.ArgumentParser(description='The set of features to create.')
-parser.add_argument('featureType', metavar='featureType', type=str,
-    help='historical or projected')
-args = parser.parse_args()
-
-if args.featureType not in ['historical', 'projected']:
-    raise ValueError('The directory argument must be either "historical" or "projected"')
-
-def readFeatures():
+def readFeatures(pitchingPath, featureType):
     """Read the raw data from local fs or S3, and format it correctly for creating features"""
     # Specify columns to later check for missing values
-    pitching = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', args.featureType, 'pitching{}.csv'.format(args.featureType.capitalize())),
+    pitching = pd.read_csv(pitchingPath,
         encoding = 'latin', dtype = {'ppa': str, 'obp': str, 'era': str, 'whip': str})
     players = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'historical', 'players.csv'), encoding = 'latin')
     cyYoung = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'auxiliary', 'cyYoungWinners.csv'), encoding = 'latin')
     teams = pd.read_csv(os.path.join(config.PROJECT_ROOT_DIR, 'data', 'historical', 'teams.csv'), encoding = 'latin')
 
     merged = players.merge(cyYoung, how='left', left_on='name_display_first_last', right_on='Winner')
-    if args.featureType == 'projected':
+    if featureType == 'projected':
         merged['season'] = config.CURRENT_SEASON
         pitching['season'] = config.CURRENT_SEASON
 
@@ -49,15 +41,15 @@ def readFeatures():
 
     return merged
 
-def cleanFeatures(merged):
+def cleanFeatures(merged, featureType):
     """Clean and normalize the feature data"""
     minimumInningsPitched = 10
     merged = merged[merged['ip'] > minimumInningsPitched]
 
-    if args.featureType == 'historical':
+    if featureType == 'historical':
         merged['is_winner'] = merged['Winner'].apply(lambda x: 0 if isinstance(x, float) else 1)
         modelData = merged[['h', 'bb', 'so', 'er', 'sv', 'w', 'ip', 'is_winner']].fillna(0)
-    elif args.featureType == 'projected':
+    elif featureType == 'projected':
         modelData = merged[['player_id', 'league_y', 'h', 'bb', 'so', 'er', 'sv', 'w', 'ip']].fillna(0)
         modelData.rename(columns={
             'league_y': 'league'
@@ -65,10 +57,32 @@ def cleanFeatures(merged):
 
     return modelData.drop_duplicates()
 
+def createCyYoungFeatures(pitchingPath, featureType):
+    """Run the two functions defined above to create features file"""
+    if not os.path.exists(pitchingPath):
+        raise FileNotFoundError('The pitching file was not found')
+
+    if featureType not in ['historical', 'projected']:
+        raise ValueError('The directory argument must be either "historical" or "projected"')
+
+    merged = readFeatures(pitchingPath, featureType)
+    modelData = cleanFeatures(merged, featureType)
+
+    return modelData
+
 if __name__ == '__main__':
 
-    merged = readFeatures()
-    modelData = cleanFeatures(merged)
+    parser = argparse.ArgumentParser(description='The set of features to create.')
+    parser.add_argument('featureType', metavar='featureType', type=str,
+        help='historical or projected')
+    args = parser.parse_args()
+
+    if args.featureType not in ['historical', 'projected']:
+        raise ValueError('The directory argument must be either "historical" or "projected"')
+
+    pitchingPath = os.path.join(config.PROJECT_ROOT_DIR, 'data', args.featureType, 'pitching{}.csv'.format(args.featureType.capitalize()))
+
+    modelData = createCyYoungFeatures(pitchingPath, args.featureType)
 
     writeToDir = config.FEATURES_DIR
     h.silentCreateDir(writeToDir)
