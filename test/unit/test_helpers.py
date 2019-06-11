@@ -45,7 +45,7 @@ def test_writeIterLine():
     expectedValue = '""\n'
     testValue = ''
 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         base.writeIterLine({}.values(), f)
     f.close()
 
@@ -57,7 +57,7 @@ def test_writeIterLine():
     expectedValue = '"testValue"\n'
     testValue = ''
 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         base.writeIterLine({'testKey': 'testValue'}.values(), f)
     f.close()
 
@@ -71,7 +71,7 @@ def test_writeIterLine():
     expectedValue = ['"testValue","test2Value"\n', '"test2Value","testValue"\n']
     testValue = ''
 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         base.writeIterLine({'testKey': 'testValue', 'test2Key': 'test2Value'}.values(), f)
     f.close()
 
@@ -85,7 +85,7 @@ def test_writeIterLine():
     expectedValue = ['"testValue","test2,test3"\n', '"test2,test3","testValue"\n']
     testValue = ''
 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w') as f:
         base.writeIterLine({'testKey': 'testValue', 'test2Key': 'test2,test3'}.values(), f)
     f.close()
 
