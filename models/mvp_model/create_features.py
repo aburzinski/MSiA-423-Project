@@ -87,10 +87,10 @@ def cleanFeatures(merged, featureType):
 def createMvpFeatures(pitchingPath, hittingPath, featureType):
     """Run the two functions defined above to create features file"""
     if not os.path.exists(pitchingPath):
-        raise FileNotFoundError('The pitching file was not found')
+        raise IOError('The pitching file was not found')
 
     if not os.path.exists(hittingPath):
-        raise FileNotFoundError('The hitting file was not found')
+        raise IOError('The hitting file was not found')
 
     if featureType not in ['historical', 'projected']:
         raise ValueError('The directory argument must be either "historical" or "projected"')
