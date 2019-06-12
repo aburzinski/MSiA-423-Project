@@ -35,7 +35,7 @@ def test_createMvpFeatures():
     try:
         mvpBase.createMvpFeatures('badPath', 'anotherBadPath', 'historical')
         assert False
-    except FileNotFoundError:
+    except IOError:
         assert True
 
     # Test for incorrect arg being passed

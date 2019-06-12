@@ -33,7 +33,7 @@ def test_createCyYoungFeatures():
     try:
         cyYoungBase.createCyYoungFeatures('badPath', 'historical')
         assert False
-    except FileNotFoundError:
+    except IOError:
         assert True
 
     # Test for incorrect arg being passed
