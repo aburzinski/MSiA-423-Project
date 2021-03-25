@@ -12,4 +12,4 @@ SQLAlchemy_Utils==0.33.11
 Flask_SQLAlchemy==2.4.0
 imblearn==0.0
 scikit_learn==0.20.3
-PyYAML==5.1.1
+PyYAML==5.4
